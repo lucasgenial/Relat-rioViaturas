@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.util.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="391.0" prefWidth="749.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroServidorController">
+    <children>
+        <SplitPane dividerPositions="0.6395939086294417" layoutX="121.0" layoutY="98.0" orientation="VERTICAL" prefHeight="396.0" prefWidth="719.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="213.0" prefWidth="747.0">
+                    <children>
+                        <ImageView fitHeight="36.0" fitWidth="37.0" layoutX="503.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../Imagens/CadUsuarios.png" />
+                            </image>
+                        </ImageView>
+                        <Label layoutX="550.0" layoutY="65.0" text="Cadastro de Servidores:">
+                            <font>
+                                <Font name="System Italic" size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="180.0" layoutY="21.0" text="SisEF - Sistema de Efetivo e Frota - STELECOM">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <GridPane layoutX="144.0" layoutY="115.0" prefHeight="120.0" prefWidth="430.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="210.0" minWidth="10.0" prefWidth="103.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="327.0" minWidth="10.0" prefWidth="327.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <Label text="Matrícula:" />
+                                <Label text="Nome Completo:" GridPane.rowIndex="1" />
+                                <Label text="Nome de Guerra:" GridPane.rowIndex="2" />
+                                <Label text="Hierarquia:" GridPane.rowIndex="3" />
+                                <TextField fx:id="txtMatricula" disable="true" GridPane.columnIndex="1" />
+                                <TextField fx:id="txtNomeCompleto" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField fx:id="txtNomeGuerra" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                <TextField fx:id="txtHierarquia" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            </children>
+                        </GridPane>
+                        <Label layoutX="23.0" layoutY="90.0" prefHeight="25.0" prefWidth="699.0" text="------------------------------------------------------------------------------------------------------------">
+                            <font>
+                                <Font name="System Italic" size="16.0" />
+                            </font>
+                        </Label>
+                        <Group layoutY="7.0">
+                            <children>
+                                <Button fx:id="btnSalvar" disable="true" layoutX="620.0" layoutY="123.0" mnemonicParsing="false" onMouseClicked="#clickedBtnSalvar" prefHeight="25.0" prefWidth="91.0" text="Salvar" />
+                                <Button fx:id="btnExcluir" layoutX="620.0" layoutY="188.0" mnemonicParsing="false" onMouseClicked="#clickedBtnExcluir" prefHeight="25.0" prefWidth="91.0" text="Excluir" />
+                                <Button fx:id="btnNovo" layoutX="620.0" layoutY="156.0" mnemonicParsing="false" onMouseClicked="#clickedBtnNovo" prefHeight="25.0" prefWidth="91.0" text="Novo" />
+                            </children>
+                        </Group>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                    <children>
+                        <TableView fx:id="tableServidor" layoutX="124.0" layoutY="7.0" onMouseClicked="#clickedTableServidor" prefHeight="139.0" prefWidth="717.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <columns>
+                                <TableColumn fx:id="tbColumnId" prefWidth="44.0" resizable="false" text="ID">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="id" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="tbColumnMatricula" prefWidth="91.0" resizable="false" text="Matrícula">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="matricula" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="tbColumnNomeCompleto" prefWidth="357.0" resizable="false" text="Nome Completo">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="nome" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="tbColumnNomeGuerra" prefWidth="144.0" resizable="false" text="Nome de Guerra">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="nomeGuerra" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="tbColumnHierarquia" prefWidth="110.0" resizable="false" text="Hierarquia">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="hierarquia" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>

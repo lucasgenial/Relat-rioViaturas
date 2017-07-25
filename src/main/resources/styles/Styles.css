@@ -1,0 +1,22 @@
+/*.button {
+    -fx-font-weight: bold;
+}*/
+
+.button {
+    -fx-padding: 5 22 5 22;
+
+    -fx-border-color: transparent;
+    -fx-border-width: 2;
+
+    -fx-background-radius: 0;
+
+    -fx-background-color: #cccccc;
+
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: black;
+}
+
+.alinhamento-tabelas { 
+    -fx-alignment: center-right; 
+} 

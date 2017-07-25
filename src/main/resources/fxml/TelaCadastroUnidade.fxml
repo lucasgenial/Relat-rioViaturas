@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.cell.*?>
+
+<Pane fx:id="root" prefHeight="292.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaCadastroUnidadeController">
+    <children>
+        <Label layoutX="17.0" layoutY="3.0" text="Selecione a Unidade" />
+        <TableView fx:id="tableUnidadesDisponiveis" layoutX="17.0" layoutY="22.0" prefHeight="236.0" prefWidth="517.0">
+            <columns>
+                <TableColumn fx:id="colIdUnidade" prefWidth="41.0" resizable="false" text="ID">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="colNomeUnidade" prefWidth="343.0" resizable="false" text="Nome Unidade">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="nome" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="colNomeCmdUnidade" prefWidth="137.0" resizable="false" text="Comando de Área">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="comandoDeArea" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+        <Button fx:id="btAdicionarUnidade" layoutX="392.0" layoutY="261.0" mnemonicParsing="false" onMouseClicked="#clickedAdicionar" text="Adicionar" />
+        <Button fx:id="btCancelarAdicao" layoutX="467.0" layoutY="261.0" mnemonicParsing="false" onMouseClicked="#clickedCancelar" prefHeight="25.0" prefWidth="66.0" text="Voltar" />
+    </children>
+</Pane>

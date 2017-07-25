@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaVisualizaMesasController">
+    <children>
+        <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="946.0">
+            <children>
+                <Label layoutX="14.0" layoutY="23.0" text="Selecione a Mesa" />
+                <ComboBox layoutX="114.0" layoutY="19.0" prefHeight="25.0" prefWidth="280.0" />
+                <TableView layoutX="14.0" layoutY="78.0" prefHeight="305.0" prefWidth="379.0">
+                    <columns>
+                        <TableColumn prefWidth="30.0" resizable="false" text="ID" />
+                        <TableColumn prefWidth="216.0" resizable="false" text="Nome" />
+                        <TableColumn prefWidth="132.0" resizable="false" text="Operador" />
+                    </columns>
+                </TableView>
+                <Label layoutX="14.0" layoutY="61.0" text="Unidades" />
+                <TabPane layoutX="400.0" layoutY="19.0" prefHeight="365.0" prefWidth="538.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="Dados da Unidade">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                    <children>
+                                        <GridPane layoutX="14.0" layoutY="14.0" prefHeight="90.0" prefWidth="517.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.0" minWidth="10.0" prefWidth="112.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="405.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="ID" />
+                                                <Label text="CIPM" GridPane.rowIndex="1" />
+                                                <Label text="Comando de Area" GridPane.rowIndex="2" />
+                                                <TextField editable="false" GridPane.columnIndex="1" />
+                                                <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                            </children>
+                                        </GridPane>
+                                        <TableView layoutX="14.0" layoutY="122.0" prefHeight="200.0" prefWidth="517.0">
+                                            <columns>
+                                                <TableColumn prefWidth="31.0" resizable="false" text="ID" />
+                                                <TableColumn prefWidth="257.0" resizable="false" text="Nome" />
+                                                <TableColumn minWidth="8.0" prefWidth="84.0" resizable="false" text="Quantidade" />
+                                                <TableColumn prefWidth="144.0" resizable="false" text="Quantidade em Módulos" />
+                                            </columns>
+                                        </TableView>
+                                        <Label layoutX="14.0" layoutY="104.0" text="PO disponiveis" />
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                        <Tab text="Relatório Operacional">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                    <children>
+                                        <TableView layoutX="14.0" layoutY="14.0" prefHeight="121.0" prefWidth="521.0">
+                                            <columns>
+                                                <TableColumn prefWidth="26.0" resizable="false" text="ID" />
+                                                <TableColumn resizable="false" text="Prefixo" />
+                                                <TableColumn minWidth="0.0" prefWidth="109.0" resizable="false" text="BCS" />
+                                                <TableColumn prefWidth="74.0" resizable="false" text="GPS" />
+                                                <TableColumn prefWidth="74.0" resizable="false" text="HT" />
+                                                <TableColumn prefWidth="62.0" resizable="false" text="Audio" />
+                                                <TableColumn prefWidth="95.0" resizable="false" text="Estado" />
+                                            </columns>
+                                        </TableView>
+                                        <GridPane layoutX="14.0" layoutY="145.0" prefHeight="150.0" prefWidth="522.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="86.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="437.0" minWidth="10.0" prefWidth="436.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Id Guarnição" />
+                                                <Label text="Comandante" GridPane.rowIndex="1" />
+                                                <Label text="Motorista" GridPane.rowIndex="2" />
+                                                <Label text="Patrulheiro 1" GridPane.rowIndex="3" />
+                                                <Label text="Patrulheiro 2" GridPane.rowIndex="4" />
+                                                <TextField prefHeight="25.0" prefWidth="63.0" GridPane.columnIndex="1" />
+                                                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                            </children>
+                                        </GridPane>
+                                        <Button layoutX="488.0" layoutY="297.0" mnemonicParsing="false" text="Editar" />
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+        </AnchorPane>
+    </children>
+</Pane>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.cell.*?>
+
+
+<Pane fx:id="root" prefHeight="350.0" prefWidth="559.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaListarServidoresController">
+    <children>
+        <TableView fx:id="tbServidores" layoutX="18.0" layoutY="84.0" prefHeight="222.0" prefWidth="524.0">
+            <columns>
+                <TableColumn fx:id="tbColumnMatriculaServidor" editable="false" prefWidth="75.0" resizable="false" text="Matricula">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="matricula" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tbColumnHieraquiaServidor" editable="false" minWidth="0.0" prefWidth="110.0" resizable="false" text="Hieraquia">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="hieraquia" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="tbColumnNomeServidor" editable="false" prefWidth="338.0" resizable="false" text="Nome">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="nome" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+        <Button fx:id="btnSelecionar" layoutX="471.0" layoutY="314.0" mnemonicParsing="false" onMouseClicked="#clickedBtnSelecionar" text="Selecionar" />
+        <TextField fx:id="txtCampoBusca" layoutX="14.0" layoutY="39.0" onKeyPressed="#keyPressedTxtBusca" prefHeight="25.0" prefWidth="531.0" />
+        <Label layoutX="18.0" layoutY="14.0" text="Informe o nome do Servidor, e selecione na tabela abaixo:" />
+    </children>
+</Pane>

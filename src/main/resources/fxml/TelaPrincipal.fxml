@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefHeight="662.0" prefWidth="1357.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaPrincipalController">
+    <children>
+        <MenuBar fx:id="barraDeMenu" minHeight="-Infinity" minWidth="-Infinity">
+            <menus>
+                <Menu fx:id="opMenuCadastro" mnemonicParsing="false" text="Cadastros">
+                    <items>
+                        <MenuItem fx:id="opMenuTipoPO" mnemonicParsing="false" onAction="#clickedOpMenuTipoPO" text="Tipos de P.O." />
+                        <MenuItem fx:id="opMenuUnidade" mnemonicParsing="false" onAction="#clickedOpMenuUnidade" text="Unidades" />
+                        <MenuItem fx:id="opMenuMesa" mnemonicParsing="false" onAction="#clickedOpMenuMesa" text="Mesas" />
+                        <MenuItem fx:id="opMenuServidor" mnemonicParsing="false" onAction="#clickedOpMenuServidor" text="Servidores" />
+                    </items>
+                </Menu>
+                <Menu fx:id="opMenuRelatorio" mnemonicParsing="false" text="Relatórios">
+                    <items>
+                        <MenuItem fx:id="opMenuRelatorioMesas" mnemonicParsing="false" onAction="#clickedOpMenuRelatorioMesas" text="Mesas" />
+                        <MenuItem fx:id="opMenuRelatorioPeriodos" mnemonicParsing="false" onAction="#clickedOpMenuRelatorioPeriodos" text="Periodos" />
+                    </items>
+                </Menu>
+                <Menu fx:id="opMenuAjuda" mnemonicParsing="false" text="Ajuda">
+                    <items>
+                        <MenuItem fx:id="opMenuAjudaSobre" mnemonicParsing="false" onAction="#clickedOpMenuAjudaSobre" text="Sobre" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane prefHeight="628.0" prefWidth="1385.0">
+            <children>
+                <Pane layoutX="10.0" layoutY="10.0">
+                    <children>
+                        <AnchorPane id="AnchorPane" prefHeight="618.0" prefWidth="1348.0">
+                            <children>
+                                <Label layoutX="3.0" layoutY="6.0" text="Selecione algum dado abaixo" />
+                                <TableView fx:id="tableResumo" layoutX="3.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#clikedRowtableResumo" prefHeight="539.0" prefWidth="577.0">
+                                    <columns>
+                                        <TableColumn fx:id="tbColumnIdResumo" prefWidth="38.0" resizable="false" text="ID">
+                                            <cellValueFactory>
+                                                <PropertyValueFactory property="id" />
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn fx:id="tbColumnDiaResumo" prefWidth="79.0" resizable="false" text="Dia">
+                                            <cellValueFactory>
+                                                <PropertyValueFactory property="dia" />
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn fx:id="tbColumnTurnoResumo" prefWidth="68.0" resizable="false" text="Turno">
+                                            <cellValueFactory>
+                                                <PropertyValueFactory property="turno" />
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn fx:id="tbColumnNomeMesaResumo" prefWidth="68.0" resizable="false" text="Nome">
+                                            <cellValueFactory>
+                                                <PropertyValueFactory property="nome" />
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn fx:id="tbColumnSupervisorResumo" prefWidth="157.0" resizable="false" text="Supervisor">
+                                            <cellValueFactory>
+                                                <PropertyValueFactory property="nome" />
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn fx:id="tbColumnNomeOperadorResumo" prefWidth="166.0" resizable="false" text="Operador">
+                                            <cellValueFactory>
+                                                <PropertyValueFactory property="nome" />
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                    </columns>
+                                </TableView>
+                                <Button fx:id="btnRemoverMesa" layoutX="486.0" layoutY="573.0" mnemonicParsing="false" onMouseClicked="#clickedRemoverMesa" text="Remover Mesa" />
+                                <Label layoutX="590.0" layoutY="6.0" text="Unidade" />
+                                <TableView fx:id="tableUnidade" disable="true" layoutX="590.0" layoutY="28.0" onMouseClicked="#clikedRowTabelaUnidade" prefHeight="539.0" prefWidth="191.0">
+                                    <columns>
+                                        <TableColumn fx:id="tbColumnIdUnidade" prefWidth="36.0" resizable="false" text="ID">
+                                            <cellValueFactory>
+                                                <PropertyValueFactory property="id" />
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                        <TableColumn fx:id="tbColumnCipmUnidade" prefWidth="154.0" resizable="false" text="Unidade">
+                                            <cellValueFactory>
+                                                <PropertyValueFactory property="nome" />
+                                            </cellValueFactory>
+                                        </TableColumn>
+                                    </columns>
+                                </TableView>
+                                <Button fx:id="btnAdicionarUnidade" disable="true" layoutX="671.0" layoutY="573.0" mnemonicParsing="false" onMouseClicked="#clickedAdicionarUnidade" text="Adiciona Unidade" />
+                                <Label layoutX="795.0" layoutY="6.0" text="Dados Unidade" />
+                                <TabPane fx:id="painelTab" layoutX="795.0" layoutY="28.0" prefHeight="578.0" prefWidth="542.0" tabClosingPolicy="UNAVAILABLE">
+                                    <tabs>
+                                        <Tab fx:id="tabDadosUnidade" closable="false" text="Dados da Unidade">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="296.0" prefWidth="542.0">
+                                                    <children>
+                                                        <GridPane layoutX="14.0" layoutY="14.0" prefHeight="90.0" prefWidth="517.0">
+                                                            <children>
+                                                                <Label text="ID" />
+                                                                <Label text="CIPM" GridPane.rowIndex="1" />
+                                                                <Label text="Comando de Area" GridPane.rowIndex="2" />
+                                                                <TextField fx:id="txtIdUnidade" disable="true" editable="false" GridPane.columnIndex="1" />
+                                                                <TextField fx:id="txtCIPMUnidade" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                <TextField fx:id="txtCmdAreaUnidade" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                            </children>
+                                                            <columnConstraints>
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.0" minWidth="10.0" prefWidth="112.0" />
+                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="418.0" minWidth="10.0" prefWidth="405.0" />
+                                                            </columnConstraints>
+                                                            <rowConstraints>
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            </rowConstraints>
+                                                        </GridPane>
+                                                        <Label layoutX="14.0" layoutY="125.0" text="PO disponiveis" />
+                                                        <TableView fx:id="tablePO" disable="true" layoutX="14.0" layoutY="142.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="368.0" prefWidth="517.0">
+                                                            <columns>
+                                                                <TableColumn fx:id="tbColumnIdPO" prefWidth="31.0" resizable="false" text="ID">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="id" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnNomePO" prefWidth="221.0" resizable="false" text="Nome">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="nome" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnQtdPO" minWidth="8.0" prefWidth="145.0" resizable="false" text="Qtd de Servidores">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="qtdPO" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>                                                      
+                                                                <TableColumn fx:id="tbColumnQtdModuloPO" prefWidth="119.0" resizable="false" text="Qtd em Módulos">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="qtdModulo" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                            </columns>
+                                                        </TableView>
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                        <Tab fx:id="tabRelatorioOperacional" closable="false" text="Relatório Operacional">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                    <children>
+                                                        <TableView fx:id="tableViatura" disable="true" layoutX="14.0" layoutY="14.0" onMouseClicked="#clikedRowTabelaViatura" prefHeight="271.0" prefWidth="521.0">
+                                                            <columns>
+                                                                <TableColumn fx:id="tbColumnIdViatura" prefWidth="31.0" resizable="false" text="ID">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="id" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnPrefixoViatura" prefWidth="68.0" resizable="false" text="Prefixo">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="prefixo" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnBcsViatura" minWidth="0.0" prefWidth="95.0" resizable="false" text="BCS">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="bcs" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnGpsViatura" prefWidth="88.0" resizable="false" text="GPS">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="gps" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnHTViatura" prefWidth="88.0" resizable="false" text="HT">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="ht" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnAudioViatura" prefWidth="81.0" resizable="false" text="Audio">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="audio" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnEstadoViatura" prefWidth="69.0" resizable="false" text="Estado">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="estado" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                            </columns>
+                                                        </TableView>
+                                                        <Button fx:id="btnAdicionaOperacional" disable="true" layoutX="80.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedAdicionarOperacional" text="Adiciona Operacional" />
+                                                        <Button fx:id="btnEditarOperacional" disable="true" layoutX="217.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedEditarOperacional" text="Editar Operacional" />
+                                                        <TableView fx:id="tableGuarnicao" disable="true" layoutX="14.0" layoutY="310.0" mouseTransparent="true" prefHeight="199.0" prefWidth="521.0">
+                                                            <columns>
+                                                                <TableColumn fx:id="tbColumnIdServidor" prefWidth="31.0" resizable="false" text="ID">
+                                                                    <cellValueFactory>
+                                                                        <PropertyValueFactory property="id" />
+                                                                    </cellValueFactory>
+                                                                </TableColumn>
+                                                                <TableColumn fx:id="tbColumnNomeServidor" prefWidth="372.0" resizable="false" text="Nome" />
+                                                                <TableColumn fx:id="tbColumnFuncaoServidor" prefWidth="117.0" resizable="false" text="Função" />
+                                                            </columns>
+                                                        </TableView>
+                                                        <Button fx:id="btnRemoverOperacional" disable="true" layoutX="339.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedRemoverOperacional" text="Remover Operacional" />
+                                                    </children>
+                                                </AnchorPane>
+                                            </content>
+                                        </Tab>
+                                    </tabs>
+                                </TabPane>
+                                <Button fx:id="btnEditarMesa" layoutX="399.0" layoutY="573.0" mnemonicParsing="false" onMouseClicked="#clickedEditarMesa" text="Editar Mesa" />
+                                <Button fx:id="btnAdicionarMesa" layoutX="297.0" layoutY="573.0" mnemonicParsing="false" onMouseClicked="#clickedAdicionarMesa" text="Adiciona Mesa" />
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </Pane>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
