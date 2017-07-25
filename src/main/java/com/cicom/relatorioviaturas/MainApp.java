@@ -25,6 +25,7 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
 //        lancarDados();
+//Teste comentário
         
         setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SplashScreen.fxml"));
