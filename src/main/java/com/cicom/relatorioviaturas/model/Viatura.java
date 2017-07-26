@@ -8,6 +8,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.Camera;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
@@ -24,7 +25,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
- * @author Lucas Matos
+ * @author Icaro Bastos
  */
 @Entity
 @Table(name = "TBL_VIATURA")
@@ -36,6 +37,8 @@ public class Viatura implements Serializable {
     private boolean bcs;
     private StringProperty estado = new SimpleStringProperty();
     private boolean gps;
+    private boolean camera;
+    private StringProperty estadoCam = new SimpleStringProperty();
     private StringProperty ht = new SimpleStringProperty();
     private StringProperty prefixo = new SimpleStringProperty();
     private PO tipoPO;
@@ -78,6 +81,19 @@ public class Viatura implements Serializable {
         return this.gps;
     }
 
+    @Basic
+    @Column(name = "CAMERA")
+    public boolean isCamera(){
+            return this.camera;
+            
+    }
+    
+    @Basic
+    @Column(name = "ESTADO_CAM")
+    public String getEstadoCam() {
+        return this.estadoCam.get();
+    }
+    
     @Basic
     @Column(name = "HT")
     public String getHt() {
@@ -138,6 +154,14 @@ public class Viatura implements Serializable {
     public void setGps(boolean value) {
         this.gps = value;
     }
+    
+    public void setCamera (boolean value){
+        this.camera = value;
+    }
+    
+    public void setEstadoCam (String value){
+        this.estadoCam.set(value);
+    }
 
     public void setHt(String value) {
         this.ht.set(value);
@@ -174,6 +198,10 @@ public class Viatura implements Serializable {
         return this.estado;
     }
 
+    public StringProperty estadoCamProperty(){
+        return this.estadoCam;
+    }
+    
     public StringProperty htProperty() {
         return this.ht;
     }
@@ -188,23 +216,25 @@ public class Viatura implements Serializable {
 
     @Override
     public String toString() {
-        return "Viatura{" + "id=" + id + ", audio=" + audio + ", bcs=" + bcs + ", estado=" + estado + ", gps=" + gps + ", ht=" + ht + ", prefixo=" + prefixo + ", tipoPO=" + tipoPO.getNome() + ", Qtd guarnicao=" + guarnicao.size() + ", vtrBaixada=" + vtrBaixada + ", hrDaBaixa=" + hrDaBaixa + '}';
+        return "Viatura{" + "id=" + id + ", audio=" + audio + ", bcs=" + bcs + ", estado=" + estado + ", gps=" + gps + ", camera=" + camera + ", estadoCam=" + estadoCam + ", ht=" + ht + ", prefixo=" + prefixo + ", tipoPO=" + tipoPO + ", guarnicao=" + guarnicao + ", vtrBaixada=" + vtrBaixada + ", hrDaBaixa=" + hrDaBaixa + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 23 * hash + Objects.hashCode(this.id);
-        hash = 23 * hash + (this.audio ? 1 : 0);
-        hash = 23 * hash + (this.bcs ? 1 : 0);
-        hash = 23 * hash + Objects.hashCode(this.estado);
-        hash = 23 * hash + (this.gps ? 1 : 0);
-        hash = 23 * hash + Objects.hashCode(this.ht);
-        hash = 23 * hash + Objects.hashCode(this.prefixo);
-        hash = 23 * hash + Objects.hashCode(this.tipoPO);
-        hash = 23 * hash + Objects.hashCode(this.guarnicao);
-        hash = 23 * hash + (this.vtrBaixada ? 1 : 0);
-        hash = 23 * hash + Objects.hashCode(this.hrDaBaixa);
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + (this.audio ? 1 : 0);
+        hash = 79 * hash + (this.bcs ? 1 : 0);
+        hash = 79 * hash + Objects.hashCode(this.estado);
+        hash = 79 * hash + (this.gps ? 1 : 0);
+        hash = 79 * hash + (this.camera ? 1 : 0);
+        hash = 79 * hash + Objects.hashCode(this.estadoCam);
+        hash = 79 * hash + Objects.hashCode(this.ht);
+        hash = 79 * hash + Objects.hashCode(this.prefixo);
+        hash = 79 * hash + Objects.hashCode(this.tipoPO);
+        hash = 79 * hash + Objects.hashCode(this.guarnicao);
+        hash = 79 * hash + (this.vtrBaixada ? 1 : 0);
+        hash = 79 * hash + Objects.hashCode(this.hrDaBaixa);
         return hash;
     }
 
@@ -229,6 +259,9 @@ public class Viatura implements Serializable {
         if (this.gps != other.gps) {
             return false;
         }
+        if (this.camera != other.camera) {
+            return false;
+        }
         if (this.vtrBaixada != other.vtrBaixada) {
             return false;
         }
@@ -236,6 +269,9 @@ public class Viatura implements Serializable {
             return false;
         }
         if (!Objects.equals(this.estado, other.estado)) {
+            return false;
+        }
+        if (!Objects.equals(this.estadoCam, other.estadoCam)) {
             return false;
         }
         if (!Objects.equals(this.ht, other.ht)) {
@@ -256,5 +292,8 @@ public class Viatura implements Serializable {
         return true;
     }
 
+   
     
 }
+     
+    

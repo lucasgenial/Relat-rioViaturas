@@ -62,11 +62,15 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private ToggleButton tbGPS;
     @FXML
+    private ToggleButton tbCamera;
+    @FXML
     private ToggleButton tbHT;
     @FXML
     private ToggleButton tbAudio;
     @FXML
     private ToggleButton tbEstado;
+    @FXML
+    private ToggleButton tbEstadoCam;
     @FXML
     private ToggleButton tbVtrBaixada;
     @FXML
@@ -131,34 +135,9 @@ public class TelaAdicionaOperacionalController implements Initializable {
                         if (viatura != null) {
 
                             if (viatura.isVtrBaixada()) {
-                                cbTipoPO.setDisable(true);
-                                txtPrefixo.setDisable(true);
-
-                                tbBCS.setDisable(true);
-                                tbGPS.setDisable(true);
-                                tbEstado.setDisable(true);
-                                tbHT.setDisable(true);
-                                tbAudio.setDisable(true);
-                                txtVtrBaixada.setDisable(true);
-
-                                btBuscaServidor.setDisable(true);
-                                btAdicionarServidor.setDisable(true);
-                                btRemoveServidor.setDisable(true);
-
-                                tableServidorGuarnicao.setDisable(true);
-
                                 btSalvar.setDisable(true);
-
-                                tbVtrBaixada.setText("SIM");
-
-                            } else {
-                                //Trocar os nomes
-                                tbAudio();
-                                tbBCS();
-                                tbEstado();
-                                tbGPS();
-                                tbHT();
                             }
+
                         }
 
                         listaPOS.addAll(relatorioDiarioViaturasSelecionado.getUnidade().getPos());
@@ -357,6 +336,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
         tbBCS.setSelected(false);
         tbEstado.setSelected(false);
         tbGPS.setSelected(false);
+        tbCamera.setSelected(false);
+        tbEstadoCam.setSelected(false);
         tbHT.setSelected(false);
         tbVtrBaixada.setSelected(false);
 
@@ -378,6 +359,15 @@ public class TelaAdicionaOperacionalController implements Initializable {
             tbGPS.setText("SIM");
         } else {
             tbGPS.setText("NÃO");
+        }
+    }
+    
+    @FXML
+    private void tbCamera() {
+        if (tbCamera.isSelected()) {
+            tbCamera.setText("SIM");
+        } else {
+            tbCamera.setText("NÃO");
         }
     }
 
@@ -409,6 +399,15 @@ public class TelaAdicionaOperacionalController implements Initializable {
     }
 
     @FXML
+    private void tbEstadoCam() {
+        if (tbEstadoCam.isSelected()) {
+            tbEstadoCam.setText("ATIVO");
+        } else {
+            tbEstadoCam.setText("INATIVO");
+        }
+    }
+    
+    @FXML
     private void tbVtrBaixada() {
         if (tbVtrBaixada.isSelected()) {
 
@@ -431,12 +430,12 @@ public class TelaAdicionaOperacionalController implements Initializable {
             final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
 
             if (resultado.get() == ButtonType.YES) {
-                tbVtrBaixada.setText("SIM");
-
+                 tbVtrBaixada.setText("SIM");
+                 
             } else {
-                tbVtrBaixada.setSelected(false);
+             tbVtrBaixada.setSelected(false);
             }
-
+                       
         } else {
             tbVtrBaixada.setText("NÃO");
         }
@@ -457,6 +456,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 viatura.setAudio(tbAudio.isSelected());
                 viatura.setBcs(tbBCS.isSelected());
                 viatura.setGps(tbGPS.isSelected());
+                viatura.setCamera(tbCamera.isSelected());
                 viatura.setVtrBaixada(tbVtrBaixada.isSelected());
 
                 //Verifica estado GPS
@@ -466,6 +466,13 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     viatura.setEstado("INATIVO");
                 }
 
+                //Verifica estado Camera
+                if (tbEstadoCam.isSelected()) {
+                    viatura.setEstadoCam("ATIVO");
+                } else {
+                    viatura.setEstadoCam("INATIVO");
+                }
+                
                 //Verfica estado HT
                 if (tbHT.isSelected()) {
                     viatura.setHt("POSSUI");
@@ -482,8 +489,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 viatura.setAudio(tbAudio.isSelected());
                 viatura.setBcs(tbBCS.isSelected());
                 viatura.setGps(tbGPS.isSelected());
+                viatura.setCamera(tbCamera.isSelected());
                 viatura.setVtrBaixada(tbVtrBaixada.isSelected());
-                viatura.setHrDaBaixa(txtVtrBaixada.getText());
 
                 //Verifica estado GPS
                 if (tbEstado.isSelected()) {
@@ -664,6 +671,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
         this.txtPrefixo.setText(value.getPrefixo());
         this.tbBCS.setSelected(value.isBcs());
         this.tbGPS.setSelected(value.isGps());
+        this.tbCamera.setSelected(value.isCamera());
+        this.tbVtrBaixada.setSelected(value.isVtrBaixada());
 
         if (value.getHt().equals("POSSUI")) {
             this.tbHT.setSelected(true);
@@ -680,9 +689,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
             this.tbEstado.setSelected(false);
         }
 
-        this.tbVtrBaixada.setSelected(value.isVtrBaixada());
-        this.txtVtrBaixada.setText(value.getHrDaBaixa());
-
         verificaTipoPO(value.getTipoPO());
         listaDeServidores = value.getGuarnicao();
         carregaDadosTablelaServidorGuarnicao(listaDeServidores);
@@ -698,6 +704,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbBCS.setDisable(false);
                     tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
+                    tbCamera.setDisable(false);
                     tbVtrBaixada.setDisable(false);
                     tbHT.setDisable(false);
                     btBuscaServidor.setDisable(false);
@@ -708,6 +715,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbBCS.setDisable(false);
                     tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
+                    tbCamera.setDisable(false);
                     tbVtrBaixada.setDisable(false);
                     tbHT.setDisable(false);
                     btBuscaServidor.setDisable(false);
@@ -717,6 +725,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbBCS.setDisable(true);
                     tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
+                    tbCamera.setDisable(false);
                     tbVtrBaixada.setDisable(false);
                     tbHT.setDisable(false);
                     btBuscaServidor.setDisable(false);
@@ -727,6 +736,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbBCS.setDisable(false);
                     tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
+                    tbCamera.setDisable(false);
                     tbVtrBaixada.setDisable(false);
                     tbHT.setDisable(false);
                     btBuscaServidor.setDisable(false);
@@ -737,6 +747,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbBCS.setDisable(true);
                     tbEstado.setDisable(true);
                     tbGPS.setDisable(true);
+                    tbCamera.setDisable(false);
                     tbVtrBaixada.setDisable(false);
                     tbHT.setDisable(true);
                     btBuscaServidor.setDisable(true);
@@ -746,6 +757,15 @@ public class TelaAdicionaOperacionalController implements Initializable {
             //Habilita Botão Salvar
             btSalvar.setDisable(false);
         }
+
+        //Trocar os nomes
+        tbAudio();
+        tbBCS();
+        tbEstado();
+        tbGPS();
+        tbCamera();
+        tbHT();
+        tbVtrBaixada();
     }
 
 }

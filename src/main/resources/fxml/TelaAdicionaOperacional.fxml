@@ -10,18 +10,20 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.cell.*?>
 
-<Pane fx:id="root" prefHeight="325.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaAdicionaOperacionalController">
+<Pane fx:id="root" prefHeight="354.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaAdicionaOperacionalController">
     <children>
         <Label layoutX="17.0" layoutY="4.0" text="Dados PO" />
-        <GridPane layoutX="17.0" layoutY="25.0" prefHeight="231.0" prefWidth="400.0">
+        <GridPane layoutX="17.0" layoutY="25.0" prefHeight="264.0" prefWidth="400.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="160.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="363.0" minWidth="10.0" prefWidth="240.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="169.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="363.0" minWidth="10.0" prefWidth="231.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -34,17 +36,21 @@
                 <Label text="Prefixo" GridPane.rowIndex="1" />
                 <TextField fx:id="txtPrefixo" disable="true" prefHeight="25.0" prefWidth="240.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label text="Pertence a Base Comunitária" GridPane.rowIndex="2" />
-                <Label text="Possui GPS?" GridPane.rowIndex="3" />
-                <Label text="Estado do GPS" GridPane.rowIndex="4" />
-                <Label text="Possui HT?" GridPane.rowIndex="5" />
-                <Label text="Possui Audio?" GridPane.rowIndex="6" />
+                <Label text="Possui GPS?" GridPane.rowIndex="5" />
+                <Label text="Estado do GPS" GridPane.rowIndex="6" />
+                <Label text="Possui HT?" GridPane.rowIndex="7" />
+                <Label text="Possui Audio?" GridPane.rowIndex="8" />
                 <ToggleButton fx:id="tbBCS" disable="true" mnemonicParsing="false" onMouseClicked="#tbBCS" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <ToggleButton fx:id="tbGPS" disable="true" mnemonicParsing="false" onMouseClicked="#tbGPS" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <ToggleButton fx:id="tbEstado" disable="true" mnemonicParsing="false" onMouseClicked="#tbEstado" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                <ToggleButton fx:id="tbHT" disable="true" mnemonicParsing="false" onMouseClicked="#tbHT" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                <ToggleButton fx:id="tbAudio" disable="true" mnemonicParsing="false" onMouseClicked="#tbAudio" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Label text="Viatura Baixada" GridPane.rowIndex="7" />
-            <ToggleButton fx:id="tbVtrBaixada" disable="true" mnemonicParsing="false" onMouseClicked="#tbVtrBaixada" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <ToggleButton fx:id="tbGPS" disable="true" mnemonicParsing="false" onMouseClicked="#tbGPS" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <ToggleButton fx:id="tbEstado" disable="true" mnemonicParsing="false" onMouseClicked="#tbEstado" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                <ToggleButton fx:id="tbHT" disable="true" mnemonicParsing="false" onMouseClicked="#tbHT" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <ToggleButton fx:id="tbAudio" disable="true" mnemonicParsing="false" onMouseClicked="#tbAudio" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label text="Viatura Baixada" GridPane.rowIndex="9" />
+            <ToggleButton fx:id="tbVtrBaixada" disable="true" mnemonicParsing="false" onMouseClicked="#tbVtrBaixada" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <Label text="Possui Câmera Embarcada?" GridPane.rowIndex="3" />
+            <ToggleButton fx:id="tbCamera" disable="true" mnemonicParsing="false" onMouseClicked="#tbCamera" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Estado da Câmera Embarcada" GridPane.rowIndex="4" />
+            <ToggleButton fx:id="tbEstadoCam" disable="true" mnemonicParsing="false" onMouseClicked="#tbEstadoCam" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             </children>
         </GridPane>
         <Label layoutX="458.0" layoutY="4.0" text="Dados Guarnição" />
@@ -68,7 +74,7 @@
         </GridPane>
         <Button fx:id="btAdicionarServidor" disable="true" layoutX="681.0" layoutY="95.0" mnemonicParsing="false" onMouseClicked="#clickedBtAdicionarServidor" text="Adiciona" />
         <Button fx:id="btRemoveServidor" disable="true" layoutX="747.0" layoutY="95.0" mnemonicParsing="false" onMouseClicked="#clickedBtRemoveServidor" text="Remove" />
-        <TableView fx:id="tableServidorGuarnicao" disable="true" layoutX="458.0" layoutY="128.0" onMouseExited="#clickedExitedTableServidorGuarnicao" prefHeight="152.0" prefWidth="348.0">
+        <TableView fx:id="tableServidorGuarnicao" disable="true" layoutX="458.0" layoutY="128.0" onMouseExited="#clickedExitedTableServidorGuarnicao" prefHeight="165.0" prefWidth="348.0">
             <columns>
                 <TableColumn fx:id="tbColumnNomeServidor" prefWidth="241.0" text="Nome">
                     <cellValueFactory>
@@ -82,11 +88,12 @@
                 </TableColumn>
             </columns>
         </TableView>
-        <Button fx:id="btSalvar" disable="true" layoutX="673.0" layoutY="294.0" mnemonicParsing="false" onMouseClicked="#clickedBtSalvar" prefHeight="25.0" prefWidth="64.0" text="Salvar" />
-        <Button fx:id="btCancelar" layoutX="744.0" layoutY="294.0" mnemonicParsing="false" onMouseClicked="#clickedBtVoltar" prefHeight="25.0" prefWidth="64.0" text="Voltar" />
-        <Separator layoutX="432.0" layoutY="12.0" orientation="VERTICAL" prefHeight="291.0" prefWidth="1.0" />
+        <Button fx:id="btSalvar" disable="true" layoutX="673.0" layoutY="318.0" mnemonicParsing="false" onMouseClicked="#clickedBtSalvar" prefHeight="25.0" prefWidth="64.0" text="Salvar" />
+        <Button fx:id="btCancelar" layoutX="744.0" layoutY="318.0" mnemonicParsing="false" onMouseClicked="#clickedBtVoltar" prefHeight="25.0" prefWidth="64.0" text="Voltar" />
+        <Separator layoutX="432.0" layoutY="3.0" orientation="VERTICAL" prefHeight="306.0" prefWidth="4.0" />
         <Separator layoutX="14.0" layoutY="22.0" prefHeight="4.0" prefWidth="803.0" />
-        <Separator layoutX="11.0" layoutY="286.0" prefHeight="4.0" prefWidth="792.0" />
-      <TextField fx:id="txtVtrBaixada" layoutX="286.0" layoutY="229.0" prefHeight="25.0" prefWidth="120.0" />
+        <Separator layoutX="10.0" layoutY="308.0" prefHeight="4.0" prefWidth="792.0" />
+      <TextField fx:id="txtVtrBaixada" layoutX="292.0" layoutY="263.0" prefHeight="25.0" prefWidth="114.0" />
+      <Label layoutX="312.0" layoutY="290.0" text="Hora da Baixa" />
     </children>
 </Pane>
