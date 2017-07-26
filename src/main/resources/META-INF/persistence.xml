@@ -7,7 +7,7 @@
             <!-- Configuração para o MYSQL -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sisef_atual"/>
-            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.user" value="cicom"/>
             <property name="javax.persistence.jdbc.password" value="nac@2016"/>
             <property name="javax.persistence.validation.group.pre-persist" value="javax.validation.groups.Default"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
