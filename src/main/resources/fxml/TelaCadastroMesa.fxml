@@ -1,40 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<Pane fx:id="root" prefHeight="229.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaCadastroMesaController">
-   <children>
-      <GridPane layoutX="11.0" layoutY="14.0" prefHeight="164.0" prefWidth="310.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="63.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="407.0" minWidth="10.0" prefWidth="247.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label fx:id="lbDia" text="Dia" />
-            <DatePicker fx:id="dataMesa" GridPane.columnIndex="1" />
-            <Label fx:id="lbTurno" text="Turno" GridPane.rowIndex="1" />
-            <ComboBox fx:id="cbTurno" prefHeight="25.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="lbMesa" text="Mesa" GridPane.rowIndex="2" />
-            <ComboBox fx:id="cbMesa" prefHeight="25.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="lbSupervisor" text="Supervisor" GridPane.rowIndex="3" />
-            <ComboBox fx:id="cbSupervisor" onAction="#clickedCbSupervisor" prefHeight="25.0" prefWidth="230.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="lbOperador" text="Operador" GridPane.rowIndex="4" />
-            <ComboBox fx:id="cbOperador" disable="true" onAction="#clickedCbOperador" prefHeight="25.0" prefWidth="231.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-         </children>
-      </GridPane>
-      <Button fx:id="btnCadastrar" layoutX="145.0" layoutY="193.0" mnemonicParsing="false" onMouseClicked="#clickedCadastrar" prefHeight="25.0" prefWidth="74.0" text="Cadastrar" />
-      <Button fx:id="btnCancelar" layoutX="227.0" layoutY="193.0" mnemonicParsing="false" onMouseClicked="#clickedCancelar" prefHeight="25.0" prefWidth="74.0" text="Voltar" />
-   </children>
-</Pane>
+<AnchorPane fx:id="root" prefHeight="371.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaCadastroMesaController">
+    
+    <children>
+        <Button fx:id="btnFechar" layoutX="631.0" prefHeight="15.0" prefWidth="52.0" text="x" textAlignment="CENTER" />
+        <Button fx:id="btnMinimizar" layoutX="577.0" prefHeight="15.0" prefWidth="52.0" text="-" textAlignment="CENTER" />
+        <Label fx:id="nome_tela" layoutX="15.0" layoutY="10.0" prefHeight="17.0" prefWidth="180.0" text="CADASTRO RELATÓRIO MESA">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Label fx:id="lbMesa" layoutX="16.0" layoutY="51.0" text="Mesa">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Label fx:id="lbDia" layoutX="14.0" layoutY="162.0" text="Data e Hora Inicial" />
+        <Label fx:id="lbDia1" layoutX="15.0" layoutY="108.0" text="Data e Hora Final" />
+        <Label layoutX="323.0" layoutY="60.0" text="Servidor">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        
+        
+        
+        <TextField layoutX="323.0" layoutY="75.0" prefHeight="25.0" prefWidth="287.0" />
+        <ComboBox layoutX="323.0" layoutY="125.0" prefHeight="27.0" prefWidth="349.0" />
+        <Label layoutX="324.0" layoutY="106.0" text="Função">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <Button layoutX="445.0" layoutY="155.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="110.0" text="Adicionar" />
+        <Button layoutX="561.0" layoutY="155.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="110.0" text="Remover" />
+        
+        <TableView layoutX="323.0" layoutY="200.0" prefHeight="126.0" prefWidth="349.0" stylesheets="@../styles/JMetroLightTheme.css">
+            <columns>
+                <TableColumn prefWidth="142.0" text="Nome" />
+                <TableColumn minWidth="0.0" prefWidth="155.0" text="Função" />
+            </columns>
+        </TableView>
+        
+        <Separator layoutX="302.0" layoutY="34.0" orientation="VERTICAL" prefHeight="336.0" prefWidth="15.0" />
+        <Button layoutX="446.0" layoutY="332.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="110.0" text="Salvar" />
+        <Button layoutX="561.0" layoutY="332.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="110.0" text="Cancelar" />
+        <Separator layoutY="33.0" prefHeight="4.0" prefWidth="687.0" />
+    </children>
+</AnchorPane>

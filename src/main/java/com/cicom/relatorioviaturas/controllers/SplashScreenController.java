@@ -49,7 +49,7 @@ public class SplashScreenController implements Initializable {
                         Scene scene = new Scene(root);
                         Stage stage = new Stage();
                         stage.setScene(scene);
-                        stage.setResizable(false);
+//                        stage.setResizable(false);
                         stage.setTitle("SisEF 1.0 - Sistema de Efetivo e Frota - STELECOM                    ||                    © Copyright@2017 ©  D.Madeira / I.Bastos / L.Matos");
                         stage.centerOnScreen();
                         stage.show();
