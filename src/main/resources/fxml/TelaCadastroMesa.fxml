@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
@@ -9,52 +10,63 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import jfxtras.scene.control.LocalTimeTextField?>
 
-<AnchorPane fx:id="root" prefHeight="371.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaCadastroMesaController">
+<AnchorPane fx:id="root" prefHeight="496.0" prefWidth="373.0" style="-fx-background-color: fff;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaCadastroMesaController">
     
     <children>
-        <Button fx:id="btnFechar" layoutX="631.0" prefHeight="15.0" prefWidth="52.0" text="x" textAlignment="CENTER" />
-        <Button fx:id="btnMinimizar" layoutX="577.0" prefHeight="15.0" prefWidth="52.0" text="-" textAlignment="CENTER" />
-        <Label fx:id="nome_tela" layoutX="15.0" layoutY="10.0" prefHeight="17.0" prefWidth="180.0" text="CADASTRO RELATÓRIO MESA">
+        <Label layoutX="20.0" layoutY="14.0" text="Mesa">
             <font>
                 <Font name="System Bold" size="12.0" />
             </font>
         </Label>
-        <Label fx:id="lbMesa" layoutX="16.0" layoutY="51.0" text="Mesa">
+        <Label layoutX="18.0" layoutY="69.0" text="Data Inicial">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Label layoutX="188.0" layoutY="69.0" text="Hora Inicial">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="18.0" layoutY="118.0" text="Data Final">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="188.0" layoutY="118.0" text="Hora Final">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Separator layoutY="166.0" prefHeight="17.0" prefWidth="373.0" />
+        <Label layoutX="17.0" layoutY="183.0" text="Servidor">
             <font>
                 <Font name="System Bold" size="12.0" />
             </font>
         </Label>
-        <Label fx:id="lbDia" layoutX="14.0" layoutY="162.0" text="Data e Hora Inicial" />
-        <Label fx:id="lbDia1" layoutX="15.0" layoutY="108.0" text="Data e Hora Final" />
-        <Label layoutX="323.0" layoutY="60.0" text="Servidor">
+        <Label layoutX="18.0" layoutY="236.0" text="Função">
             <font>
                 <Font name="System Bold" size="12.0" />
             </font>
         </Label>
         
-        
-        
-        <TextField layoutX="323.0" layoutY="75.0" prefHeight="25.0" prefWidth="287.0" />
-        <ComboBox layoutX="323.0" layoutY="125.0" prefHeight="27.0" prefWidth="349.0" />
-        <Label layoutX="324.0" layoutY="106.0" text="Função">
-            <font>
-                <Font name="System Bold" size="12.0" />
-            </font>
-        </Label>
-        <Button layoutX="445.0" layoutY="155.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="110.0" text="Adicionar" />
-        <Button layoutX="561.0" layoutY="155.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="110.0" text="Remover" />
-        
-        <TableView layoutX="323.0" layoutY="200.0" prefHeight="126.0" prefWidth="349.0" stylesheets="@../styles/JMetroLightTheme.css">
+        <TableView fx:id="tableServidorMesa" layoutX="17.0" layoutY="324.0" prefHeight="126.0" prefWidth="332.0" stylesheets="@../styles/JMetroLightTheme.css">
             <columns>
-                <TableColumn prefWidth="142.0" text="Nome" />
-                <TableColumn minWidth="0.0" prefWidth="155.0" text="Função" />
+                <TableColumn fx:id="tbColumnNomeServidor" prefWidth="172.0" text="Nome" />
+                <TableColumn fx:id="tbColumnFuncaoServidor" minWidth="0.0" prefWidth="159.0" text="Função" />
             </columns>
         </TableView>
-        
-        <Separator layoutX="302.0" layoutY="34.0" orientation="VERTICAL" prefHeight="336.0" prefWidth="15.0" />
-        <Button layoutX="446.0" layoutY="332.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="110.0" text="Salvar" />
-        <Button layoutX="561.0" layoutY="332.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="110.0" text="Cancelar" />
-        <Separator layoutY="33.0" prefHeight="4.0" prefWidth="687.0" />
+      <ComboBox fx:id="cbMesa" layoutX="19.0" layoutY="31.0" onAction="#clickedCbMesa" prefHeight="25.0" prefWidth="332.0" promptText="Selecione a mesa" />
+      <DatePicker fx:id="dataInicial" layoutX="17.0" layoutY="86.0" prefHeight="25.0" prefWidth="162.0" />
+      <DatePicker fx:id="dataFinal" layoutX="17.0" layoutY="135.0" prefHeight="25.0" prefWidth="162.0" />
+      <TextField fx:id="txtNomeServidor" layoutX="17.0" layoutY="200.0" onAction="#clickedBuscarServidor" prefHeight="25.0" prefWidth="332.0" promptText="Selecione o servidor" />
+      <ComboBox fx:id="cbFuncao" layoutX="17.0" layoutY="252.0" onAction="#clickedCbFuncao" prefHeight="25.0" prefWidth="332.0" promptText="Selecione a função" />
+      <Button fx:id="btnAdicionarServidor" layoutX="183.0" layoutY="288.0" mnemonicParsing="false" onAction="#clickedAdicionarServidor" text="ADICIONAR" />
+      <Button fx:id="btnRemoverServidor" layoutX="270.0" layoutY="289.0" mnemonicParsing="false" onAction="#clickedRemoverServidor" prefHeight="25.0" prefWidth="79.0" text="REMOVER" />
+      <Button fx:id="btnSalvarMesa" layoutX="182.0" layoutY="460.0" mnemonicParsing="false" onAction="#clickedSalvar" prefHeight="25.0" prefWidth="79.0" text="SALVAR" />
+      <Button fx:id="btnCancelar" layoutX="269.0" layoutY="460.0" mnemonicParsing="false" onAction="#clickedCancelar" prefHeight="25.0" prefWidth="79.0" text="CANCELAR" />
+      <LocalTimeTextField layoutX="189.0" layoutY="86.0" prefHeight="25.0" prefWidth="162.0" />
+      <LocalTimeTextField layoutX="189.0" layoutY="135.0" prefHeight="25.0" prefWidth="162.0" />
     </children>
 </AnchorPane>

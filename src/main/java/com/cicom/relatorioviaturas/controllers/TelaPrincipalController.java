@@ -41,6 +41,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 /**
@@ -451,6 +452,7 @@ public class TelaPrincipalController implements Initializable {
 
             //Criando um Estágio de Diologo (Stage Dialog)
             Stage dialogStageAtual = new Stage();
+            dialogStageAtual.initStyle(StageStyle.UNDECORATED);
             dialogStageAtual.initModality(Modality.APPLICATION_MODAL);
             dialogStageAtual.setTitle("Cadastro de Mesas");
             dialogStageAtual.setResizable(false);
