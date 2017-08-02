@@ -3,7 +3,7 @@ package com.cicom.relatorioviaturas.controllers;
 import com.cicom.relatorioviaturas.DAO.RelatorioDiarioMesasDAO;
 import com.cicom.relatorioviaturas.DAO.ViaturaDAO;
 import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroMesasController;
-import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroServidorController;
+import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroServidorController1;
 import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroTipoPOController;
 import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroUnidadesController;
 import com.cicom.relatorioviaturas.model.*;
@@ -89,14 +89,9 @@ public class TelaPrincipalController implements Initializable {
     @FXML
     private TableColumn<RelatorioDiarioMesas, String> tbColumnDiaResumo;
     @FXML
-    private TableColumn<RelatorioDiarioMesas, String> tbColumnTurnoResumo;
+    private TableColumn<RelatorioDiarioMesas, String> tbColumnHoraResumo;
     @FXML
     private TableColumn<RelatorioDiarioMesas, String> tbColumnNomeMesaResumo;
-    @FXML
-    private TableColumn<RelatorioDiarioMesas, String> tbColumnSupervisorResumo;
-    @FXML
-    private TableColumn<RelatorioDiarioMesas, String> tbColumnNomeOperadorResumo;
-
     @FXML
     private Button btnAdicionarMesa;
     @FXML
@@ -209,7 +204,14 @@ public class TelaPrincipalController implements Initializable {
         tbColumnDiaResumo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioMesas, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioMesas, String> data) {
-                return new SimpleStringProperty(data.getValue().getDataInicial().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                return new SimpleStringProperty(data.getValue().getDiaMesa());
+            }
+        });
+        
+        tbColumnHoraResumo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioMesas, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioMesas, String> data) {
+                return new SimpleStringProperty(data.getValue().getHorarioMesa());
             }
         });
 
@@ -217,22 +219,6 @@ public class TelaPrincipalController implements Initializable {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioMesas, String> data) {
                 return data.getValue().getMesa().nomeProperty();
-            }
-        });
-
-        tbColumnSupervisorResumo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioMesas, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioMesas, String> param) {
-                return param.getValue().getSupervisor().getServidor().nomeProperty();
-            }
-
-        });
-
-        /* COLUNA NOME OPERADOR */
-        tbColumnNomeOperadorResumo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioMesas, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioMesas, String> param) {
-                return param.getValue().getOperador().getServidor().nomeProperty();
             }
         });
 
@@ -955,7 +941,7 @@ public class TelaPrincipalController implements Initializable {
             dialogStageAtual.setScene(scene);
 
             //Setando o cliente no Controller.
-            TelaAdmCadastroServidorController controller = loader.getController();
+            TelaAdmCadastroServidorController1 controller = loader.getController();
 //            controller.setDialogStage(dialogStageAtual);
 
             //Mostra a tela ate que o usuario feche

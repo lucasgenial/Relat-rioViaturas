@@ -1,56 +1,88 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.cicom.relatorioviaturas.controllers.adm;
 
 import com.cicom.relatorioviaturas.DAO.ServidorDAO;
+import com.cicom.relatorioviaturas.model.Instituicao;
 import com.cicom.relatorioviaturas.model.Servidor;
+import com.cicom.relatorioviaturas.model.Sexo;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
+import javax.imageio.ImageIO;
 
 /**
+ * FXML Controller class
  *
- * @author Lucas Matos
+ * @author estatistica
  */
 public class TelaAdmCadastroServidorController implements Initializable {
 
     @FXML
-    private AnchorPane root;
+    private Tab tabCadastro;
     @FXML
     private TextField txtMatricula;
     @FXML
-    private TextField txtNomeCompleto;
+    private ComboBox<Instituicao> cbOrgao;
     @FXML
-    private TextField txtNomeGuerra;
+    private TextField txtGrauHierarquico;
     @FXML
-    private TextField txtHierarquia;
+    private ComboBox<Sexo> cbSexo;
     @FXML
-    private TableView<Servidor> tableServidor;
+    private TextField txtNome;
+    @FXML
+    private TextArea txtObservacao;
+    @FXML
+    private Button btnAdicionaFoto;
+    @FXML
+    private ImageView imagemFoto;
+    @FXML
+    private Button btnCadastrar;
+    @FXML
+    private Button btnExcluir;
+    @FXML
+    private Button btnVoltar;
+    @FXML
+    private Tab tabListagem;
+    @FXML
+    private TextField txtNomeBusca;
+    @FXML
+    private ComboBox<Instituicao> cbOrgaoBusca;
+    @FXML
+    private TableView<Servidor> tableListaServidores;
     @FXML
     private TableColumn<Servidor, Integer> tbColumnId;
     @FXML
     private TableColumn<Servidor, String> tbColumnMatricula;
     @FXML
-    private TableColumn<Servidor, String> tbColumnNomeCompleto;
+    private TableColumn<Servidor, String> tbColumnGrauHierarquico;
     @FXML
-    private TableColumn<Servidor, String> tbColumnNomeGuerra;
+    private TableColumn<Servidor, String> tbColumnNome;
     @FXML
-    private TableColumn<Servidor, String> tbColumnHierarquia;
-    @FXML
-    private Button btnSalvar;
-    @FXML
-    private Button btnNovo;
-    @FXML
-    private Button btnExcluir;
+    private Button btnVerDetalhesServidor;
 
     /*
     EXTRA
@@ -60,201 +92,189 @@ public class TelaAdmCadastroServidorController implements Initializable {
     private boolean editar = false;
     private String tituloMensagem;
     private String corpoMensagem;
+    private Servidor novoServidor;
     private Servidor servidorSelecionado;
 
+    /**
+     * Initializes the controller class.
+     */
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        carregaDados();
-    }
-
-    @FXML
-    private void clickedBtnExcluir() {
-        servidorSelecionado = (Servidor) tableServidor.getSelectionModel().getSelectedItem();
-
-        if (servidorSelecionado != null) {
-            Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
-            alertAntesExcluir.setTitle("Atenção!");
-            alertAntesExcluir.setHeaderText("Os dados referentes à este servidor serão perdidos, deseja continuar?");
-            alertAntesExcluir.getButtonTypes().clear();
-            alertAntesExcluir.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-
-            //Deactivate Defaultbehavior for yes-Button:
-            Button yesButton = (Button) alertAntesExcluir.getDialogPane().lookupButton(ButtonType.YES);
-            yesButton.setDefaultButton(false);
-
-            //Activate Defaultbehavior for no-Button:
-            Button noButton = (Button) alertAntesExcluir.getDialogPane().lookupButton(ButtonType.NO);
-            noButton.setDefaultButton(true);
-
-            //Pega qual opção o usuario pressionou
-            final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
-
-            if (resultado.get() == ButtonType.YES) {
-                daoServidor.deletar(servidorSelecionado);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso!");
-                alert.setHeaderText("Servidor excluído com sucesso!");
-                alert.showAndWait();
-                carregaDados();
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro!");
-            alert.setHeaderText("É necessário selecionar, o Servidor!");
-            alert.showAndWait();
-        }
-    }
-
-    @FXML
-    private void clickedBtnNovo() {
-        btnSalvar.setText("Salvar");
-        txtMatricula.setText("");
-        txtNomeCompleto.setText("");
-        txtNomeGuerra.setText("");
-        txtHierarquia.setText("");
-
-        txtMatricula.setDisable(false);
-        txtNomeCompleto.setDisable(false);
-        txtNomeGuerra.setDisable(false);
-        txtHierarquia.setDisable(false);
-        btnSalvar.setDisable(false);
-        editar = false;
-        servidorSelecionado = null;
-    }
-
-    @FXML
-    private void clickedTableServidor() {
-        servidorSelecionado = (Servidor) tableServidor.getSelectionModel().getSelectedItem();
-        txtMatricula.setText(servidorSelecionado.getMatricula());
-        txtNomeCompleto.setText(servidorSelecionado.getNome());
-        txtNomeGuerra.setText(servidorSelecionado.getNomeGuerra());
-        txtHierarquia.setText(servidorSelecionado.getHierarquia());
-
-        btnSalvar.setText("Editar");
-        btnSalvar.setDisable(false);
-
-        //Habilita o disable
-        txtMatricula.setDisable(true);
-        txtNomeCompleto.setDisable(true);
-        txtNomeGuerra.setDisable(true);
-        txtHierarquia.setDisable(true);
-
-        editar = false;
-    }
-
-    @FXML
-    private void clickedBtnSalvar() {
-        //Ver a ação no botão editar
-        if (btnSalvar.getText().equals("Editar")) {
-            txtMatricula.setDisable(false);
-            txtNomeCompleto.setDisable(false);
-            txtNomeGuerra.setDisable(false);
-            txtHierarquia.setDisable(false);
-            btnSalvar.setDisable(false);
-            btnSalvar.setText("Salvar");
-
-            editar = true;
-
-            //Se o botão salvar for ativado e o editar for verdadeiro
-            //Estamos modificando um Tipo P.O. Já existente
-        } else if (btnSalvar.getText().equals("Salvar") && editar) {
-            if (verificaDados()) {
-                //Altera o nome do PO
-                servidorSelecionado.setMatricula(txtMatricula.getText());
-                servidorSelecionado.setNome(txtNomeCompleto.getText());
-                servidorSelecionado.setNomeGuerra(txtNomeGuerra.getText());
-                servidorSelecionado.setHierarquia(txtHierarquia.getText());
-
-                daoServidor.alterar(servidorSelecionado);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso!");
-                alert.setHeaderText("Servidor alterado com sucesso!");
-                alert.showAndWait();
-                carregaDados();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(tituloMensagem);
-                alert.setHeaderText(corpoMensagem);
-                alert.showAndWait();
-            }
-            //Adicionando novo tipo P.O.
-        } else if (btnSalvar.getText().equals("Salvar") && !editar) {
-            //Altera o nome do PO
-            servidorSelecionado = new Servidor();
-            servidorSelecionado.setMatricula(txtMatricula.getText());
-            servidorSelecionado.setNome(txtNomeCompleto.getText());
-            servidorSelecionado.setNomeGuerra(txtNomeGuerra.getText());
-            servidorSelecionado.setHierarquia(txtHierarquia.getText());
-
-            if (verificaDados()) {
-                daoServidor.salvar(servidorSelecionado);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso!");
-                alert.setHeaderText("Novo Servidor cadastrado!");
-                alert.showAndWait();
-                carregaDados();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(tituloMensagem);
-                alert.setHeaderText(corpoMensagem);
-                alert.showAndWait();
-            }
-        }
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
     }
 
     private void carregaDados() {
         listaDeServidor = daoServidor.getListAtivos();
 
-        txtMatricula.setDisable(true);
-        txtNomeCompleto.setDisable(true);
-        txtNomeGuerra.setDisable(true);
-        txtHierarquia.setDisable(true);
-        btnSalvar.setDisable(true);
-        btnSalvar.setText("Editar");
-
         if (!listaDeServidor.isEmpty()) {
-            tableServidor.getItems().setAll(FXCollections.observableList(listaDeServidor));
+            tbColumnMatricula.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Servidor, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Servidor, String> data) {
+                    return new SimpleStringProperty(data.getValue().getMatricula());
+                }
+            });
+
+            tbColumnGrauHierarquico.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Servidor, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Servidor, String> data) {
+                    return new SimpleStringProperty(data.getValue().getGrauHierarquico());
+                }
+            });
+
+            tbColumnNome.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Servidor, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Servidor, String> data) {
+                    return new SimpleStringProperty(data.getValue().getNome());
+                }
+            });
+
+            tableListaServidores.getItems().setAll(FXCollections.observableList(listaDeServidor));
         }
+    }
+
+    @FXML
+    private void clickedAdicionarFoto(MouseEvent event) {
+    }
+
+    @FXML
+    private void clickedCadastrarServidor(MouseEvent event) throws IOException {
+
+        if (btnCadastrar.getText().equals("EDITAR")) {
+            //Habilita os campos
+            txtMatricula.setDisable(true);
+            cbOrgao.setDisable(true);
+            txtGrauHierarquico.setDisable(true);
+            cbSexo.setDisable(true);
+            txtNome.setDisable(true);
+            txtObservacao.setDisable(true);
+            btnAdicionaFoto.setDisable(true);
+
+            btnCadastrar.setText("SALVAR");
+            //Um novo Servidor
+        } else if (btnCadastrar.getText().equals("CADASTRAR")) {
+            if (verificaDados()) {
+                novoServidor = new Servidor();
+
+                novoServidor.setMatricula(txtMatricula.getText());
+                novoServidor.setInstituicao(cbOrgao.getSelectionModel().getSelectedItem());
+                novoServidor.setGrauHierarquico(txtGrauHierarquico.getText());
+                novoServidor.setSexo(cbSexo.getSelectionModel().getSelectedItem());
+                novoServidor.setNome(txtNome.getText());
+                novoServidor.setObservacao(txtObservacao.getText());
+
+                //Converte a imagem
+                if (imagemFoto.getImage() != null) {
+                    BufferedImage bImage = SwingFXUtils.fromFXImage(imagemFoto.getImage(), null);
+                    ByteArrayOutputStream s = new ByteArrayOutputStream();
+                    ImageIO.write(bImage, "jpg", s);
+                    byte[] res = s.toByteArray();
+                    s.close();
+                    novoServidor.setFoto(res);
+                }
+                novoServidor.setAtivo(true);
+
+                daoServidor.salvar(novoServidor);
+
+                novoServidor = null;
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Servidor cadastrado com sucesso!");
+                alert.showAndWait();
+                carregaDados();
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(tituloMensagem);
+                alert.setHeaderText(corpoMensagem);
+                alert.showAndWait();
+            }
+
+            //Modificando Servidor
+        } else if (btnCadastrar.getText().equals("SALVAR")) {
+            if (verificaDados()) {
+                servidorSelecionado.setMatricula(txtMatricula.getText());
+                servidorSelecionado.setInstituicao(cbOrgao.getSelectionModel().getSelectedItem());
+                servidorSelecionado.setGrauHierarquico(txtGrauHierarquico.getText());
+                servidorSelecionado.setSexo(cbSexo.getSelectionModel().getSelectedItem());
+                servidorSelecionado.setNome(txtNome.getText());
+                servidorSelecionado.setObservacao(txtObservacao.getText());
+
+                //Converte a imagem
+                if (imagemFoto.getImage() != null) {
+                    BufferedImage bImage = SwingFXUtils.fromFXImage(imagemFoto.getImage(), null);
+                    ByteArrayOutputStream s = new ByteArrayOutputStream();
+                    ImageIO.write(bImage, "jpg", s);
+                    byte[] res = s.toByteArray();
+                    s.close();
+                    novoServidor.setFoto(res);
+                }
+                servidorSelecionado.setAtivo(true);
+
+                daoServidor.salvar(servidorSelecionado);
+
+                servidorSelecionado = null;
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Servidor modificado com sucesso!");
+                alert.showAndWait();
+                carregaDados();
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(tituloMensagem);
+                alert.setHeaderText(corpoMensagem);
+                alert.showAndWait();
+            }
+        }
+    }
+
+    @FXML
+    private void clickedExcluirServidor(MouseEvent event) {
+    }
+
+    @FXML
+    private void clickedVoltar(MouseEvent event) {
     }
 
     private boolean verificaDados() {
         if (txtMatricula.getText().isEmpty()) {
             tituloMensagem = "Erro Matricula";
             corpoMensagem = "A matricula é obrigatória!";
-            txtMatricula.setFocusTraversable(true);
             return false;
         }
 
-        if (txtNomeCompleto.getText().isEmpty()) {
-            tituloMensagem = "Erro Nome Completo";
-            corpoMensagem = "O Nome completo é obrigatório!";
-            txtNomeCompleto.setFocusTraversable(true);
+        if (cbOrgao.getSelectionModel().getSelectedItem() == null) {
+            tituloMensagem = "Erro Instituição";
+            corpoMensagem = "É obrigatório a seleção de uma instituição!";
             return false;
         }
 
-        if (txtNomeGuerra.getText().isEmpty()) {
+        if (txtGrauHierarquico.getText().isEmpty()) {
             tituloMensagem = "Erro Nome de Guerra";
             corpoMensagem = "O Nome de Guerra é obrigatório!";
-            txtNomeGuerra.setFocusTraversable(true);
             return false;
         }
 
-        if (txtHierarquia.getText().isEmpty()) {
-            tituloMensagem = "Erro Hierarquia";
-            corpoMensagem = "O grau Hierarquico é obrigatório!";
-            txtHierarquia.setFocusTraversable(true);
+        if (cbSexo.getSelectionModel().getSelectedItem() == null) {
+            tituloMensagem = "Erro Sexo";
+            corpoMensagem = "É obrigatório a seleção de um sexo!";
+            return false;
+        }
+
+        if (txtNome.getText().isEmpty()) {
+            tituloMensagem = "Erro Nome Completo";
+            corpoMensagem = "O Nome completo é obrigatório!";
             return false;
         }
 
         if (daoServidor.buscaPorMatricula(servidorSelecionado.getMatricula()) != null && !editar) {
             tituloMensagem = "Erro Matricula";
             corpoMensagem = "Matricula inválida, por já está em uso!";
-            txtMatricula.setFocusTraversable(true);
             return false;
         }
 
         return true;
     }
+
 }

@@ -26,32 +26,27 @@ import javax.validation.constraints.NotNull;
 public class Servidor implements Serializable {
 
     private IntegerProperty id = new SimpleIntegerProperty();
-    private StringProperty hierarquia = new SimpleStringProperty();
     private StringProperty nome = new SimpleStringProperty();
-    private StringProperty nomeGuerra = new SimpleStringProperty();
     private StringProperty matricula = new SimpleStringProperty();
+    private Instituicao instituicao = new Instituicao();
+    private StringProperty grauHierarquico = new SimpleStringProperty();
+
+    private Sexo sexo = new Sexo();
+    private StringProperty observacao = new SimpleStringProperty();
+    private byte[] foto;
     private Boolean ativo;
 
     public Servidor() {
     }
 
-    public Servidor(String nome, String nomeGuerra, String hierarquia, String matricula) {
+    public Servidor(String nome, String matricula, Instituicao instituicao, String grauHierarquico, Sexo sexo, String observacao, Boolean ativo) {
         this.setNome(nome);
-        this.setNomeGuerra(nomeGuerra);
-        this.setHierarquia(hierarquia);
+        this.setGrauHierarquico(grauHierarquico);
         this.setMatricula(matricula);
-
-    }
-
-     public Servidor(String nome, String nomeGuerra, String hierarquia, String matricula, Boolean ativo) {
-        this.setNome(nome);
-        this.setNomeGuerra(nomeGuerra);
-        this.setHierarquia(hierarquia);
-        this.setMatricula(matricula);
+        this.setObservacao(observacao);
         this.setAtivo(ativo);
-
     }
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", unique = true)
@@ -68,16 +63,9 @@ public class Servidor implements Serializable {
 
     @Basic
     @NotNull
-    @Column(name = "NOME_GUERRA")
-    public String getNomeGuerra() {
-        return this.nomeGuerra.get();
-    }
-
-    @Basic
-    @NotNull
-    @Column(name = "HIERARQUIA")
-    public String getHierarquia() {
-        return this.hierarquia.get();
+    @Column(name = "GRAU HIERARQUICO")
+    public String getGrauHierarquico() {
+        return this.grauHierarquico.get();
     }
 
     @Basic
@@ -86,11 +74,31 @@ public class Servidor implements Serializable {
     public String getMatricula() {
         return this.matricula.get();
     }
-    
+
+    @Basic
+    @NotNull
+    @Column(name = "INSTITUICAO")
+    public Instituicao getInstituicao() {
+        return this.instituicao;
+    }
+
+    @Basic
+    @NotNull
+    @Column(name = "SEXO")
+    public Sexo getSexo() {
+        return this.sexo;
+    }
+
     @Column(name = "ATIVO")
     public Boolean getAtivo() {
         return ativo;
-    }    
+    }
+
+    @Basic(optional = true)
+    @Column(name = "FOTO")
+    public byte[] getFoto() {
+        return foto;
+    }
 
     /*
     SETTERS
@@ -103,22 +111,33 @@ public class Servidor implements Serializable {
         this.nome.set(value);
     }
 
-    public void setNomeGuerra(String value) {
-        this.nomeGuerra.set(value);
-    }
-
-    public void setHierarquia(String value) {
-        this.hierarquia.set(value);
+    public void setGrauHierarquico(String value) {
+        this.grauHierarquico.set(value);
     }
 
     public void setMatricula(String value) {
         this.matricula.set(value);
     }
-    
-   public void setAtivo(Boolean ativo) {
+
+    public void setInstituicao(Instituicao value) {
+        this.instituicao = value;
+    }
+
+    public void setSexo(Sexo value) {
+        this.sexo = sexo;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao.set(observacao);
+    }
+
+    public void setFoto(byte[] value) {
+        this.foto = value;
+    }
+
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
-    
 
     /*
     PROPERTY
@@ -131,30 +150,33 @@ public class Servidor implements Serializable {
         return this.nome;
     }
 
-    public StringProperty nomeGuerraProperty() {
-        return this.nomeGuerra;
-    }
-
     public StringProperty hierarquiaProperty() {
-        return this.hierarquia;
+        return this.grauHierarquico;
     }
 
     public StringProperty matriculaProperty() {
         return this.matricula;
     }
 
+    public StringProperty observacaoProperty() {
+        return this.observacao;
+    }
+
     @Override
     public String toString() {
-        return "Servidor{" + "id=" + id + ", hierarquia=" + hierarquia + ", nome=" + nome + ", nomeGuerra=" + nomeGuerra + ", matricula=" + matricula + '}';
+        return "Servidor{" + "id=" + id + ", nome=" + nome + ", matricula=" + matricula + ", instituicao=" + instituicao + ", grauHierarquico=" + grauHierarquico + ", sexo=" + sexo + ", ativo=" + ativo + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 17 * hash + Objects.hashCode(this.hierarquia);
-        hash = 17 * hash + Objects.hashCode(this.nome);
-        hash = 17 * hash + Objects.hashCode(this.nomeGuerra);
-        hash = 17 * hash + Objects.hashCode(this.matricula);
+        hash = 23 * hash + Objects.hashCode(this.id);
+        hash = 23 * hash + Objects.hashCode(this.nome);
+        hash = 23 * hash + Objects.hashCode(this.matricula);
+        hash = 23 * hash + Objects.hashCode(this.instituicao);
+        hash = 23 * hash + Objects.hashCode(this.grauHierarquico);
+        hash = 23 * hash + Objects.hashCode(this.sexo);
+        hash = 23 * hash + Objects.hashCode(this.ativo);
         return hash;
     }
 
@@ -170,22 +192,28 @@ public class Servidor implements Serializable {
             return false;
         }
         final Servidor other = (Servidor) obj;
-
-        if (!Objects.equals(this.hierarquia, other.hierarquia)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.nome, other.nome)) {
             return false;
         }
-        if (!Objects.equals(this.nomeGuerra, other.nomeGuerra)) {
+        if (!Objects.equals(this.matricula, other.matricula)) {
             return false;
         }
-        if (!Objects.equals(this.matricula, other.matricula)) {
+        if (!Objects.equals(this.instituicao, other.instituicao)) {
+            return false;
+        }
+        if (!Objects.equals(this.grauHierarquico, other.grauHierarquico)) {
+            return false;
+        }
+        if (!Objects.equals(this.sexo, other.sexo)) {
+            return false;
+        }
+        if (!Objects.equals(this.ativo, other.ativo)) {
             return false;
         }
         return true;
     }
-
-    
 
 }

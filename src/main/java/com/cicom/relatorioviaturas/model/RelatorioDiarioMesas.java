@@ -3,6 +3,7 @@ package com.cicom.relatorioviaturas.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -45,7 +46,7 @@ public class RelatorioDiarioMesas implements Serializable {
     private LocalTime horaFinal;
     private Mesa mesa;
     private Set<RelatorioDiarioViaturas> relatorioDiarioViaturas = new HashSet<>();
-    private List<ServidorFuncao> servidores = new ArrayList<>();
+    private Set<ServidorFuncao> servidores = new HashSet<>();
 
     public RelatorioDiarioMesas() {
     }
@@ -58,7 +59,7 @@ public class RelatorioDiarioMesas implements Serializable {
         this.mesa = mesa;
     }
 
-    public RelatorioDiarioMesas(LocalDate dataInicial, LocalDate dataFinal, LocalTime horaInicial, LocalTime horaFinal, Mesa mesa, List<ServidorFuncao> servidor) {
+    public RelatorioDiarioMesas(LocalDate dataInicial, LocalDate dataFinal, LocalTime horaInicial, LocalTime horaFinal, Mesa mesa, Set<ServidorFuncao> servidor) {
         this.dataInicial = dataInicial;
         this.dataFinal = dataFinal;
         this.horaInicial = horaInicial;
@@ -123,7 +124,7 @@ public class RelatorioDiarioMesas implements Serializable {
     @JoinTable(name = "TBL_SERVIDORES_RELATORIO_MESAS", joinColumns = {
         @JoinColumn(name = "RELATORIO_MESAS_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "SERVIDOR_ID")})
-    public List<ServidorFuncao> getServidores() {
+    public Set<ServidorFuncao> getServidores() {
         return this.servidores;
     }
 
@@ -147,6 +148,18 @@ public class RelatorioDiarioMesas implements Serializable {
         return null;
     }
 
+    @Transient
+    public String getHorarioMesa() {
+        return horaInicial.format(DateTimeFormatter.ISO_TIME) + " - " 
+                + horaFinal.format(DateTimeFormatter.ISO_TIME);
+    }
+
+    @Transient
+    public String getDiaMesa() {
+        return dataInicial.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " - " 
+                + dataFinal.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
     /*
     SETTERS
      */
@@ -166,16 +179,8 @@ public class RelatorioDiarioMesas implements Serializable {
         this.relatorioDiarioViaturas = value;
     }
 
-    public void setServidores(List<ServidorFuncao> value) {
+    public void setServidores(Set<ServidorFuncao> value) {
         this.servidores = value;
-    }
-
-    public void setSupervisor(ServidorFuncao value) {
-        this.servidores.add(0, value);
-    }
-
-    public void setOperador(ServidorFuncao value) {
-        this.servidores.add(1, value);
     }
 
     public void setDataFinal(LocalDate dataFinal) {

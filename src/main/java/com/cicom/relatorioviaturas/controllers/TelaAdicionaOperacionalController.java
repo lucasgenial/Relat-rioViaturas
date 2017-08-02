@@ -313,8 +313,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
             carregaDadosTablelaServidorGuarnicao(listaDeServidores);
 
         } else {
-            btRemoveServidor.setDisable(true);
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("É necessário clicar no Servidor abaixo!");

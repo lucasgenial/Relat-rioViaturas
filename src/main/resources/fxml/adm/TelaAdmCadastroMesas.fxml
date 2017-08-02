@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.util.*?>
-<?import java.lang.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.cell.*?>
-<?import javafx.collections.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="842.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroMesasController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="842.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroMesasController">
     <children>
         <SplitPane fx:id="splitPanePrincipal" dividerPositions="0.4726190476190476" layoutX="-6.0" layoutY="-17.0" prefHeight="456.0" prefWidth="715.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <TableView fx:id="tableMesa" layoutX="23.0" layoutY="26.0" onMouseClicked="#clickedTableMesa" prefHeight="401.0" prefWidth="394.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+                        <TableView fx:id="tableMesa" layoutX="23.0" layoutY="28.0" onMouseClicked="#clickedTableMesa" prefHeight="399.0" prefWidth="394.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
                             <columns>
                                 <TableColumn fx:id="tbColumnIdMesa" prefWidth="38.0" resizable="false" text="ID">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="id" />
                                     </cellValueFactory>
                                 </TableColumn>
-                                <TableColumn fx:id="tbColumnNomeMesa" prefWidth="355.0" resizable="false" text="Mesa">
+                                <TableColumn fx:id="tbColumnNomeMesa" prefWidth="355.0" resizable="false" text="MESA">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="nome" />
                                     </cellValueFactory>
@@ -37,7 +42,7 @@
                                 </TableColumn>-->
                             </columns>
                         </TableView>
-                  <TextField fx:id="txtBuscaMesa" layoutY="2.0" prefHeight="25.0" prefWidth="394.0" />
+                  <TextField fx:id="txtBuscaMesa" layoutY="2.0" prefHeight="25.0" prefWidth="394.0" promptText="Buscar" />
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="426.0">
@@ -54,8 +59,8 @@
                         </Label>
                         <GridPane layoutX="20.0" layoutY="131.0" prefHeight="90.0" prefWidth="388.0">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="123.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="275.0" minWidth="10.0" prefWidth="265.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="146.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="275.0" minWidth="10.0" prefWidth="242.0" />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -63,10 +68,10 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label text="Nome da Mesa:" />
-                                <Label text="Unidades Controladas:" GridPane.rowIndex="1" />
+                                <Label text="NOME" />
+                                <Label prefHeight="17.0" prefWidth="150.0" text="UNIDADES CONTROLADAS" GridPane.rowIndex="1" />
                                 <TextField fx:id="txtNomeMesa" disable="true" prefHeight="25.0" prefWidth="249.0" GridPane.columnIndex="1" />
-                                <ComboBox fx:id="cbUnidades" disable="true" onMouseClicked="#clickedCbUnidades" prefHeight="25.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <ComboBox fx:id="cbUnidades" disable="true" onMouseClicked="#clickedCbUnidades" prefHeight="25.0" prefWidth="248.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button fx:id="btnAdicionarUnidade" mnemonicParsing="false" onMouseClicked="#clickedBtnAdicionarUnidade" prefHeight="25.0" prefWidth="120.0" text="Adicionar Unidade" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                             </children>
                         </GridPane>
@@ -77,7 +82,7 @@
                                         <PropertyValueFactory property="id" />
                                     </cellValueFactory>
                                 </TableColumn>
-                                <TableColumn fx:id="tbColumnNomeUnidade" prefWidth="337.0" text="Unidades Controladas">
+                                <TableColumn fx:id="tbColumnNomeUnidade" prefWidth="337.0" text="UNIDADES CONTROLADAS">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="nome" />
                                     </cellValueFactory>
@@ -96,13 +101,14 @@
                         </Label>
                         <Group layoutX="34.0" layoutY="-49.0">
                             <children>
-                                <Button fx:id="btnVoltar" layoutX="237.0" layoutY="443.0" mnemonicParsing="false" onMouseClicked="#clickedBtnVoltar" prefHeight="25.0" prefWidth="65.0" text="Voltar" />
-                                <Button fx:id="btnNovo" layoutX="159.0" layoutY="443.0" mnemonicParsing="false" onMouseClicked="#clickedBtnNovo" prefHeight="25.0" prefWidth="65.0" text="Novo" />
-                        <Button fx:id="btnSalvar" layoutX="80.0" layoutY="443.0" mnemonicParsing="false" onMouseClicked="#clickedBtnSalvar" prefHeight="25.0" prefWidth="65.0" text="Salvar" />
+                                <Button fx:id="btnNovo" layoutX="161.0" layoutY="438.0" mnemonicParsing="false" onMouseClicked="#clickedBtnNovo" prefHeight="25.0" prefWidth="65.0" text="NOVO" />
+                        <Button fx:id="btnSalvar" layoutX="86.0" layoutY="438.0" mnemonicParsing="false" onMouseClicked="#clickedBtnSalvar" prefHeight="25.0" prefWidth="65.0" text="SALVAR" />
                             </children>
                         </Group>
                   <Label fx:id="labelNumeroUnidade" layoutX="281.0" layoutY="358.0" text="15 unidades controladas" />
-                  <Button fx:id="btnRemoverUnidade" disable="true" layoutX="268.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#clickedBtnRemoverUnidade" prefHeight="25.0" prefWidth="120.0" text="Remover Unidade" />
+                  <Button fx:id="btnRemoverUnidade" disable="true" layoutX="293.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#clickedBtnRemoverUnidade" prefHeight="25.0" prefWidth="120.0" text="Remover Unidade" />
+                  <Button fx:id="btnExcluir" layoutX="269.0" layoutY="389.0" mnemonicParsing="false" onMouseClicked="#clickedBtnExcluir" prefHeight="25.0" prefWidth="65.0" text="EXCLUIR" />
+                          <Button fx:id="btnVoltar" layoutX="344.0" layoutY="389.0" mnemonicParsing="false" onMouseClicked="#clickedBtnVoltar" prefHeight="25.0" prefWidth="65.0" text="VOLTAR" />
                     </children>
                 </AnchorPane>
             </items>

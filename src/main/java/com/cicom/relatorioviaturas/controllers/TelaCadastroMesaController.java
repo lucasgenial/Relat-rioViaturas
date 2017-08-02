@@ -121,7 +121,7 @@ public class TelaCadastroMesaController implements Initializable {
         this.horaInicial.setLocalTime(value.getHoraInicial());
         this.horaFinal.setLocalTime(value.getHoraFinal());
 
-        listaDeServidores = (Set<ServidorFuncao>) value.getServidores();
+        listaDeServidores = value.getServidores();
         this.carregaDadosTableServidoresMesa(listaDeServidores);
 
         //Desabilita os itens que não poderão ser editados
@@ -137,6 +137,10 @@ public class TelaCadastroMesaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         carregaDadosIniciais();
+
+        cbFuncao.setDisable(true);
+        btnAdicionarServidor.setDisable(true);
+        btnRemoverServidor.setDisable(true);
     }
 
     private void carregaDadosIniciais() {
@@ -155,7 +159,9 @@ public class TelaCadastroMesaController implements Initializable {
             if (relatorio == null) {
                 //Assume que o plantão inicia-se no dia do lançamento
                 dataInicial.setValue(LocalDate.now());
-                dataInicial.setDisable(false);
+                dataInicial.setDisable(true);
+            } else {
+                btnRemoverServidor.setDisable(false);
             }
 
             //Converte as opções para o modo String
@@ -243,10 +249,22 @@ public class TelaCadastroMesaController implements Initializable {
 
     @FXML
     private void clickedCbMesa() {
+        if (cbMesa.getSelectionModel().getSelectedItem() != null) {
+            btnSalvarMesa.setDisable(false);
+        } else {
+            btnSalvarMesa.setDisable(true);
+        }
     }
 
     @FXML
     private void clickedCbFuncao() {
+        funcao = cbFuncao.getSelectionModel().getSelectedItem();
+
+        if (funcao != null && servidor != null) {
+            btnAdicionarServidor.setDisable(false);
+        } else {
+            btnAdicionarServidor.setDisable(true);
+        }
     }
 
     @FXML
@@ -292,21 +310,28 @@ public class TelaCadastroMesaController implements Initializable {
 
     @FXML
     private void clickedAdicionarServidor() {
-        listaDeServidores.add(new ServidorFuncao(servidor, funcao));
+        if (servidor != null && funcao != null) {
+            listaDeServidores.add(new ServidorFuncao(servidor, funcao));
 
-        //Carrega os dados na tabela Servidores
-        carregaDadosTableServidoresMesa(listaDeServidores);
+            //Carrega os dados na tabela Servidores
+            carregaDadosTableServidoresMesa(listaDeServidores);
 
-        //Desabilitar e Limpa dados para um novo ServidorFunção
-        cbFuncao.setValue(null);
-        cbFuncao.setDisable(true);
-        txtNomeServidor.clear();
-        servidor = null;
+            //Desabilitar e Limpa dados para um novo ServidorFunção
+            cbFuncao.setValue(null);
+            cbFuncao.setDisable(true);
+            txtNomeServidor.clear();
+            servidor = null;
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Servidor Adicionado");
-        alert.setHeaderText("Servidor adicionado!");
-        alert.showAndWait();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Servidor Adicionado");
+            alert.setHeaderText("Servidor adicionado!");
+            alert.showAndWait();
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro ao adicionar");
+            alert.setHeaderText("Servidor não pode ser adicionado!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -321,8 +346,6 @@ public class TelaCadastroMesaController implements Initializable {
             carregaDadosTableServidoresMesa(listaDeServidores);
 
         } else {
-            btnRemoverServidor.setDisable(true);
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("É necessário clicar no Servidor abaixo!");
@@ -342,7 +365,7 @@ public class TelaCadastroMesaController implements Initializable {
                 relatorio.setHoraInicial(horaInicial.getLocalTime());
                 relatorio.setDataFinal(dataFinal.getValue());
                 relatorio.setHoraFinal(horaFinal.getLocalTime());
-                relatorio.setServidores((List<ServidorFuncao>) listaDeServidores);
+                relatorio.setServidores(listaDeServidores);
 
                 //Cadastra o resumo no banco
                 daoRelatorioDiarioMesas.salvar(relatorio);
@@ -359,8 +382,7 @@ public class TelaCadastroMesaController implements Initializable {
                 relatorio.setHoraInicial(horaInicial.getLocalTime());
                 relatorio.setDataFinal(dataFinal.getValue());
                 relatorio.setHoraFinal(horaFinal.getLocalTime());
-
-                relatorio.setServidores((List<ServidorFuncao>) listaDeServidores);
+                relatorio.setServidores(listaDeServidores);
 
                 //Persiste no banco
                 daoRelatorioDiarioMesas.alterar(relatorio);
