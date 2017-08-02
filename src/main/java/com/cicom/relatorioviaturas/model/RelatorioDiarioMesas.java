@@ -2,8 +2,10 @@ package com.cicom.relatorioviaturas.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -37,8 +39,10 @@ import javax.validation.constraints.NotNull;
 public class RelatorioDiarioMesas implements Serializable {
 
     private IntegerProperty id = new SimpleIntegerProperty();
-    private LocalDate dia;
-    private StringProperty turno = new SimpleStringProperty();
+    private LocalDate dataInicial;
+    private LocalDate dataFinal;
+    private LocalTime horaInicial;
+    private LocalTime horaFinal;
     private Mesa mesa;
     private Set<RelatorioDiarioViaturas> relatorioDiarioViaturas = new HashSet<>();
     private List<ServidorFuncao> servidores = new ArrayList<>();
@@ -46,17 +50,21 @@ public class RelatorioDiarioMesas implements Serializable {
     public RelatorioDiarioMesas() {
     }
 
-    public RelatorioDiarioMesas(LocalDate dia, Mesa mesa, List<ServidorFuncao> servidores) {
-        this.dia = dia;
+    public RelatorioDiarioMesas(LocalDate dataInicial, LocalDate dataFinal, LocalTime horaInicial, LocalTime horaFinal, Mesa mesa) {
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
+        this.horaInicial = horaInicial;
+        this.horaFinal = horaFinal;
         this.mesa = mesa;
-        this.servidores = servidores;
     }
 
-    public RelatorioDiarioMesas(LocalDate dia, Mesa mesa, Set<RelatorioDiarioViaturas> relatorioDiarioViaturases, List<ServidorFuncao> servidores) {
-        this.dia = dia;
+    public RelatorioDiarioMesas(LocalDate dataInicial, LocalDate dataFinal, LocalTime horaInicial, LocalTime horaFinal, Mesa mesa, List<ServidorFuncao> servidor) {
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
+        this.horaInicial = horaInicial;
+        this.horaFinal = horaFinal;
         this.mesa = mesa;
-        this.relatorioDiarioViaturas = relatorioDiarioViaturases;
-        this.servidores = servidores;
+        this.servidores = servidor;
     }
 
     /*
@@ -71,16 +79,30 @@ public class RelatorioDiarioMesas implements Serializable {
 
     @Basic
     @NotNull
-    @Column(name = "DIA")
-    public LocalDate getDia() {
-        return this.dia;
+    @Column(name = "DATA_INICIAL")
+    public LocalDate getDataInicial() {
+        return this.dataInicial;
     }
 
     @Basic
     @NotNull
-    @Column(name = "TURNO")
-    public String getTurno() {
-        return this.turno.get();
+    @Column(name = "HORA_INICIAL")
+    public LocalTime getHoraInicial() {
+        return this.horaInicial;
+    }
+
+    @Basic
+    @NotNull
+    @Column(name = "DATA_FINAL")
+    public LocalDate getDataFinal() {
+        return this.dataFinal;
+    }
+
+    @Basic
+    @NotNull
+    @Column(name = "HORA_FINAL")
+    public LocalTime getHoraFinal() {
+        return this.horaFinal;
     }
 
     @OneToOne(targetEntity = Mesa.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -107,20 +129,22 @@ public class RelatorioDiarioMesas implements Serializable {
 
     @Transient
     public ServidorFuncao getSupervisor() {
-        if (this.servidores.get(0) != null && !servidores.isEmpty()) {
-            return this.servidores.get(0);
-        } else {
-            return null;
+        for (ServidorFuncao ser : servidores) {
+            if (ser.getFuncao().getNome().equalsIgnoreCase("supervisor")) {
+                return ser;
+            }
         }
+        return null;
     }
 
     @Transient
     public ServidorFuncao getOperador() {
-        if (this.servidores.get(1) != null && !servidores.isEmpty()) {
-            return this.servidores.get(1);
-        } else {
-            return null;
+        for (ServidorFuncao ser : servidores) {
+            if (ser.getFuncao().getNome().equalsIgnoreCase("operador")) {
+                return ser;
+            }
         }
+        return null;
     }
 
     /*
@@ -130,12 +154,8 @@ public class RelatorioDiarioMesas implements Serializable {
         this.id.set(value);
     }
 
-    public void setDia(LocalDate value) {
-        this.dia = value;
-    }
-
-    public void setTurno(String value) {
-        this.turno.set(value);
+    public void setDataInicial(LocalDate value) {
+        this.dataInicial = value;
     }
 
     public void setMesa(Mesa mesa) {
@@ -158,6 +178,18 @@ public class RelatorioDiarioMesas implements Serializable {
         this.servidores.add(1, value);
     }
 
+    public void setDataFinal(LocalDate dataFinal) {
+        this.dataFinal = dataFinal;
+    }
+
+    public void setHoraInicial(LocalTime horaInicial) {
+        this.horaInicial = horaInicial;
+    }
+
+    public void setHoraFinal(LocalTime horaFinal) {
+        this.horaFinal = horaFinal;
+    }
+
     /*
     PROPERTY
      */
@@ -165,21 +197,22 @@ public class RelatorioDiarioMesas implements Serializable {
         return this.id;
     }
 
-    public StringProperty turnoProperty() {
-        return this.turno;
-    }
-
     @Override
     public String toString() {
-        return "RelatorioDiarioMesas{" + "id=" + id + ", dia=" + dia + ", turno=" + turno + ", mesa=" + mesa + ", relatorioDiarioViaturases=" + relatorioDiarioViaturas + ", servidores=" + servidores + '}';
+        return "RelatorioDiarioMesas{" + "id=" + id + ", dataInicial=" + dataInicial + ", dataFinal=" + dataFinal + ", horaInicial=" + horaInicial + ", horaFinal=" + horaFinal + ", mesa=" + mesa + ", QTD_relatorioDiarioViaturas=" + relatorioDiarioViaturas.size() + ", QTD_servidores=" + servidores.size() + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.dia);
-        hash = 47 * hash + Objects.hashCode(this.turno);
-        hash = 47 * hash + Objects.hashCode(this.mesa);
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        hash = 59 * hash + Objects.hashCode(this.dataInicial);
+        hash = 59 * hash + Objects.hashCode(this.dataFinal);
+        hash = 59 * hash + Objects.hashCode(this.horaInicial);
+        hash = 59 * hash + Objects.hashCode(this.horaFinal);
+        hash = 59 * hash + Objects.hashCode(this.mesa);
+        hash = 59 * hash + Objects.hashCode(this.relatorioDiarioViaturas);
+        hash = 59 * hash + Objects.hashCode(this.servidores);
         return hash;
     }
 
@@ -195,13 +228,28 @@ public class RelatorioDiarioMesas implements Serializable {
             return false;
         }
         final RelatorioDiarioMesas other = (RelatorioDiarioMesas) obj;
-        if (!Objects.equals(this.dia, other.dia)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.turno, other.turno)) {
+        if (!Objects.equals(this.dataInicial, other.dataInicial)) {
+            return false;
+        }
+        if (!Objects.equals(this.dataFinal, other.dataFinal)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaInicial, other.horaInicial)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaFinal, other.horaFinal)) {
             return false;
         }
         if (!Objects.equals(this.mesa, other.mesa)) {
+            return false;
+        }
+        if (!Objects.equals(this.relatorioDiarioViaturas, other.relatorioDiarioViaturas)) {
+            return false;
+        }
+        if (!Objects.equals(this.servidores, other.servidores)) {
             return false;
         }
         return true;

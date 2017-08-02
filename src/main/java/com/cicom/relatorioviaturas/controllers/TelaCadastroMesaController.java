@@ -11,6 +11,7 @@ import com.cicom.relatorioviaturas.model.Servidor;
 import com.cicom.relatorioviaturas.model.ServidorFuncao;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +31,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -39,6 +39,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import jfxtras.scene.control.LocalTimeTextField;
 
 /**
  * FXML Controller class
@@ -54,13 +55,13 @@ public class TelaCadastroMesaController implements Initializable {
     @FXML
     private DatePicker dataInicial;
     @FXML
-    private Spinner<?> horaInicial;
-    @FXML
     private DatePicker dataFinal;
     @FXML
-    private Spinner<?> horaFinal;
-    @FXML
     private TextField txtNomeServidor;
+    @FXML
+    private LocalTimeTextField horaInicial;
+    @FXML
+    private LocalTimeTextField horaFinal;
     @FXML
     private ComboBox<Funcao> cbFuncao;
     @FXML
@@ -113,20 +114,18 @@ public class TelaCadastroMesaController implements Initializable {
     public void setRelatorio(RelatorioDiarioMesas value) {
         this.relatorio = value;
 
-//        //Carrega os dados para os campos
-//        this.dataMesa.setValue(value.getDia());
-//        this.cbTurno.getSelectionModel().select(value.getTurno());
-//        this.cbMesa.getSelectionModel().select(value.getMesa());
-//        this.cbSupervisor.getSelectionModel().select(value.getSupervisor().getServidor());
-//        clickedCbSupervisor();
-//        this.cbOperador.getSelectionModel().select(value.getOperador().getServidor());
-//
-//        //Bloqueia a edição para os campos necessários
-//        this.cbOperador.setDisable(false);
-//        this.dataMesa.setDisable(true);
-//        this.cbMesa.setDisable(true);
-//
-//        this.btnCadastrar.setText("Salvar");
+        //Carrega os dados para os campos
+        this.cbMesa.setValue(value.getMesa());
+        this.dataInicial.setValue(value.getDataInicial());
+        this.dataFinal.setValue(value.getDataFinal());
+        this.horaInicial.setLocalTime(value.getHoraInicial());
+        this.horaFinal.setLocalTime(value.getHoraFinal());
+
+        listaDeServidores = (Set<ServidorFuncao>) value.getServidores();
+        this.carregaDadosTableServidoresMesa(listaDeServidores);
+
+        //Desabilita os itens que não poderão ser editados
+        cbMesa.setDisable(false);
     }
 
     /**
@@ -152,6 +151,13 @@ public class TelaCadastroMesaController implements Initializable {
             alert.showAndWait();
             root.getScene().getWindow().hide();
         } else {
+
+            if (relatorio == null) {
+                //Assume que o plantão inicia-se no dia do lançamento
+                dataInicial.setValue(LocalDate.now());
+                dataInicial.setDisable(false);
+            }
+
             //Converte as opções para o modo String
             cbMesa.setConverter(new StringConverter<Mesa>() {
                 @Override
@@ -211,7 +217,7 @@ public class TelaCadastroMesaController implements Initializable {
         return true;
     }
 
-    private void carregaDadosTablelaServidorGuarnicao(Set<ServidorFuncao> dados) {
+    private void carregaDadosTableServidoresMesa(Set<ServidorFuncao> dados) {
 
         if (!dados.isEmpty()) {
             btnRemoverServidor.setDisable(false);
@@ -289,7 +295,7 @@ public class TelaCadastroMesaController implements Initializable {
         listaDeServidores.add(new ServidorFuncao(servidor, funcao));
 
         //Carrega os dados na tabela Servidores
-        carregaDadosTablelaServidorGuarnicao(listaDeServidores);
+        carregaDadosTableServidoresMesa(listaDeServidores);
 
         //Desabilitar e Limpa dados para um novo ServidorFunção
         cbFuncao.setValue(null);
@@ -312,7 +318,7 @@ public class TelaCadastroMesaController implements Initializable {
             listaDeServidores.remove(servidorParaExcluir);
 
             //Carrega os dados na tabela Servidores
-            carregaDadosTablelaServidorGuarnicao(listaDeServidores);
+            carregaDadosTableServidoresMesa(listaDeServidores);
 
         } else {
             btnRemoverServidor.setDisable(true);
@@ -326,6 +332,50 @@ public class TelaCadastroMesaController implements Initializable {
 
     @FXML
     private void clickedSalvar(ActionEvent event) {
+        if (verificaDados()) {
+            if (relatorio == null) {
+                //Cadastra Nova Mesa
+                relatorio = new RelatorioDiarioMesas();
+
+                relatorio.setMesa(cbMesa.getValue());
+                relatorio.setDataInicial(dataInicial.getValue());
+                relatorio.setHoraInicial(horaInicial.getLocalTime());
+                relatorio.setDataFinal(dataFinal.getValue());
+                relatorio.setHoraFinal(horaFinal.getLocalTime());
+                relatorio.setServidores((List<ServidorFuncao>) listaDeServidores);
+
+                //Cadastra o resumo no banco
+                daoRelatorioDiarioMesas.salvar(relatorio);
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Mesa cadastrada com Sucesso");
+                alert.showAndWait();
+                root.getScene().getWindow().hide();
+            } else {
+                //Edita a mesa
+                //relatorio.setMesa(cbMesa.getValue());
+                relatorio.setDataInicial(dataInicial.getValue());
+                relatorio.setHoraInicial(horaInicial.getLocalTime());
+                relatorio.setDataFinal(dataFinal.getValue());
+                relatorio.setHoraFinal(horaFinal.getLocalTime());
+
+                relatorio.setServidores((List<ServidorFuncao>) listaDeServidores);
+
+                //Persiste no banco
+                daoRelatorioDiarioMesas.alterar(relatorio);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Mesa editada com Sucesso");
+                alert.showAndWait();
+                root.getScene().getWindow().hide();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(mensagemErroTela);
+            alert.setHeaderText(mensagemErroCorpo);
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -353,5 +403,63 @@ public class TelaCadastroMesaController implements Initializable {
             servidor = null;
             root.getScene().getWindow().hide();
         }
+    }
+
+    private boolean verificaDados() {
+        //Data final é depois da data inicial
+        if (dataFinal.getValue().isBefore(dataInicial.getValue())) {
+            mensagemErroTela = "Data Inválida";
+            mensagemErroCorpo = "Corrija o campo Data Inicial!\nEsta não poderá anterior a data Inicial";
+            return false;
+        }
+
+        if (dataFinal.getValue().isEqual(dataInicial.getValue()) && horaFinal.getLocalTime().isBefore(horaInicial.getLocalTime())) {
+            mensagemErroTela = "Hora Final Inválida";
+            mensagemErroCorpo = "Corrija o campo Hora Final!\nNão poderá ser anterior a Hora Inicial";
+            return false;
+        }
+
+        if (dataFinal.getValue().isEqual(dataInicial.getValue()) && horaInicial.getLocalTime().isAfter(horaFinal.getLocalTime())) {
+            mensagemErroTela = "Hora Inicial Inválida";
+            mensagemErroCorpo = "Corrija o campo Hora Inicial!\nNão poderá ser posterior a Hora Final";
+            return false;
+        }
+
+        if (listaDeServidores.size() < 2) {
+            mensagemErroTela = "Erro ao salvar";
+            mensagemErroCorpo = "É necessário que a mesa possua, pelo menos 2 servidores!\n"
+                    + "1 - Operador\n"
+                    + "1 - Supervisor";
+
+            return false;
+        } else {
+            boolean retornoOperador = false;
+            boolean retornoSupervisor = false;
+            for (ServidorFuncao ser : listaDeServidores) {
+                System.out.println(ser);
+                if (ser.getFuncao().getNome().equalsIgnoreCase("Operador")) {
+                    retornoOperador = true;
+                }
+
+                if (ser.getFuncao().getNome().equalsIgnoreCase("Supervisor")) {
+                    retornoSupervisor = true;
+                }
+            }
+
+            //Verifica se há um operador cadastrado
+            if (!retornoOperador) {
+                mensagemErroTela = "Erro ao salvar";
+                mensagemErroCorpo = "É necessário que a mesa possua, pelo menos 1 operador!";
+                return false;
+            }
+
+            //Verifica se há um supervisor cadastrado
+            if (!retornoSupervisor) {
+                mensagemErroTela = "Erro ao salvar";
+                mensagemErroCorpo = "É necessário que a mesa possua, pelo menos 1 supervisor!";
+                return false;
+            }
+        }
+        return true;
     }
 }

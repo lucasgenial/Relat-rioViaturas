@@ -209,7 +209,7 @@ public class TelaPrincipalController implements Initializable {
         tbColumnDiaResumo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioMesas, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioMesas, String> data) {
-                return new SimpleStringProperty(data.getValue().getDia().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                return new SimpleStringProperty(data.getValue().getDataInicial().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
         });
 
@@ -452,7 +452,7 @@ public class TelaPrincipalController implements Initializable {
 
             //Criando um Estágio de Diologo (Stage Dialog)
             Stage dialogStageAtual = new Stage();
-            dialogStageAtual.initStyle(StageStyle.UNDECORATED);
+//            dialogStageAtual.initStyle(StageStyle.UNDECORATED);
             dialogStageAtual.initModality(Modality.APPLICATION_MODAL);
             dialogStageAtual.setTitle("Cadastro de Mesas");
             dialogStageAtual.setResizable(false);

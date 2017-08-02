@@ -60,13 +60,13 @@
       <ComboBox fx:id="cbMesa" layoutX="19.0" layoutY="31.0" onAction="#clickedCbMesa" prefHeight="25.0" prefWidth="332.0" promptText="Selecione a mesa" />
       <DatePicker fx:id="dataInicial" layoutX="17.0" layoutY="86.0" prefHeight="25.0" prefWidth="162.0" />
       <DatePicker fx:id="dataFinal" layoutX="17.0" layoutY="135.0" prefHeight="25.0" prefWidth="162.0" />
-      <TextField fx:id="txtNomeServidor" layoutX="17.0" layoutY="200.0" onAction="#clickedBuscarServidor" prefHeight="25.0" prefWidth="332.0" promptText="Selecione o servidor" />
+      <TextField fx:id="txtNomeServidor" layoutX="17.0" layoutY="200.0" onAction="#clickedBuscarServidor" onKeyPressed="#clickedBuscarServidor" onMouseClicked="#clickedBuscarServidor" prefHeight="25.0" prefWidth="332.0" promptText="Selecione o servidor" />
       <ComboBox fx:id="cbFuncao" layoutX="17.0" layoutY="252.0" onAction="#clickedCbFuncao" prefHeight="25.0" prefWidth="332.0" promptText="Selecione a função" />
       <Button fx:id="btnAdicionarServidor" layoutX="183.0" layoutY="288.0" mnemonicParsing="false" onAction="#clickedAdicionarServidor" text="ADICIONAR" />
       <Button fx:id="btnRemoverServidor" layoutX="270.0" layoutY="289.0" mnemonicParsing="false" onAction="#clickedRemoverServidor" prefHeight="25.0" prefWidth="79.0" text="REMOVER" />
       <Button fx:id="btnSalvarMesa" layoutX="182.0" layoutY="460.0" mnemonicParsing="false" onAction="#clickedSalvar" prefHeight="25.0" prefWidth="79.0" text="SALVAR" />
       <Button fx:id="btnCancelar" layoutX="269.0" layoutY="460.0" mnemonicParsing="false" onAction="#clickedCancelar" prefHeight="25.0" prefWidth="79.0" text="CANCELAR" />
-      <LocalTimeTextField layoutX="189.0" layoutY="86.0" prefHeight="25.0" prefWidth="162.0" />
-      <LocalTimeTextField layoutX="189.0" layoutY="135.0" prefHeight="25.0" prefWidth="162.0" />
+      <LocalTimeTextField fx:id="horaInicial" layoutX="189.0" layoutY="86.0" prefHeight="25.0" prefWidth="162.0" />
+      <LocalTimeTextField fx:id="horaFinal" layoutX="189.0" layoutY="135.0" prefHeight="25.0" prefWidth="162.0" />
     </children>
 </AnchorPane>
