@@ -19,25 +19,32 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author estatistica
+ * @author Lucas Matos e Souza
  */
 @Entity
 @Table(name = "TBL_SEXO")
 @Access(AccessType.PROPERTY)
 public class Sexo implements Serializable {
-
+    
     private IntegerProperty id = new SimpleIntegerProperty();
     private StringProperty nome = new SimpleStringProperty();
-
+    
+    public Sexo() {
+    }
+    
+    public Sexo(String nome) {
+        this.setNome(nome);
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", unique = true)
     public int getId() {
         return id.get();
     }
-
-    @NotNull
+    
     @Basic
+    @NotNull
     @Column(name = "NOME", unique = true)
     public String getNome() {
         return nome.get();
@@ -49,7 +56,7 @@ public class Sexo implements Serializable {
     public void setId(int value) {
         this.id.set(value);
     }
-
+    
     public void setNome(String value) {
         this.nome.set(value);
     }
@@ -60,16 +67,16 @@ public class Sexo implements Serializable {
     public IntegerProperty idProperty() {
         return id;
     }
-
+    
     public StringProperty nomeProperty() {
         return nome;
     }
-
+    
     @Override
     public String toString() {
         return "Sexo{" + "id=" + id + ", nome=" + nome + '}';
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -77,7 +84,7 @@ public class Sexo implements Serializable {
         hash = 17 * hash + Objects.hashCode(this.nome);
         return hash;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -98,5 +105,5 @@ public class Sexo implements Serializable {
         }
         return true;
     }
-
+    
 }

@@ -14,70 +14,78 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.TelaAdmCadastroServidorController">
-  <tabs>
-    <Tab fx:id="tabCadastro" text="Cadastro">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="580.0">
-               <children>
-                  <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRAR NOVO SERVIDOR">
-                     <font>
-                        <Font name="Roboto" size="12.0" />
-                     </font>
-                  </Text>
-                  <Separator layoutY="33.0" prefHeight="7.0" prefWidth="586.0" />
-                  <Label layoutX="161.0" layoutY="70.0" text="Matricula" />
-                  <TextField fx:id="txtMatricula" layoutX="161.0" layoutY="87.0" prefHeight="25.0" prefWidth="168.0" promptText="Matricula" />
-                  <Label layoutX="340.0" layoutY="70.0" text="Instituição" />
-                  <ComboBox fx:id="cbInstituicao" layoutX="339.0" layoutY="87.0" prefHeight="25.0" prefWidth="224.0" promptText="Selecione o instituição" />
-                  <Label layoutX="162.0" layoutY="121.0" prefHeight="17.0" prefWidth="112.0" text="Grau Hierárquico" />
-                  <TextField fx:id="txtGrauHierarquico" layoutX="162.0" layoutY="138.0" prefHeight="25.0" prefWidth="244.0" promptText="Grau hierárquico" />
-                  <Label layoutX="418.0" layoutY="121.0" text="Sexo" />
-                  <ComboBox fx:id="cbSexo" layoutX="417.0" layoutY="138.0" prefHeight="25.0" prefWidth="147.0" />
-                  <Label layoutX="162.0" layoutY="172.0" text="Nome" />
-                  <TextField fx:id="txtNome" layoutX="162.0" layoutY="189.0" prefHeight="25.0" prefWidth="402.0" promptText="Nome completo" />
-                  <Label layoutX="163.0" layoutY="223.0" text="Observação" />
-                  <TextArea fx:id="txtObservacao" layoutX="161.0" layoutY="240.0" prefHeight="85.0" prefWidth="406.0" promptText="Insira informações adicionais" />
-                  <Button fx:id="btnAdicionaFoto" layoutX="34.0" layoutY="223.0" mnemonicParsing="false" onMouseClicked="#clickedAdicionarFoto" text="Adicionar foto" />
-                  <ImageView fx:id="imagemFoto" fitHeight="147.0" fitWidth="131.0" layoutX="14.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" style="-fx-blend-mode: c1c1;" />
-                  <Button fx:id="btnCadastrar" layoutX="296.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#clickedCadastrarServidor" text="CADASTRAR" />
-                  <Button fx:id="btnExcluir" layoutX="387.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#clickedExcluirServidor" prefHeight="25.0" prefWidth="84.0" text="EXCLUIR" />
-                  <Button fx:id="btnVoltar" layoutX="481.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#clickedVoltar" prefHeight="25.0" prefWidth="85.0" text="VOLTAR" />
-                  <Separator layoutX="14.0" layoutY="65.0" prefHeight="9.0" prefWidth="134.0" />
-                  <Separator layoutX="13.0" layoutY="212.0" prefHeight="8.0" prefWidth="134.0" />
-                  <Separator layoutX="11.0" layoutY="69.0" orientation="VERTICAL" prefHeight="149.0" prefWidth="6.0" />
-                  <Separator layoutX="146.0" layoutY="68.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="6.0" />
-               </children></AnchorPane>
-      </content>
-    </Tab>
-    <Tab fx:id="tabListagem" text="Listagem">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="405.0" prefWidth="580.0">
-               <children>
-                  <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LISTAGEM SERVIDORES CADASTRADOS">
-                     <font>
-                        <Font name="Roboto" size="12.0" />
-                     </font>
-                  </Text>
-                  <Separator layoutY="33.0" prefHeight="7.0" prefWidth="586.0" />
-                  <Label layoutX="17.0" layoutY="46.0" text="Nome" />
-                  <TextField fx:id="txtNomeBusca" layoutX="17.0" layoutY="63.0" prefHeight="25.0" prefWidth="334.0" promptText="Informe o nome do servidor" />
-                  <Label layoutX="359.0" layoutY="47.0" text="Instituição" />
-                  <ComboBox fx:id="cbOrgaoBusca" layoutX="358.0" layoutY="64.0" prefHeight="25.0" prefWidth="213.0" promptText="Selecione a instituição" />
-                  <Label layoutX="18.0" layoutY="93.0" text="Resultado da busca" />
-                  <TableView fx:id="tableListaServidores" layoutX="17.0" layoutY="110.0" prefHeight="214.0" prefWidth="554.0">
-                    <columns>
-                      <TableColumn fx:id="cbColumnId" prefWidth="44.0" text="ID" />
-                      <TableColumn fx:id="tbColumnMatricula" prefWidth="85.0" text="MATRICULA" />
-                        <TableColumn fx:id="cbColumnGrauHierarquico" prefWidth="162.0" text="GRAU HIERÁRQUICO" />
-                        <TableColumn fx:id="cbColumnNome" prefWidth="261.0" text="NOME" />
-                    </columns>
-                  </TableView>
-                  <Button fx:id="btnVerDetalhesServidor" layoutX="405.0" layoutY="332.0" mnemonicParsing="false" text="VER DETALHES" />
-                  <Button fx:id="btnVoltar" layoutX="511.0" layoutY="332.0" mnemonicParsing="false" text="VOLTAR" />
-               </children></AnchorPane>
-      </content>
-    </Tab>
-  </tabs>
+<TabPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroServidorController">
+    <tabs>
+        <Tab fx:id="tabCadastro" text="Cadastro">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="580.0">
+                    <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRAR NOVO SERVIDOR">
+                            <font>
+                                <Font name="Roboto" size="12.0" />
+                            </font>
+                        </Text>
+                        <Separator layoutY="33.0" prefHeight="7.0" prefWidth="586.0" />
+                        <Label layoutX="161.0" layoutY="70.0" text="Matricula" />
+                        <TextField fx:id="txtMatricula" layoutX="161.0" layoutY="87.0" prefHeight="25.0" prefWidth="168.0" promptText="Matricula" />
+                        <Label layoutX="340.0" layoutY="70.0" text="Instituição" />
+                        <ComboBox fx:id="cbInstituicao" layoutX="339.0" layoutY="87.0" prefHeight="25.0" prefWidth="224.0" promptText="Selecione o instituição" />
+                        <Label layoutX="162.0" layoutY="121.0" prefHeight="17.0" prefWidth="112.0" text="Grau Hierárquico" />
+                        <TextField fx:id="txtGrauHierarquico" layoutX="162.0" layoutY="138.0" prefHeight="25.0" prefWidth="244.0" promptText="Grau hierárquico" />
+                        <Label layoutX="418.0" layoutY="121.0" text="Sexo" />
+                        <ComboBox fx:id="cbSexo" layoutX="417.0" layoutY="138.0" prefHeight="25.0" prefWidth="147.0" />
+                        <Label layoutX="162.0" layoutY="172.0" text="Nome" />
+                        <TextField fx:id="txtNome" layoutX="162.0" layoutY="189.0" prefHeight="25.0" prefWidth="402.0" promptText="Nome completo" />
+                        <Label layoutX="163.0" layoutY="223.0" text="Observação" />
+                        <TextArea fx:id="txtObservacao" layoutX="161.0" layoutY="240.0" prefHeight="85.0" prefWidth="406.0" promptText="Insira informações adicionais" />
+                        <Button fx:id="btnAdicionaFoto" layoutX="34.0" layoutY="223.0" mnemonicParsing="false" onMouseClicked="#clickedAdicionarFoto" text="Adicionar foto" />
+                        <ImageView fx:id="imagemFoto" fitHeight="147.0" fitWidth="131.0" layoutX="14.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="btnCadastrar" layoutX="296.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#clickedCadastrarServidor" text="CADASTRAR" />
+                        <Button fx:id="btnExcluir" layoutX="387.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#clickedExcluirServidor" prefHeight="25.0" prefWidth="84.0" text="EXCLUIR" />
+                        <Button fx:id="btnVoltar" layoutX="481.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#clickedVoltar" prefHeight="25.0" prefWidth="85.0" text="VOLTAR" />
+                        <Separator layoutX="14.0" layoutY="65.0" prefHeight="9.0" prefWidth="134.0" />
+                        <Separator layoutX="13.0" layoutY="212.0" prefHeight="8.0" prefWidth="134.0" />
+                        <Separator layoutX="11.0" layoutY="69.0" orientation="VERTICAL" prefHeight="149.0" prefWidth="6.0" />
+                        <Separator layoutX="146.0" layoutY="68.0" orientation="VERTICAL" prefHeight="150.0" prefWidth="6.0" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="tabListagem" text="Listagem">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="405.0" prefWidth="580.0">
+                    <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LISTAGEM SERVIDORES CADASTRADOS">
+                            <font>
+                                <Font name="Roboto" size="12.0" />
+                            </font>
+                        </Text>
+                        <Separator layoutY="33.0" prefHeight="7.0" prefWidth="586.0" />
+                        <Label layoutX="17.0" layoutY="46.0" text="Nome" />
+                        <TextField fx:id="txtNomeBusca" layoutX="17.0" layoutY="63.0" prefHeight="25.0" prefWidth="334.0" promptText="Informe o nome do servidor" />
+                        <Label layoutX="359.0" layoutY="47.0" text="Instituição" />
+                        <ComboBox fx:id="cbInstituicaoBusca" layoutX="358.0" layoutY="64.0" prefHeight="25.0" prefWidth="213.0" promptText="Selecione a instituição" />
+                        <Label layoutX="18.0" layoutY="93.0" text="Resultado da busca" />
+                        <TableView fx:id="tableListaServidores" layoutX="17.0" layoutY="110.0" prefHeight="214.0" prefWidth="554.0">
+                            <columns>
+                                <TableColumn fx:id="tbColumnId" prefWidth="44.0" text="ID">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="id" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="tbColumnMatricula" prefWidth="85.0" text="MATRICULA" />
+                                <TableColumn fx:id="tbColumnGrauHierarquico" prefWidth="162.0" text="GRAU HIERÁRQUICO" />
+                                <TableColumn fx:id="tbColumnNome" prefWidth="261.0" text="NOME" />
+                            </columns>
+                        </TableView>
+                        <Button fx:id="btnVerDetalhesServidor" layoutX="405.0" layoutY="332.0" mnemonicParsing="false" onMouseClicked="#clickedBtnVerDetalhesServidor" text="VER DETALHES" />
+                        <Button fx:id="btnVoltar2" layoutX="511.0" layoutY="332.0" mnemonicParsing="false" onMouseClicked="#clickedVoltar2" text="VOLTAR" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
 </TabPane>

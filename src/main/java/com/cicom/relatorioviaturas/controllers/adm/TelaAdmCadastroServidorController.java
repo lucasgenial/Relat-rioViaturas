@@ -1,52 +1,58 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cicom.relatorioviaturas.controllers.adm;
 
+import com.cicom.relatorioviaturas.DAO.InstituicaoDAO;
 import com.cicom.relatorioviaturas.DAO.ServidorDAO;
+import com.cicom.relatorioviaturas.DAO.SexoDAO;
 import com.cicom.relatorioviaturas.model.Instituicao;
 import com.cicom.relatorioviaturas.model.Servidor;
 import com.cicom.relatorioviaturas.model.Sexo;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.embed.swing.SwingFXUtils;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import javax.imageio.ImageIO;
+import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
  *
- * @author estatistica
+ * @author Lucas Matos e Souza
  */
 public class TelaAdmCadastroServidorController implements Initializable {
 
+    @FXML
+    private TabPane root;
     @FXML
     private Tab tabCadastro;
     @FXML
     private TextField txtMatricula;
     @FXML
-    private ComboBox<Instituicao> cbOrgao;
+    private ComboBox<Instituicao> cbInstituicao;
     @FXML
     private TextField txtGrauHierarquico;
     @FXML
@@ -69,8 +75,9 @@ public class TelaAdmCadastroServidorController implements Initializable {
     private Tab tabListagem;
     @FXML
     private TextField txtNomeBusca;
+
     @FXML
-    private ComboBox<Instituicao> cbOrgaoBusca;
+    private ComboBox<Instituicao> cbInstituicaoBusca;
     @FXML
     private TableView<Servidor> tableListaServidores;
     @FXML
@@ -83,12 +90,18 @@ public class TelaAdmCadastroServidorController implements Initializable {
     private TableColumn<Servidor, String> tbColumnNome;
     @FXML
     private Button btnVerDetalhesServidor;
+    @FXML
+    private Button btnVoltar2;
 
     /*
     EXTRA
      */
     private ServidorDAO daoServidor = new ServidorDAO();
+    private InstituicaoDAO daoInstituicao = new InstituicaoDAO();
+    private SexoDAO daoSexo = new SexoDAO();
     private List<Servidor> listaDeServidor;
+    private List<Instituicao> listaDeInstituicao;
+    private List<Sexo> listaDeSexo;
     private boolean editar = false;
     private String tituloMensagem;
     private String corpoMensagem;
@@ -101,12 +114,45 @@ public class TelaAdmCadastroServidorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        carregaDados();
+        btnExcluir.setDisable(true);
     }
 
     private void carregaDados() {
         listaDeServidor = daoServidor.getListAtivos();
+        listaDeInstituicao = daoInstituicao.getList("From Instituicao");
+        listaDeSexo = daoSexo.getList("From Sexo");
 
         if (!listaDeServidor.isEmpty()) {
+
+            ObservableList<Servidor> dadosIniciais = FXCollections.observableList(listaDeServidor);
+
+            // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+            FilteredList<Servidor> filtroDeDados = new FilteredList<>(dadosIniciais, p -> true);
+
+            txtNomeBusca.textProperty().addListener((observable, oldValue, newValue) -> {
+                filtroDeDados.setPredicate(dado -> {
+                    // If filter text is empty, display all persons.
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+
+                    // Compare first name and last name of every person with filter text.
+                    String valorDigitado = newValue.toLowerCase();
+
+                    if (dado.getNome().toLowerCase().contains(valorDigitado)) {
+                        return true; // Filter matches first name.
+                    }
+                    return false; // Does not match.
+                });
+            });
+
+            // 3. Wrap the FilteredList in a SortedList. 
+            SortedList<Servidor> sortedData = new SortedList<>(filtroDeDados);
+
+            // 4. Bind the SortedList comparator to the TableView comparator.
+            sortedData.comparatorProperty().bind(tableListaServidores.comparatorProperty());
+
             tbColumnMatricula.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Servidor, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<Servidor, String> data) {
@@ -128,12 +174,72 @@ public class TelaAdmCadastroServidorController implements Initializable {
                 }
             });
 
-            tableListaServidores.getItems().setAll(FXCollections.observableList(listaDeServidor));
+            // 5. Add sorted (and filtered) data to the table.
+            tableListaServidores.setItems(sortedData);
+
+//            tableListaServidores.getItems().setAll(FXCollections.observableList(listaDeServidor));
+        }
+
+        if (!listaDeInstituicao.isEmpty()) {
+            //Converte as opções para o modo String
+            cbInstituicao.setConverter(new StringConverter<Instituicao>() {
+                @Override
+                public String toString(Instituicao item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
+                }
+
+                @Override
+                public Instituicao fromString(String string) {
+                    return daoInstituicao.buscaPorNome(string);
+                }
+            });
+
+            //Lança todos os servidores cadastrados para a escolha do usuário do Supervisor
+            cbInstituicao.setItems(FXCollections.observableList(listaDeInstituicao));
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro Instituição");
+            alert.setHeaderText("Possivelmente não há Instituições cadastradas/diponiveis na unidade!\n"
+                    + "Entre em contato com o administrador do sistema!");
+            alert.showAndWait();
+            root.getScene().getWindow().hide();
+        }
+
+        if (!listaDeSexo.isEmpty()) {
+            //Converte as opções para o modo String
+            cbSexo.setConverter(new StringConverter<Sexo>() {
+                @Override
+                public String toString(Sexo item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
+                }
+
+                @Override
+                public Sexo fromString(String string) {
+                    return daoSexo.buscaPorNome(string);
+                }
+            });
+
+            //Lança todos os servidores cadastrados para a escolha do usuário do Supervisor
+            cbSexo.setItems(FXCollections.observableList(listaDeSexo));
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro Sexo");
+            alert.setHeaderText("Possivelmente não há Tipo de Sexo cadastradas/diponiveis na unidade!\n"
+                    + "Entre em contato com o administrador do sistema!");
+            alert.showAndWait();
+            root.getScene().getWindow().hide();
         }
     }
 
     @FXML
     private void clickedAdicionarFoto(MouseEvent event) {
+
     }
 
     @FXML
@@ -141,12 +247,12 @@ public class TelaAdmCadastroServidorController implements Initializable {
 
         if (btnCadastrar.getText().equals("EDITAR")) {
             //Habilita os campos
-            txtMatricula.setDisable(true);
-            cbOrgao.setDisable(true);
-            txtGrauHierarquico.setDisable(true);
-            cbSexo.setDisable(true);
-            txtNome.setDisable(true);
-            txtObservacao.setDisable(true);
+            txtMatricula.setDisable(false);
+            cbInstituicao.setDisable(false);
+            txtGrauHierarquico.setDisable(false);
+            cbSexo.setDisable(false);
+            txtNome.setDisable(false);
+            txtObservacao.setDisable(false);
             btnAdicionaFoto.setDisable(true);
 
             btnCadastrar.setText("SALVAR");
@@ -156,32 +262,33 @@ public class TelaAdmCadastroServidorController implements Initializable {
                 novoServidor = new Servidor();
 
                 novoServidor.setMatricula(txtMatricula.getText());
-                novoServidor.setInstituicao(cbOrgao.getSelectionModel().getSelectedItem());
+                novoServidor.setInstituicao(cbInstituicao.getSelectionModel().getSelectedItem());
                 novoServidor.setGrauHierarquico(txtGrauHierarquico.getText());
                 novoServidor.setSexo(cbSexo.getSelectionModel().getSelectedItem());
                 novoServidor.setNome(txtNome.getText());
                 novoServidor.setObservacao(txtObservacao.getText());
 
                 //Converte a imagem
-                if (imagemFoto.getImage() != null) {
-                    BufferedImage bImage = SwingFXUtils.fromFXImage(imagemFoto.getImage(), null);
-                    ByteArrayOutputStream s = new ByteArrayOutputStream();
-                    ImageIO.write(bImage, "jpg", s);
-                    byte[] res = s.toByteArray();
-                    s.close();
-                    novoServidor.setFoto(res);
-                }
+//                if (imagemFoto.getImage() != null) {
+//                    BufferedImage bImage = SwingFXUtils.fromFXImage(imagemFoto.getImage(), null);
+//                    ByteArrayOutputStream s = new ByteArrayOutputStream();
+//                    ImageIO.write(bImage, "jpg", s);
+//                    byte[] res = s.toByteArray();
+//                    s.close();
+//                    novoServidor.setFoto(res);
+//                }
                 novoServidor.setAtivo(true);
 
                 daoServidor.salvar(novoServidor);
 
-                novoServidor = null;
-                
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso!");
                 alert.setHeaderText("Servidor cadastrado com sucesso!");
                 alert.showAndWait();
                 carregaDados();
+                limparDados();
+
+                root.getSelectionModel().select(tabListagem);
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -194,31 +301,33 @@ public class TelaAdmCadastroServidorController implements Initializable {
         } else if (btnCadastrar.getText().equals("SALVAR")) {
             if (verificaDados()) {
                 servidorSelecionado.setMatricula(txtMatricula.getText());
-                servidorSelecionado.setInstituicao(cbOrgao.getSelectionModel().getSelectedItem());
+                servidorSelecionado.setInstituicao(cbInstituicao.getSelectionModel().getSelectedItem());
                 servidorSelecionado.setGrauHierarquico(txtGrauHierarquico.getText());
                 servidorSelecionado.setSexo(cbSexo.getSelectionModel().getSelectedItem());
                 servidorSelecionado.setNome(txtNome.getText());
                 servidorSelecionado.setObservacao(txtObservacao.getText());
 
                 //Converte a imagem
-                if (imagemFoto.getImage() != null) {
-                    BufferedImage bImage = SwingFXUtils.fromFXImage(imagemFoto.getImage(), null);
-                    ByteArrayOutputStream s = new ByteArrayOutputStream();
-                    ImageIO.write(bImage, "jpg", s);
-                    byte[] res = s.toByteArray();
-                    s.close();
-                    novoServidor.setFoto(res);
-                }
+//                if (imagemFoto.getImage() != null) {
+//                    BufferedImage bImage = SwingFXUtils.fromFXImage(imagemFoto.getImage(), null);
+//                    ByteArrayOutputStream s = new ByteArrayOutputStream();
+//                    ImageIO.write(bImage, "jpg", s);
+//                    byte[] res = s.toByteArray();
+//                    s.close();
+//                    novoServidor.setFoto(res);
+//                }
                 servidorSelecionado.setAtivo(true);
 
-                daoServidor.salvar(servidorSelecionado);
+                daoServidor.alterar(servidorSelecionado);
 
-                servidorSelecionado = null;
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso!");
                 alert.setHeaderText("Servidor modificado com sucesso!");
                 alert.showAndWait();
                 carregaDados();
+                limparDados();
+
+                root.getSelectionModel().select(tabListagem);
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -231,10 +340,87 @@ public class TelaAdmCadastroServidorController implements Initializable {
 
     @FXML
     private void clickedExcluirServidor(MouseEvent event) {
+        if (servidorSelecionado != null) {
+            Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
+            alertAntesExcluir.setTitle("Atenção!");
+            alertAntesExcluir.setHeaderText("Os dados referentes à este servidor serão perdidos, deseja continuar?");
+            alertAntesExcluir.getButtonTypes().clear();
+            alertAntesExcluir.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+            //Deactivate Defaultbehavior for yes-Button:
+            Button yesButton = (Button) alertAntesExcluir.getDialogPane().lookupButton(ButtonType.YES);
+            yesButton.setDefaultButton(false);
+
+            //Activate Defaultbehavior for no-Button:
+            Button noButton = (Button) alertAntesExcluir.getDialogPane().lookupButton(ButtonType.NO);
+            noButton.setDefaultButton(true);
+
+            //Pega qual opção o usuario pressionou
+            final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
+
+            if (resultado.get() == ButtonType.YES) {
+                servidorSelecionado.setAtivo(false);
+                daoServidor.alterar(servidorSelecionado);
+
+                servidorSelecionado = null;
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Servidor excluído com sucesso!");
+                alert.showAndWait();
+                carregaDados();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("É necessário selecionar, o Servidor!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
-    private void clickedVoltar(MouseEvent event) {
+    private void clickedVoltar() {
+        if (btnVoltar.getText().equalsIgnoreCase("VOLTAR")) {
+            Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
+            alertVoltar.setTitle("Atenção!");
+            alertVoltar.setHeaderText("Os dados informados serão perdidos, deseja continuar?");
+            alertVoltar.getButtonTypes().clear();
+            alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+            //Deactivate Defaultbehavior for yes-Button:
+            Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+            yesButton.setDefaultButton(false);
+
+            //Activate Defaultbehavior for no-Button:
+            Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+            noButton.setDefaultButton(true);
+
+            //Pega qual opção o usuario pressionou
+            final Optional<ButtonType> resultado = alertVoltar.showAndWait();
+
+            if (resultado.get() == ButtonType.YES) {
+                root.getScene().getWindow().hide();
+            }
+        } else if (btnVoltar.getText().equalsIgnoreCase("NOVO")) {
+            carregaDados();
+            limparDados();
+            txtMatricula.setDisable(false);
+            cbInstituicao.setDisable(false);
+            txtGrauHierarquico.setDisable(false);
+            cbSexo.setDisable(false);
+            txtNome.setDisable(false);
+            txtObservacao.setDisable(false);
+            btnAdicionaFoto.setDisable(true);
+
+            btnCadastrar.setText("CADASTRAR");
+            btnVoltar.setText("VOLTAR");
+            btnExcluir.setDisable(true);
+        }
+    }
+
+    @FXML
+    private void clickedVoltar2(MouseEvent event) {
+        root.getScene().getWindow().hide();
     }
 
     private boolean verificaDados() {
@@ -244,7 +430,7 @@ public class TelaAdmCadastroServidorController implements Initializable {
             return false;
         }
 
-        if (cbOrgao.getSelectionModel().getSelectedItem() == null) {
+        if (cbInstituicao.getSelectionModel().getSelectedItem() == null) {
             tituloMensagem = "Erro Instituição";
             corpoMensagem = "É obrigatório a seleção de uma instituição!";
             return false;
@@ -268,13 +454,70 @@ public class TelaAdmCadastroServidorController implements Initializable {
             return false;
         }
 
-        if (daoServidor.buscaPorMatricula(servidorSelecionado.getMatricula()) != null && !editar) {
-            tituloMensagem = "Erro Matricula";
-            corpoMensagem = "Matricula inválida, por já está em uso!";
-            return false;
+        if (btnCadastrar.getText().equalsIgnoreCase("CADASTRAR")) {
+            if (daoServidor.buscaPorMatricula(txtMatricula.getText()) != null && !editar) {
+                tituloMensagem = "Erro Matricula";
+                corpoMensagem = "Matricula inválida, por já está em uso!";
+                return false;
+            }
+        }
+
+        if (btnCadastrar.getText().equalsIgnoreCase("SALVAR")) {
+            if (daoServidor.buscaPorObjeto(servidorSelecionado) != null && !editar) {
+                tituloMensagem = "Erro ao salvar";
+                corpoMensagem = "Já existe um servidor com estes dados!\n"
+                        + "Verifique e tente novamente";
+                return false;
+            }
         }
 
         return true;
     }
 
+    @FXML
+    private void clickedBtnVerDetalhesServidor() throws IOException {
+        servidorSelecionado = (Servidor) tableListaServidores.getSelectionModel().getSelectedItem();
+
+        if (servidorSelecionado != null) {
+            //Desabilita os campos
+            txtMatricula.setDisable(true);
+            cbInstituicao.setDisable(true);
+            txtGrauHierarquico.setDisable(true);
+            cbSexo.setDisable(true);
+            txtNome.setDisable(true);
+            txtObservacao.setDisable(true);
+            btnAdicionaFoto.setDisable(true);
+
+            //Coloca os valores nos campos
+            txtMatricula.setText(servidorSelecionado.getMatricula());
+            cbInstituicao.setValue(servidorSelecionado.getInstituicao());
+            txtGrauHierarquico.setText(servidorSelecionado.getGrauHierarquico());
+            cbSexo.setValue(servidorSelecionado.getSexo());
+            txtNome.setText(servidorSelecionado.getNome());
+            txtObservacao.setText(servidorSelecionado.getObservacao());
+
+            //Converte a imagem
+            btnCadastrar.setText("EDITAR");
+            btnVoltar.setText("NOVO");
+            btnExcluir.setDisable(false);
+
+            root.getSelectionModel().select(tabCadastro);
+
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro!");
+            alert.setHeaderText("É necessário selecionar, o Servidor!");
+            alert.showAndWait();
+        }
+    }
+
+    private void limparDados() {
+        txtMatricula.setText("");
+        cbInstituicao.setValue(null);
+        txtGrauHierarquico.setText("");
+        cbSexo.setValue(null);
+        txtNome.setText("");
+        txtObservacao.setText("");
+        btnAdicionaFoto.setDisable(true);
+    }
 }

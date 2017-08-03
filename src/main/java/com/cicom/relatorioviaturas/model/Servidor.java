@@ -9,11 +9,15 @@ import javafx.beans.property.StringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -30,7 +34,6 @@ public class Servidor implements Serializable {
     private StringProperty matricula = new SimpleStringProperty();
     private Instituicao instituicao = new Instituicao();
     private StringProperty grauHierarquico = new SimpleStringProperty();
-
     private Sexo sexo = new Sexo();
     private StringProperty observacao = new SimpleStringProperty();
     private byte[] foto;
@@ -39,12 +42,26 @@ public class Servidor implements Serializable {
     public Servidor() {
     }
 
-    public Servidor(String nome, String matricula, Instituicao instituicao, String grauHierarquico, Sexo sexo, String observacao, Boolean ativo) {
+    public Servidor(String nome, String matricula, Instituicao instituicao, String grauHierarquico, Sexo sexo, 
+            String observacao, Boolean ativo) {
+        this.setNome(nome);
+        this.setGrauHierarquico(grauHierarquico);
+        this.setMatricula(matricula);
+        this.setObservacao(observacao);
+        this.setInstituicao(instituicao);
+        this.setSexo(sexo);
+        this.setAtivo(ativo);
+    }
+
+    public Servidor(String nome, String matricula, Instituicao instituicao, String grauHierarquico, Sexo sexo,
+            String observacao, byte[] foto, Boolean ativo) {
         this.setNome(nome);
         this.setGrauHierarquico(grauHierarquico);
         this.setMatricula(matricula);
         this.setObservacao(observacao);
         this.setAtivo(ativo);
+        this.setSexo(sexo);
+        this.setFoto(foto);
     }
 
     @Id
@@ -63,7 +80,7 @@ public class Servidor implements Serializable {
 
     @Basic
     @NotNull
-    @Column(name = "GRAU HIERARQUICO")
+    @Column(name = "GRAU_HIERARQUICO")
     public String getGrauHierarquico() {
         return this.grauHierarquico.get();
     }
@@ -75,16 +92,14 @@ public class Servidor implements Serializable {
         return this.matricula.get();
     }
 
-    @Basic
-    @NotNull
-    @Column(name = "INSTITUICAO")
+    @OneToOne(targetEntity = Instituicao.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "INSTITUICAO")
     public Instituicao getInstituicao() {
         return this.instituicao;
     }
 
-    @Basic
-    @NotNull
-    @Column(name = "SEXO")
+    @OneToOne(targetEntity = Sexo.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "SEXO")
     public Sexo getSexo() {
         return this.sexo;
     }
@@ -94,10 +109,16 @@ public class Servidor implements Serializable {
         return ativo;
     }
 
-    @Basic(optional = true)
+    @Lob
     @Column(name = "FOTO")
     public byte[] getFoto() {
         return foto;
+    }
+
+    @Basic(optional = true)
+    @Column(name = "OBSERVACAO")
+    public String getObservacao() {
+        return this.observacao.get();
     }
 
     /*
@@ -124,7 +145,7 @@ public class Servidor implements Serializable {
     }
 
     public void setSexo(Sexo value) {
-        this.sexo = sexo;
+        this.sexo = value;
     }
 
     public void setObservacao(String observacao) {
@@ -164,7 +185,7 @@ public class Servidor implements Serializable {
 
     @Override
     public String toString() {
-        return "Servidor{" + "id=" + id + ", nome=" + nome + ", matricula=" + matricula + ", instituicao=" + instituicao + ", grauHierarquico=" + grauHierarquico + ", sexo=" + sexo + ", ativo=" + ativo + '}';
+        return "Servidor{" + "id=" + id + ", nome=" + nome + ", matricula=" + matricula + ", instituicao=" + instituicao.getNome() + ", grauHierarquico=" + grauHierarquico.getName() + ", sexo=" + sexo.getNome() + ", ativo=" + ativo + '}';
     }
 
     @Override

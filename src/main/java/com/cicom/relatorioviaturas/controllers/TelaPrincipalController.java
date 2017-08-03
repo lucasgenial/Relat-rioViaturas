@@ -3,7 +3,7 @@ package com.cicom.relatorioviaturas.controllers;
 import com.cicom.relatorioviaturas.DAO.RelatorioDiarioMesasDAO;
 import com.cicom.relatorioviaturas.DAO.ViaturaDAO;
 import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroMesasController;
-import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroServidorController1;
+import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroServidorController;
 import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroTipoPOController;
 import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroUnidadesController;
 import com.cicom.relatorioviaturas.model.*;
@@ -929,19 +929,19 @@ public class TelaPrincipalController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(this.getClass().getResource("/fxml/adm/TelaAdmCadastroServidor.fxml"));
-            AnchorPane page = loader.load();
+            TabPane page = loader.load();
 
             Scene scene = new Scene(page);
 
             //Criando um Estágio de Diologo (Stage Dialog)
             Stage dialogStageAtual = new Stage();
             dialogStageAtual.initModality(Modality.APPLICATION_MODAL);
-            dialogStageAtual.setTitle("Cadastro de Unidade");
+            dialogStageAtual.setTitle("Cadastro de Servidores");
             dialogStageAtual.setResizable(false);
             dialogStageAtual.setScene(scene);
 
             //Setando o cliente no Controller.
-            TelaAdmCadastroServidorController1 controller = loader.getController();
+            TelaAdmCadastroServidorController controller = loader.getController();
 //            controller.setDialogStage(dialogStageAtual);
 
             //Mostra a tela ate que o usuario feche

@@ -29,6 +29,14 @@ public class Instituicao implements Serializable {
     private IntegerProperty id = new SimpleIntegerProperty();
     private StringProperty nome = new SimpleStringProperty();
 
+    public Instituicao() {
+
+    }
+
+    public Instituicao(String nome) {
+        this.setNome(nome);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", unique = true)
@@ -36,8 +44,8 @@ public class Instituicao implements Serializable {
         return id.get();
     }
 
-    @NotNull
     @Basic
+    @NotNull
     @Column(name = "NOME", unique = true)
     public String getNome() {
         return nome.get();

@@ -40,6 +40,10 @@ public class Unidade implements Serializable {
     public Unidade() {
     }
 
+    public Unidade(String nome) {
+        this.setNome(nome);
+    }
+
     public Unidade(String nome, String comandoArea) {
         this.setNome(nome);
         this.setComandoDeArea(comandoArea);
@@ -63,7 +67,7 @@ public class Unidade implements Serializable {
 
     @Basic
     @NotNull
-    @Column(name = "NOME", unique = true)
+    @Column(name = "NOME")
     public String getNome() {
         return this.nome.get();
     }
@@ -112,22 +116,24 @@ public class Unidade implements Serializable {
     public StringProperty nomeProperty() {
         return this.nome;
     }
-    
-    public StringProperty comandoDeAreaProperty(){
+
+    public StringProperty comandoDeAreaProperty() {
         return this.comandoDeArea;
     }
 
     @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 31 * hash + Objects.hashCode(this.nome);
-        hash = 31 * hash + Objects.hashCode(this.comandoDeArea);
-        return hash;
+    public String toString() {
+        return "Unidade{" + "id=" + id + ", nome=" + nome + ", comandoDeArea=" + comandoDeArea + ", pos=" + pos.size() + '}';
     }
 
     @Override
-    public String toString() {
-        return "Unidade{" + "id=" + id + ", nome=" + nome + ", comandante=" + comandoDeArea + ", pos=" + pos + '}';
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.id);
+        hash = 83 * hash + Objects.hashCode(this.nome);
+        hash = 83 * hash + Objects.hashCode(this.comandoDeArea);
+        hash = 83 * hash + Objects.hashCode(this.pos);
+        return hash;
     }
 
     @Override
@@ -142,10 +148,16 @@ public class Unidade implements Serializable {
             return false;
         }
         final Unidade other = (Unidade) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
         if (!Objects.equals(this.nome, other.nome)) {
             return false;
         }
         if (!Objects.equals(this.comandoDeArea, other.comandoDeArea)) {
+            return false;
+        }
+        if (!Objects.equals(this.pos, other.pos)) {
             return false;
         }
         return true;

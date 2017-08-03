@@ -62,7 +62,7 @@ public class Mesa implements Serializable {
         return this.nome.get();
     }
 
-    @ManyToMany(targetEntity = Unidade.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(name = "TBL_MESA_UNIDADE", 
             joinColumns = {@JoinColumn(name = "MESA_ID_FK")},
             inverseJoinColumns = {@JoinColumn(name = "UNIDADE_ID_FK")})
@@ -95,7 +95,7 @@ public class Mesa implements Serializable {
 
     @Override
     public String toString() {
-        return "Mesa{" + "id=" + id + ", nome=" + nome + ", unidades=" + unidades + '}';
+        return "Mesa{" + "id=" + id + ", nome=" + nome + ", unidades=" + unidades.size() + '}';
     }
 
     @Override
