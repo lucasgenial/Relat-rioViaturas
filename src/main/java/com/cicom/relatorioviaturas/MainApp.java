@@ -6,12 +6,15 @@ import com.cicom.relatorioviaturas.DAO.MesaDAO;
 import com.cicom.relatorioviaturas.DAO.PoDAO;
 import com.cicom.relatorioviaturas.DAO.ServidorDAO;
 import com.cicom.relatorioviaturas.DAO.SexoDAO;
+import com.cicom.relatorioviaturas.DAO.TipoMesaDAO;
 import com.cicom.relatorioviaturas.DAO.UnidadeDAO;
 import com.cicom.relatorioviaturas.model.Funcao;
 import com.cicom.relatorioviaturas.model.Instituicao;
 import com.cicom.relatorioviaturas.model.Mesa;
 import com.cicom.relatorioviaturas.model.PO;
+import com.cicom.relatorioviaturas.model.Servidor;
 import com.cicom.relatorioviaturas.model.Sexo;
+import com.cicom.relatorioviaturas.model.TipoMesa;
 import com.cicom.relatorioviaturas.model.Unidade;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +31,6 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 
 //        lancarDados();
-        
         setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SplashScreen.fxml"));
 
@@ -84,29 +86,62 @@ public class MainApp extends Application {
         System.out.println("SALVAR SEXO");
         SexoDAO daoSexo = new SexoDAO();
 
-        daoSexo.salvar(new Sexo("Masculino"));
-        daoSexo.salvar(new Sexo("Feminino"));
+        Sexo sex1 = new Sexo("Masculino");
+        Sexo sex2 = new Sexo("Feminino");
+
+        daoSexo.salvar(sex1);
+        daoSexo.salvar(sex2);
 
         System.out.println("SALVAR SEXO\n\n");
-        
+
         System.out.println("SALVAR INSTITUCIONAL");
         InstituicaoDAO daoInstituicao = new InstituicaoDAO();
-        
-        daoInstituicao.salvar(new Instituicao("PM"));
-        daoInstituicao.salvar(new Instituicao("BPM"));
-        daoInstituicao.salvar(new Instituicao("PC"));
-        daoInstituicao.salvar(new Instituicao("DPT"));
-        
+
+        Instituicao inst1 = new Instituicao("PM");
+        Instituicao inst2 = new Instituicao("BPM");
+        Instituicao inst3 = new Instituicao("PC");
+        Instituicao inst4 = new Instituicao("DPT");
+
+        daoInstituicao.salvar(inst1);
+        daoInstituicao.salvar(inst2);
+        daoInstituicao.salvar(inst3);
+        daoInstituicao.salvar(inst4);
+
         System.out.println("SALVAR INSTITUCIONAL\n\n");
 
 //        //CADASTRA COMANDANTE
 //        System.out.println("SALVAR SERVIDOR \n\n");
         ServidorDAO daoServidor = new ServidorDAO();
         daoServidor.getListAtivos();
-        
+
 //        public Servidor(String nome, String matricula, Instituicao instituicao, String grauHierarquico, Sexo sexo, String observacao, Boolean ativo);
-//        Servidor ser1 = new Servidor("SERGIO ANTONIO", "4241", "PM", "Tenente",  true);
-//        Servidor ser2 = new Servidor("PEDRO ORLANDO SARDA FILHO","Tenente", "342432", true);
+        Servidor ser1 = new Servidor("SERGIO ANTONIO", "15975", inst1, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
+        Servidor ser2 = new Servidor("PEDRO ORLANDO SARDA FILHO", "342432", inst1, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
+        Servidor ser3 = new Servidor("ANNA KARINA DO NASCIMENTO BONATO", "89492", inst1, "TENENTE", sex2, "INSERIDO NO MAIN", true);
+        Servidor ser4 = new Servidor("MONICA GONCALVES PETRY", "8748", inst1, "TENENTE", sex2, "INSERIDO NO MAIN", true);
+        Servidor ser5 = new Servidor("LEANDRO LEONIDAS DE BRITO", "42421", inst2, "TENENTE", sex1, "INSERIDO NO MAIN", true);
+        Servidor ser6 = new Servidor("JULIANA MIRANDA MARTINS", "82719", inst2, "CABO", sex2, "INSERIDO NO MAIN", true);
+        Servidor ser7 = new Servidor("TAMARA PADILHA DE SOUZA", "552", inst2, "CABO", sex2, "INSERIDO NO MAIN", true);
+        Servidor ser8 = new Servidor("RAIMIR PEREIRA DA SILVA", "653", inst2, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
+        Servidor ser9 = new Servidor("MAYKON LUIZ ZORZAN DE LIMA", "654", inst2, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
+        Servidor ser10 = new Servidor("LUCAS INOCENCIO DOS SANTOS", "655", inst2, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
+        Servidor ser11 = new Servidor("ARILSON ZARELLI CUSTODIO DA SILVA", "656", inst2, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
+        Servidor ser12 = new Servidor("IRWING CESAR BONDAR", "666", inst2, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
+        
+        
+        daoServidor.salvar(ser1);
+        daoServidor.salvar(ser2);
+        daoServidor.salvar(ser3);
+        daoServidor.salvar(ser4);
+        daoServidor.salvar(ser5);
+        daoServidor.salvar(ser6);
+        daoServidor.salvar(ser7);
+        daoServidor.salvar(ser8);
+        daoServidor.salvar(ser9);
+        daoServidor.salvar(ser10);
+        daoServidor.salvar(ser11);
+        daoServidor.salvar(ser12);        
+
 //        Servidor ser3 = new Servidor("ANNA KARINA DO NASCIMENTO BONATO", "Tenente", "89492", true);
 //        Servidor ser4 = new Servidor("MONICA GONCALVES PETRY", "Tenente", "8748", true);
 //        Servidor ser5 = new Servidor("LEANDRO LEONIDAS DE BRITO","Tenente", "42421", true);
@@ -161,14 +196,14 @@ public class MainApp extends Application {
 //
 //        //Unidade
 //        System.out.println("SALVAR UNIDADE \n\n");
-        Unidade und1 = new Unidade("POLICIA MILITAR","8º BPM");
-        Unidade und2 = new Unidade("POLICIA MILITAR","7º CIPM");
-        Unidade und3 = new Unidade("POLICIA MILITAR","CIPPA");
-        Unidade und4 = new Unidade("POLICIA MILITAR","5º PEL/CIPRV - ITABUNA");
-        Unidade und5 = new Unidade("POLICIA MILITAR","CIPT/SUL");
-        Unidade und6 = new Unidade("CORPO DE BOMBEIROS MILITAR","6º GBM");
-        Unidade und7 = new Unidade("DPT","24º CRPT");
-        Unidade und8 = new Unidade("DELEGACIA","23º COORPIN");
+        Unidade und1 = new Unidade("POLICIA MILITAR", "8º BPM", true);
+        Unidade und2 = new Unidade("POLICIA MILITAR", "7º CIPM", true);
+        Unidade und3 = new Unidade("POLICIA MILITAR", "CIPPA", true);
+        Unidade und4 = new Unidade("POLICIA MILITAR", "5º PEL/CIPRV - ITABUNA", true);
+        Unidade und5 = new Unidade("POLICIA MILITAR", "CIPT/SUL", true);
+        Unidade und6 = new Unidade("CORPO DE BOMBEIROS MILITAR", "6º GBM", true);
+        Unidade und7 = new Unidade("DPT", "24º CRPT", true);
+        Unidade und8 = new Unidade("DELEGACIA", "23º COORPIN", true);
 //        Unidade und2 = new Unidade("10ª CIPM / CANDEIAS", "R.M.S");
 //        Unidade und3 = new Unidade("22ª CIPM / SIMÕES FILHO", "R.M.S");
 //        Unidade und4 = new Unidade("32ª CIPM / POJUCA", "R.M.S");
@@ -324,8 +359,16 @@ public class MainApp extends Application {
 //        listaUnid.add(und59);
 //        listaUnid.add(und64);
 //        listaUnid.add(und65);
+
+        TipoMesa tipoMesa = new TipoMesa("Fixa");
+        TipoMesa tipoMesa2 = new TipoMesa("Evento");
+        TipoMesaDAO daoTipoMesa = new TipoMesaDAO();
+
+        daoTipoMesa.salvar(tipoMesa);
+        daoTipoMesa.salvar(tipoMesa2);
+
         MesaDAO daoMesa = new MesaDAO();
-        daoMesa.salvar(new Mesa("CICOM - PORTO SEGURO", listaUnid));
+        daoMesa.salvar(new Mesa("CICOM - PORTO SEGURO", listaUnid, tipoMesa, true));
 //        daoMesa.salvar(new Mesa("ATL 02"));
 //        daoMesa.salvar(new Mesa("ATL 03"));
 //        daoMesa.salvar(new Mesa("ATL 04"));

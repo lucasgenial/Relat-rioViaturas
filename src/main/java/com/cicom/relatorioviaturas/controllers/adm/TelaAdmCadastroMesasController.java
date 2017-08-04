@@ -1,31 +1,46 @@
 package com.cicom.relatorioviaturas.controllers.adm;
 
 import com.cicom.relatorioviaturas.DAO.MesaDAO;
+import com.cicom.relatorioviaturas.DAO.TipoMesaDAO;
 import com.cicom.relatorioviaturas.DAO.UnidadeDAO;
+import com.cicom.relatorioviaturas.MainApp;
+import com.cicom.relatorioviaturas.model.Instituicao;
 import com.cicom.relatorioviaturas.model.Mesa;
+import com.cicom.relatorioviaturas.model.PO;
 import com.cicom.relatorioviaturas.model.Servidor;
+import com.cicom.relatorioviaturas.model.TipoMesa;
 import com.cicom.relatorioviaturas.model.Unidade;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 /**
@@ -35,226 +50,76 @@ import javafx.util.StringConverter;
 public class TelaAdmCadastroMesasController implements Initializable {
 
     @FXML
-    private AnchorPane root;
+    private TabPane root;
     @FXML
-    private SplitPane splitPanePrincipal;
+    private Tab tabCadastro;
     @FXML
-    private TableView<Mesa> tableMesa;
+    private TextField txtNome;
     @FXML
-    private TableColumn<Mesa, Integer> tbColumnIdMesa;
+    private ComboBox<TipoMesa> cbTipoMesa;
     @FXML
-    private TableColumn<Mesa, String> tbColumnNomeMesa;
+    private ComboBox<Unidade> cbUnidade;
     @FXML
-    private TextField txtNomeMesa;
+    private Button btnCadastrar;
     @FXML
-    private ComboBox<Unidade> cbUnidades;
+    private Button btnVoltar;
     @FXML
-    private TableView<Unidade> tableUnidadesControladas;
+    private Button btnInserirMesa;
+    @FXML
+    private TableView<Unidade> tableUnidades;
     @FXML
     private TableColumn<Unidade, Integer> tbColumnIdUnidade;
     @FXML
     private TableColumn<Unidade, String> tbColumnNomeUnidade;
     @FXML
-    private Label labelNumeroUnidade;
+    private TableColumn<Unidade, Boolean> tbColumnAcaoUnidade;
     @FXML
-    private Button btnVoltar;
+    private Tab tabListagem;
     @FXML
-    private Button btnSalvar;
+    private TextField txtNomeBusca;
     @FXML
-    private Button btnAdicionarUnidade;
+    private ComboBox<TipoMesa> cbTipoBusca;
     @FXML
-    private Button btnNovo;
+    private TableView<Mesa> tableListaMesa;
     @FXML
-    private Button btnRemoverUnidade;
+    private TableColumn<Mesa, Integer> tbColumnIdMesa;
     @FXML
-    private TextField txtBuscaMesa;
+    private TableColumn<Mesa, String> tbColumnNomeMesa;
+    @FXML
+    private TableColumn<Mesa, String> tbColumnTipoMesa;
+    @FXML
+    private TableColumn<Mesa, Boolean> tbColumnAcaoMesa;
 
-    /*
-    Extra
-     */
-    private UnidadeDAO daoUnidade = new UnidadeDAO();
+    //
     private MesaDAO daoMesa = new MesaDAO();
-    private Mesa novaMesa;
-    private Set<Unidade> listaDeUnidades;
-    private List<Unidade> listaDeUnidadesCombo;
-    private List<Mesa> listaDeMesas;
-    private boolean editar = false;
-    private String tituloMensagem;
-    private String corpoMensagem;
+    private TipoMesaDAO daoTipoMesa = new TipoMesaDAO();
+    private UnidadeDAO daoUnidade = new UnidadeDAO();
+    private List<Mesa> listaDeMesa;
+    private List<TipoMesa> listaDeTipoMesa;
+    private List<Unidade> listaDeUnidades;
+    
+    Mesa mesaSelecionada;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         carregaDados();
     }
 
-    @FXML
-    private void clickedTableMesa() {
-        novaMesa = tableMesa.getSelectionModel().getSelectedItem();
-        txtNomeMesa.setText(novaMesa.getNome());
-        labelNumeroUnidade.setText((novaMesa.getUnidades() != null) ? (novaMesa.getUnidades().size() + " Unidades Controladas") : ("0 Unidade Controlada"));
-        listaDeUnidades = (novaMesa.getUnidades() != null) ? novaMesa.getUnidades() : null;
-        tableUnidadesControladas.getItems().setAll(FXCollections.observableSet(listaDeUnidades));
-
-        btnSalvar.setText("Editar");
-        btnSalvar.setDisable(false);
-
-        txtNomeMesa.setDisable(true);
-        cbUnidades.setDisable(true);
-        btnAdicionarUnidade.setDisable(true);
-        editar = false;
-    }
-
-    @FXML
-    private void clickedBtnVoltar() {
-        Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
-        alertVoltar.setTitle("Atenção!");
-        alertVoltar.setHeaderText("Os dados informados serão perdidos, deseja continuar?");
-        alertVoltar.getButtonTypes().clear();
-        alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-
-        //Deactivate Defaultbehavior for yes-Button:
-        Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
-        yesButton.setDefaultButton(false);
-
-        //Activate Defaultbehavior for no-Button:
-        Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
-        noButton.setDefaultButton(true);
-
-        //Pega qual opção o usuario pressionou
-        final Optional<ButtonType> resultado = alertVoltar.showAndWait();
-
-        if (resultado.get() == ButtonType.YES) {
-            root.getScene().getWindow().hide();
-        }
-    }
-
-    @FXML
-    private void clickedBtnSalvar() {
-        //Ver a ação no botão editar
-        if (btnSalvar.getText().equals("Editar")) {
-            txtNomeMesa.setDisable(false);
-            cbUnidades.setDisable(false);
-            btnSalvar.setDisable(false);
-            btnAdicionarUnidade.setDisable(false);
-            btnSalvar.setText("Salvar");
-            editar = true;
-
-            //Se o botão salvar for ativado e o editar for verdadeiro
-            //Estamos modificando um Tipo P.O. Já existente
-        } else if (btnSalvar.getText().equals("Salvar") && editar) {
-            if (verificaDados()) {
-                //Altera o nome do PO
-                novaMesa.setNome(txtNomeMesa.getText());
-                novaMesa.setUnidades(listaDeUnidades);
-
-                daoMesa.alterar(novaMesa);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso!");
-                alert.setHeaderText("Mesa alterada com sucesso!");
-                alert.showAndWait();
-                carregaDados();
-
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(tituloMensagem);
-                alert.setHeaderText(corpoMensagem);
-                alert.showAndWait();
-            }
-            //Adicionando novo tipo P.O.
-        } else if (btnSalvar.getText().equals("Salvar") && !editar) {
-            if (verificaDados()) {
-                //Altera o nome do PO
-                novaMesa = new Mesa();
-                novaMesa.setNome(txtNomeMesa.getText());
-                novaMesa.setUnidades(listaDeUnidades);
-
-                daoMesa.salvar(novaMesa);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso!");
-                alert.setHeaderText("Nova Mesa cadastrada!");
-                alert.showAndWait();
-                carregaDados();
-
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(tituloMensagem);
-                alert.setHeaderText(corpoMensagem);
-                alert.showAndWait();
-            }
-        }
-    }
-
-    @FXML
-    private void clickedBtnNovo() {
-        btnSalvar.setText("Salvar");
-        txtNomeMesa.setText("");
-        txtNomeMesa.setDisable(false);
-        cbUnidades.setDisable(false);
-        btnAdicionarUnidade.setDisable(false);
-        btnSalvar.setDisable(false);
-        editar = false;
-        novaMesa = null;
-    }
-
-    @FXML
-    private void clickedCbUnidades() {
-    }
-
-    @FXML
-    private void clickedTableUnidadesControladas() {
-        btnRemoverUnidade.setDisable(false);
-    }
-
     private void carregaDados() {
-        txtNomeMesa.setDisable(true);
-        cbUnidades.setDisable(true);
-        btnAdicionarUnidade.setDisable(true);
-        btnSalvar.setDisable(true);
-        btnSalvar.setText("Editar");
+        listaDeMesa = daoMesa.getListAtivos();
+        listaDeTipoMesa = daoTipoMesa.getList("From TipoMesa");
+        listaDeUnidades = daoUnidade.getListAtivos();
 
-        //Carrega a lista de Funções
-        listaDeUnidadesCombo = daoUnidade.getList("FROM Unidade");
-        listaDeMesas = daoMesa.getList("FROM Mesa");
+        if (!listaDeMesa.isEmpty()) {
 
-        if (!listaDeUnidadesCombo.isEmpty()) {
-            //Carrega os dados dos POs no ComboBox
-            cbUnidades.setConverter(new StringConverter<Unidade>() {
-                @Override
-                public String toString(Unidade item) {
-                    if (item != null) {
-                        return item.getNome();
-                    }
-                    return "";
-                }
-
-                @Override
-                public Unidade fromString(String string) {
-                    return daoUnidade.buscaPorNome(string);
-                }
-
-            });
-            cbUnidades.getItems().setAll(FXCollections.observableList(listaDeUnidadesCombo));
-
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro Unidade");
-            alert.setHeaderText("Possivelmente não há Unidades cadastradas/diponiveis no sistema!");
-            alert.showAndWait();
-            root.getScene().getWindow().hide();
-        }
-
-        //Carrega as Unidades cadastradas no banco de dados
-        if (!listaDeMesas.isEmpty()) {
-            ObservableList<Mesa> dadosIniciais = FXCollections.observableList(listaDeMesas);
+            ObservableList<Mesa> dadosIniciais = FXCollections.observableList(listaDeMesa);
 
             // 1. Wrap the ObservableList in a FilteredList (initially display all data).
             FilteredList<Mesa> filtroDeDados = new FilteredList<>(dadosIniciais, p -> true);
 
-            txtBuscaMesa.textProperty().addListener((observable, oldValue, newValue) -> {
+            txtNomeBusca.textProperty().addListener((observable, oldValue, newValue) -> {
                 filtroDeDados.setPredicate(dado -> {
-                    // If filter text is empty, display all persons.
+                    // Se o texto do filtro estiver vazio, exiba todas as pessoas.
                     if (newValue == null || newValue.isEmpty()) {
                         return true;
                     }
@@ -263,8 +128,26 @@ public class TelaAdmCadastroMesasController implements Initializable {
                     String valorDigitado = newValue.toLowerCase();
 
                     if (dado.getNome().toLowerCase().contains(valorDigitado)) {
-                        return true; // Filter matches first name.
+                        return true; // Filtro corresponde ao primeiro nome.
                     }
+                    return false; // Does not match.
+                });
+            });
+
+            cbTipoBusca.valueProperty().addListener((observable, oldValue, newValue) -> {
+                filtroDeDados.setPredicate(dado -> {
+                    // Se o combobox estiver vazio, exiba todas as pessoas.
+                    if (newValue == null) {
+                        return true;
+                    }
+
+                    // Compare o primeiro valor.
+                    TipoMesa valorDigitado = newValue;
+
+                    if (dado.getTipoMesa().equals(valorDigitado)) {
+                        return true; // Filtro corresponde ao primeiro nome.
+                    }
+
                     return false; // Does not match.
                 });
             });
@@ -273,77 +156,263 @@ public class TelaAdmCadastroMesasController implements Initializable {
             SortedList<Mesa> sortedData = new SortedList<>(filtroDeDados);
 
             // 4. Bind the SortedList comparator to the TableView comparator.
-            sortedData.comparatorProperty().bind(tableMesa.comparatorProperty());
+            sortedData.comparatorProperty().bind(tableListaMesa.comparatorProperty());
+
+            tbColumnNomeMesa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Mesa, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Mesa, String> data) {
+                    return new SimpleStringProperty(data.getValue().getNome());
+                }
+            });
+
+            tbColumnTipoMesa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Mesa, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Mesa, String> data) {
+                    return new SimpleStringProperty(data.getValue().getTipoMesa().getNome());
+                }
+            });
+
+            tbColumnAcaoMesa.setSortable(false);
+
+            tbColumnAcaoMesa.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Mesa, Boolean>, ObservableValue<Boolean>>() {
+                @Override
+                public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Mesa, Boolean> data) {
+                    return new SimpleBooleanProperty(data.getValue() != null);
+                }
+            });
+
+            tbColumnAcaoMesa.setCellFactory(new Callback<TableColumn<Mesa, Boolean>, TableCell<Mesa, Boolean>>() {
+                @Override
+                public TableCell<Mesa, Boolean> call(TableColumn<Mesa, Boolean> data) {
+                    return new ButtonCell(tableListaMesa);
+                }
+
+                //Define the button cell
+                class ButtonCell extends TableCell<Mesa, Boolean> {
+
+                    HBox hb = new HBox();
+
+                    //BOTAO REMOVER
+                    private Button botaoRemover = new Button();
+                    private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
+
+                    //BOTAO EDITAR
+                    private Button botaoEditar = new Button();
+                    private final ImageView imagemEditar = new ImageView(new Image(getClass().getResourceAsStream("/icons/editar.png")));
+
+                    //BOTAO EDITAR
+                    private Button botaoVisualizar = new Button();
+                    private final ImageView imagemVisualizar = new ImageView(new Image(getClass().getResourceAsStream("/icons/visualizar.png")));
+
+                    ButtonCell(final TableView tblView) {
+                        mesaSelecionada = (Mesa) tblView.getSelectionModel().getSelectedItem();
+                        
+                        //BOTAO VISUALIZAR
+                        imagemVisualizar.fitHeightProperty().set(16);
+                        imagemVisualizar.fitWidthProperty().set(16);
+
+                        botaoVisualizar.setGraphic(imagemVisualizar);
+
+                        botaoVisualizar.setOnAction(new EventHandler<ActionEvent>() {
+
+                            @Override
+                            public void handle(ActionEvent t) {
+                                if (mesaSelecionada != null) {
+                                    txtNome.setText(mesaSelecionada.getNome());
+                                    cbTipoMesa.setValue(mesaSelecionada.getTipoMesa());
+                                    tableUnidades.getItems().setAll(mesaSelecionada.getUnidades());
+                                    
+                                    txtNome.setDisable(false);
+                                    cbTipoMesa.setDisable(false);
+                                    tableUnidades.setDisable(false);
+                                    btnCadastrar.setDisable(false);
+                                    
+                                    root.getSelectionModel().select(tabCadastro);
+                                }
+                            }
+                        });
+
+                        //BOTAO EDITAR
+                        imagemEditar.fitHeightProperty().set(16);
+                        imagemEditar.fitWidthProperty().set(16);
+
+                        botaoEditar.setGraphic(imagemEditar);
+
+                        botaoEditar.setOnAction(new EventHandler<ActionEvent>() {
+
+                            @Override
+                            public void handle(ActionEvent t) {
+                                if (mesaSelecionada != null) {
+                                    txtNome.setText(mesaSelecionada.getNome());
+                                    cbTipoMesa.setValue(mesaSelecionada.getTipoMesa());
+                                    tableUnidades.getItems().setAll(mesaSelecionada.getUnidades());
+                                    
+                                    txtNome.setDisable(true);
+                                    cbTipoMesa.setDisable(true);
+                                    tableUnidades.setDisable(true);
+                                    btnCadastrar.setDisable(true);
+                                    
+                                    btnCadastrar.setText("SALVAR");
+                                    
+                                    root.getSelectionModel().select(tabCadastro);
+                                }
+                            }
+                        });
+
+                        //BOTAO REMOVER
+                        imagemRemover.fitHeightProperty().set(16);
+                        imagemRemover.fitWidthProperty().set(16);
+
+                        botaoRemover.setGraphic(imagemRemover);
+
+                        botaoRemover.setOnAction(new EventHandler<ActionEvent>() {
+
+                            @Override
+                            public void handle(ActionEvent t) {
+                                if (mesaSelecionada != null) {
+                                    Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
+                                    alertVoltar.setTitle("Atenção!");
+                                    alertVoltar.setHeaderText("Os dados referentes à esta Mesa serão perdidos, deseja continuar?");
+                                    alertVoltar.getButtonTypes().clear();
+                                    alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+                                    //Deactivate Defaultbehavior for yes-Button:
+                                    Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+                                    yesButton.setDefaultButton(false);
+
+                                    //Activate Defaultbehavior for no-Button:
+                                    Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+                                    noButton.setDefaultButton(true);
+
+                                    //Pega qual opção o usuario pressionou
+                                    final Optional<ButtonType> resultado = alertVoltar.showAndWait();
+
+                                    if (resultado.get() == ButtonType.YES) {
+                                        mesaSelecionada.setAtivo(false);
+                                        
+                                        daoMesa.alterar(mesaSelecionada);
+
+                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                        alert.setTitle("Sucesso!");
+                                        alert.setHeaderText("Tipo Mesa excluído com sucesso!");
+                                        alert.showAndWait();
+                                        carregaDados();
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    //Display button if the row is not empty
+                    @Override
+                    protected void updateItem(Boolean t, boolean empty) {
+                        hb.setAlignment(Pos.CENTER);
+
+                        super.updateItem(t, empty);
+                        if (!empty) {
+                            hb.getChildren().add(botaoVisualizar);
+                            hb.getChildren().add(botaoEditar);
+                            hb.getChildren().add(botaoRemover);
+
+                            setGraphic(hb);
+                        }
+                    }
+                }
+            });
 
             // 5. Add sorted (and filtered) data to the table.
-            tableMesa.getItems().setAll(FXCollections.observableList(listaDeMesas));
-        }
-    }
+            tableListaMesa.setItems(sortedData);
 
-    private boolean verificaDados() {
-        if (txtNomeMesa.getText().isEmpty()) {
-            tituloMensagem = "Erro Nome Mesa";
-            corpoMensagem = "O nome da Mesa é necessário!";
-            txtNomeMesa.setFocusTraversable(true);
-            return false;
         }
 
-        if (listaDeUnidades.isEmpty()) {
-            tituloMensagem = "Erro Unidades Mesa";
-            corpoMensagem = "A Mesa precisará gerenciar alguma Unidade!";
-            cbUnidades.setFocusTraversable(true);
-            return false;
+        if (!listaDeTipoMesa.isEmpty()) {
+            //Converte as opções para o modo String
+            cbTipoMesa.setConverter(new StringConverter<TipoMesa>() {
+                @Override
+                public String toString(TipoMesa item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
+                }
+
+                @Override
+                public TipoMesa fromString(String string) {
+                    return daoTipoMesa.buscaPorNome(string);
+                }
+            });
+
+            //Lança no combobox para busca
+            cbTipoMesa.setItems(FXCollections.observableList(listaDeTipoMesa));
+
+            cbTipoBusca.setConverter(new StringConverter<TipoMesa>() {
+                @Override
+                public String toString(TipoMesa item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
+                }
+
+                @Override
+                public TipoMesa fromString(String string) {
+                    return daoTipoMesa.buscaPorNome(string);
+                }
+            });
+
+            cbTipoBusca.setItems(FXCollections.observableList(listaDeTipoMesa));
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro Tipo Mesa");
+            alert.setHeaderText("Possivelmente não há Tipo de Mesa cadastradas!\n"
+                    + "Entre em contato com o administrador do sistema!");
+            alert.showAndWait();
+            root.getScene().getWindow().hide();
         }
 
-        if (daoMesa.buscaPorObjeto(novaMesa) != null) {
-            tituloMensagem = "Erro Salvar Mesa";
-            corpoMensagem = "Esta Mesa encontra-se cadastrada no banco!";
-            return false;
-        }
+        if (!listaDeUnidades.isEmpty()) {
+            //Converte as opções para o modo String
+            cbUnidade.setConverter(new StringConverter<Unidade>() {
+                @Override
+                public String toString(Unidade item) {
+                    if (item != null) {
+                        return item.getNome() + " - " + item.getComandoDeArea();
+                    }
+                    return "";
+                }
 
-        return true;
+                @Override
+                public Unidade fromString(String string) {
+                    return daoUnidade.buscaPorNome(string);
+                }
+            });
+
+            //Lança no combobox para busca
+            cbUnidade.setItems(FXCollections.observableList(listaDeUnidades));
+
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro Unidade");
+            alert.setHeaderText("Possivelmente não há Unidades cadastradas!");
+            alert.showAndWait();
+            root.getScene().getWindow().hide();
+        }
     }
 
     @FXML
-    private void clickedBtnAdicionarUnidade() {
-        Unidade unidadeSelecionada = cbUnidades.getSelectionModel().getSelectedItem();
-
-        if (unidadeSelecionada != null) {
-            //Carrega o item na lista de POS que comporá a tabela/Unidade
-            listaDeUnidades.add(unidadeSelecionada);
-
-            //Adiciono o item na Tabela
-            tableUnidadesControladas.getItems().setAll(FXCollections.observableSet(listaDeUnidades));
-
-            labelNumeroUnidade.setText(tableUnidadesControladas.getItems().size() + " Unidades Controladas");
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("É necessário selecionar uma Unidade!");
-            alert.showAndWait();
-        }
-        tableUnidadesControladas.setFocusTraversable(true);
+    private void clickedCadastrarServidor(MouseEvent event) {
     }
 
     @FXML
-    private void clickedBtnRemoverUnidade() {
-        Unidade unidadeSelecionada = tableUnidadesControladas.getSelectionModel().getSelectedItem();
-
-        if (unidadeSelecionada != null) {
-            //Carrega o item na lista de POS que comporá a tabela/Unidade
-            listaDeUnidades.remove(unidadeSelecionada);
-
-            //Adiciono o item na Tabela
-            tableUnidadesControladas.getItems().setAll(FXCollections.observableSet(listaDeUnidades));
-
-            labelNumeroUnidade.setText(tableUnidadesControladas.getItems().size() + " Unidades Controladas");
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("É necessário selecionar uma Unidade na tabela abaixo!");
-            alert.showAndWait();
-        }
-        tableUnidadesControladas.setFocusTraversable(true);
-        btnRemoverUnidade.setDisable(true);
+    private void clickedVoltar(MouseEvent event) {
     }
+
+    @FXML
+    private void clickedInserirUnidade(MouseEvent event) {
+    }
+
+    @FXML
+    private void exitCbTipoBusca(MouseEvent event) {
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.cicom.relatorioviaturas.DAO;
 
+import static com.cicom.relatorioviaturas.DAO.AbstractDAO.transacao;
 import com.cicom.relatorioviaturas.model.Mesa;
+import com.cicom.relatorioviaturas.model.Servidor;
 import java.util.List;
 
 /**
@@ -23,9 +25,6 @@ public class MesaDAO extends AbstractDAO<Mesa> {
                     .getResultList();
         } catch (Exception e) {
             throw e;
-        } finally {
-//            administracao.close();
-//            fabrica.close();
         }
 
         if (resultados.size() > 0) {
@@ -33,5 +32,23 @@ public class MesaDAO extends AbstractDAO<Mesa> {
         } else {
             return null;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Mesa> getListAtivos() {
+
+        List<Mesa> t = null;
+
+        try {
+            transacao.begin();
+            t = administracao.createQuery("SELECT u FROM Mesa u WHERE u.ativo=1").getResultList();
+            transacao.commit();
+        } catch (Exception e) {
+            if (transacao != null) {
+                transacao.rollback();
+            }
+            e.printStackTrace();
+        }
+        return t;
     }
 }

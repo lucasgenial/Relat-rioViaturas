@@ -1,6 +1,7 @@
 package com.cicom.relatorioviaturas.DAO;
 
 import static com.cicom.relatorioviaturas.DAO.AbstractDAO.administracao;
+import com.cicom.relatorioviaturas.model.Mesa;
 import com.cicom.relatorioviaturas.model.Unidade;
 import java.util.List;
 
@@ -30,5 +31,23 @@ public class UnidadeDAO extends AbstractDAO<Unidade> {
         } else {
             return null;
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<Unidade> getListAtivos() {
+
+        List<Unidade> t = null;
+
+        try {
+            transacao.begin();
+            t = administracao.createQuery("SELECT u FROM Unidade u WHERE u.ativo=1").getResultList();
+            transacao.commit();
+        } catch (Exception e) {
+            if (transacao != null) {
+                transacao.rollback();
+            }
+            e.printStackTrace();
+        }
+        return t;
     }
 }

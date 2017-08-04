@@ -26,6 +26,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -35,6 +37,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -132,7 +135,7 @@ public class TelaAdmCadastroServidorController implements Initializable {
 
             txtNomeBusca.textProperty().addListener((observable, oldValue, newValue) -> {
                 filtroDeDados.setPredicate(dado -> {
-                    // If filter text is empty, display all persons.
+                    // Se o texto do filtro estiver vazio, exiba todas as pessoas.
                     if (newValue == null || newValue.isEmpty()) {
                         return true;
                     }
@@ -141,8 +144,26 @@ public class TelaAdmCadastroServidorController implements Initializable {
                     String valorDigitado = newValue.toLowerCase();
 
                     if (dado.getNome().toLowerCase().contains(valorDigitado)) {
-                        return true; // Filter matches first name.
+                        return true; // Filtro corresponde ao primeiro nome.
                     }
+                    return false; // Does not match.
+                });
+            });
+
+            cbInstituicaoBusca.valueProperty().addListener((observable, oldValue, newValue) -> {
+                filtroDeDados.setPredicate(dado -> {
+                    // Se o combobox estiver vazio, exiba todas as pessoas.
+                    if (newValue == null) {
+                        return true;
+                    }
+
+                    // Compare o primeiro valor.
+                    Instituicao valorDigitado = newValue;
+
+                    if (dado.getInstituicao().equals(valorDigitado)) {
+                        return true; // Filtro corresponde ao primeiro nome.
+                    }
+
                     return false; // Does not match.
                 });
             });
@@ -177,7 +198,6 @@ public class TelaAdmCadastroServidorController implements Initializable {
             // 5. Add sorted (and filtered) data to the table.
             tableListaServidores.setItems(sortedData);
 
-//            tableListaServidores.getItems().setAll(FXCollections.observableList(listaDeServidor));
         }
 
         if (!listaDeInstituicao.isEmpty()) {
@@ -197,8 +217,26 @@ public class TelaAdmCadastroServidorController implements Initializable {
                 }
             });
 
-            //Lança todos os servidores cadastrados para a escolha do usuário do Supervisor
+            //Lança no combobox para busca
             cbInstituicao.setItems(FXCollections.observableList(listaDeInstituicao));
+
+            cbInstituicaoBusca.setConverter(new StringConverter<Instituicao>() {
+                @Override
+                public String toString(Instituicao item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
+                }
+
+                @Override
+                public Instituicao fromString(String string) {
+                    return daoInstituicao.buscaPorNome(string);
+                }
+            });
+
+            //Lança todos os servidores cadastrados para a escolha do usuário do Supervisor
+            cbInstituicaoBusca.setItems(FXCollections.observableList(listaDeInstituicao));
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro Instituição");
@@ -519,5 +557,10 @@ public class TelaAdmCadastroServidorController implements Initializable {
         txtNome.setText("");
         txtObservacao.setText("");
         btnAdicionaFoto.setDisable(true);
+    }
+
+    @FXML
+    private void exitCbInstituicaoBusca() {
+        cbInstituicaoBusca.setValue(null);
     }
 }

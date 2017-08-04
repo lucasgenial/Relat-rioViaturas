@@ -902,7 +902,7 @@ public class TelaPrincipalController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(this.getClass().getResource("/fxml/adm/TelaAdmCadastroMesas.fxml"));
-            AnchorPane page = loader.load();
+            TabPane page = loader.load();
 
             Scene scene = new Scene(page);
 

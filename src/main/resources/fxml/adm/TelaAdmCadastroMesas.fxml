@@ -1,117 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="842.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroMesasController">
-    <children>
-        <SplitPane fx:id="splitPanePrincipal" dividerPositions="0.4726190476190476" layoutX="-6.0" layoutY="-17.0" prefHeight="456.0" prefWidth="715.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+<TabPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroMesasController">
+    <tabs>
+        <Tab fx:id="tabCadastro" text="Cadastro">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="580.0">
                     <children>
-                        <TableView fx:id="tableMesa" layoutX="23.0" layoutY="28.0" onMouseClicked="#clickedTableMesa" prefHeight="399.0" prefWidth="394.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0">
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRAR NOVA MESA">
+                            <font>
+                                <Font name="Roboto" size="12.0" />
+                            </font>
+                        </Text>
+                        <Separator layoutY="33.0" prefHeight="7.0" prefWidth="586.0" />
+                        <Label layoutX="14.0" layoutY="46.0" text="Nome" />
+                        <TextField fx:id="txtNome" layoutX="12.0" layoutY="63.0" prefHeight="25.0" prefWidth="372.0" promptText="Nome" />
+                        <Label layoutX="397.0" layoutY="46.0" text="Tipo" />
+                        <ComboBox fx:id="cbTipoMesa" layoutX="396.0" layoutY="63.0" prefHeight="25.0" prefWidth="170.0" promptText="Selecione o tipo" />
+                        <Label layoutX="25.0" layoutY="119.0" prefHeight="17.0" prefWidth="112.0" text="Unidade" />
+                        <ComboBox fx:id="cbUnidade" layoutX="24.0" layoutY="136.0" prefHeight="25.0" prefWidth="449.0" promptText="Selecione a unidade" />
+                        <Button fx:id="btnCadastrar" layoutX="388.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#clickedCadastrarServidor" text="CADASTRAR" />
+                        <Button fx:id="btnVoltar" layoutX="481.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#clickedVoltar" prefHeight="25.0" prefWidth="85.0" text="VOLTAR" />
+                  <Separator layoutX="158.0" layoutY="98.0" prefHeight="14.0" prefWidth="407.0" />
+                  <Separator layoutX="15.0" layoutY="321.0" prefHeight="8.0" prefWidth="550.0" />
+                  <Separator layoutX="8.0" layoutY="104.0" orientation="VERTICAL" prefHeight="220.0" prefWidth="13.0" />
+                  <Separator layoutX="559.0" layoutY="105.0" orientation="VERTICAL" prefHeight="219.0" prefWidth="13.0" />
+                  <Label layoutX="22.0" layoutY="97.0" prefHeight="15.0" prefWidth="123.0" text="Controle de Unidades">
+                     <font>
+                        <Font name="Roboto" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btnInserirMesa" layoutX="481.0" layoutY="136.0" mnemonicParsing="false" onMouseClicked="#clickedInserirUnidade" prefHeight="25.0" prefWidth="72.0" text="INSERIR" />
+                  <TableView fx:id="tableUnidades" layoutX="23.0" layoutY="171.0" prefHeight="143.0" prefWidth="532.0">
+                    <columns>
+                      <TableColumn fx:id="tbColumnIdUnidade" prefWidth="42.0" text="ID" />
+                      <TableColumn fx:id="tbColumnNomeUnidade" prefWidth="366.0" text="NOME" />
+                        <TableColumn fx:id="tbColumnAcaoUnidade" minWidth="0.0" prefWidth="123.0" text="AÇÃO" />
+                    </columns>
+                  </TableView>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="tabListagem" text="Listagem">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="405.0" prefWidth="580.0">
+                    <children>
+                        <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LISTAGEM MESAS CADASTRADOS">
+                            <font>
+                                <Font name="Roboto" size="12.0" />
+                            </font>
+                        </Text>
+                        <Separator layoutY="33.0" prefHeight="7.0" prefWidth="586.0" />
+                        <Label layoutX="14.0" layoutY="46.0" text="Nome" />
+                        <TextField fx:id="txtNomeBusca" layoutX="12.0" layoutY="63.0" prefHeight="25.0" prefWidth="372.0" promptText="Informe o nome da Mesa" />
+                        <Label layoutX="397.0" layoutY="46.0" text="Tipo" />
+                        <ComboBox fx:id="cbTipoBusca" layoutX="396.0" layoutY="63.0" onMouseExited="#exitCbTipoBusca" prefHeight="25.0" prefWidth="170.0" promptText="Selecione o tipo" />
+                        <Label layoutX="14.0" layoutY="93.0" text="Resultado da busca" />
+                        <TableView fx:id="tableListaMesa" layoutX="13.0" layoutY="110.0" prefHeight="249.0" prefWidth="555.0">
                             <columns>
-                                <TableColumn fx:id="tbColumnIdMesa" prefWidth="38.0" resizable="false" text="ID">
+                                <TableColumn fx:id="tbColumnIdMesa" prefWidth="44.0" text="ID">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="id" />
                                     </cellValueFactory>
                                 </TableColumn>
-                                <TableColumn fx:id="tbColumnNomeMesa" prefWidth="355.0" resizable="false" text="MESA">
-                                    <cellValueFactory>
-                                        <PropertyValueFactory property="nome" />
-                                    </cellValueFactory>
-                                </TableColumn>
-<!--                                <TableColumn fx:id="tbColumnComandoArea" prefWidth="95.0" text="CMD. ÁREA">
-                                    <cellValueFactory>
-                                        <PropertyValueFactory property="comandoDeArea" />
-                                    </cellValueFactory>
-                                </TableColumn>-->
+                                <TableColumn fx:id="tbColumnNomeMesa" prefWidth="251.0" text="NOME" />
+                                <TableColumn fx:id="tbColumnTipoMesa" prefWidth="121.0" text="TIPO" />
+                                <TableColumn fx:id="tbColumnAcaoMesa" prefWidth="138.0" resizable="false" text="AÇÃO" />
                             </columns>
                         </TableView>
-                  <TextField fx:id="txtBuscaMesa" layoutY="2.0" prefHeight="25.0" prefWidth="394.0" promptText="Buscar" />
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="426.0">
-                    <children>
-                        <Label layoutX="20.0" layoutY="30.0" text="SisEF - Sistema de Efetivo e Frota - STELECOM">
-                            <font>
-                                <Font name="System Bold" size="18.0" />
-                            </font>
-                        </Label>
-                        <Label layoutX="269.0" layoutY="80.0" text="Cadastro de Mesas:">
-                            <font>
-                                <Font name="System Italic" size="16.0" />
-                            </font>
-                        </Label>
-                        <GridPane layoutX="20.0" layoutY="131.0" prefHeight="90.0" prefWidth="388.0">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="146.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="275.0" minWidth="10.0" prefWidth="242.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <Label text="NOME" />
-                                <Label prefHeight="17.0" prefWidth="150.0" text="UNIDADES CONTROLADAS" GridPane.rowIndex="1" />
-                                <TextField fx:id="txtNomeMesa" disable="true" prefHeight="25.0" prefWidth="249.0" GridPane.columnIndex="1" />
-                                <ComboBox fx:id="cbUnidades" disable="true" onMouseClicked="#clickedCbUnidades" prefHeight="25.0" prefWidth="248.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button fx:id="btnAdicionarUnidade" mnemonicParsing="false" onMouseClicked="#clickedBtnAdicionarUnidade" prefHeight="25.0" prefWidth="120.0" text="Adicionar Unidade" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                            </children>
-                        </GridPane>
-                        <TableView fx:id="tableUnidadesControladas" layoutX="17.0" layoutY="225.0" onMouseClicked="#clickedTableUnidadesControladas" prefHeight="131.0" prefWidth="397.0">
-                            <columns>
-                                <TableColumn fx:id="tbColumnIdUnidade" prefWidth="50.0" text="ID">
-                                    <cellValueFactory>
-                                        <PropertyValueFactory property="id" />
-                                    </cellValueFactory>
-                                </TableColumn>
-                                <TableColumn fx:id="tbColumnNomeUnidade" prefWidth="337.0" text="UNIDADES CONTROLADAS">
-                                    <cellValueFactory>
-                                        <PropertyValueFactory property="nome" />
-                                    </cellValueFactory>
-                                </TableColumn>
-                            </columns>
-                        </TableView>
-                        <ImageView fitHeight="40.0" fitWidth="36.0" layoutX="218.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../../Imagens/CadMesas.png" />
-                            </image>
-                        </ImageView>
-                        <Label layoutX="20.0" layoutY="105.0" prefHeight="25.0" prefWidth="388.0" text="------------------------------------------------------------">
-                            <font>
-                                <Font name="System Italic" size="16.0" />
-                            </font>
-                        </Label>
-                        <Group layoutX="34.0" layoutY="-49.0">
-                            <children>
-                                <Button fx:id="btnNovo" layoutX="161.0" layoutY="438.0" mnemonicParsing="false" onMouseClicked="#clickedBtnNovo" prefHeight="25.0" prefWidth="65.0" text="NOVO" />
-                        <Button fx:id="btnSalvar" layoutX="86.0" layoutY="438.0" mnemonicParsing="false" onMouseClicked="#clickedBtnSalvar" prefHeight="25.0" prefWidth="65.0" text="SALVAR" />
-                            </children>
-                        </Group>
-                  <Label fx:id="labelNumeroUnidade" layoutX="281.0" layoutY="358.0" text="15 unidades controladas" />
-                  <Button fx:id="btnRemoverUnidade" disable="true" layoutX="293.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#clickedBtnRemoverUnidade" prefHeight="25.0" prefWidth="120.0" text="Remover Unidade" />
-                  <Button fx:id="btnExcluir" layoutX="269.0" layoutY="389.0" mnemonicParsing="false" onMouseClicked="#clickedBtnExcluir" prefHeight="25.0" prefWidth="65.0" text="EXCLUIR" />
-                          <Button fx:id="btnVoltar" layoutX="344.0" layoutY="389.0" mnemonicParsing="false" onMouseClicked="#clickedBtnVoltar" prefHeight="25.0" prefWidth="65.0" text="VOLTAR" />
-                    </children>
-                </AnchorPane>
-            </items>
-        </SplitPane>
-    </children>
-</AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

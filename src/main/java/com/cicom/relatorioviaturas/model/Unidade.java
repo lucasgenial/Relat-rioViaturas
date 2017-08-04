@@ -36,23 +36,27 @@ public class Unidade implements Serializable {
     private StringProperty nome = new SimpleStringProperty();
     private StringProperty comandoDeArea = new SimpleStringProperty();
     private Set<PO> pos = new HashSet<>();
+    private Boolean ativo;
 
     public Unidade() {
     }
 
-    public Unidade(String nome) {
+    public Unidade(String nome, Boolean ativo) {
         this.setNome(nome);
+        this.setAtivo(ativo);
     }
 
-    public Unidade(String nome, String comandoArea) {
+    public Unidade(String nome, String comandoArea, Boolean ativo) {
         this.setNome(nome);
         this.setComandoDeArea(comandoArea);
+        this.setAtivo(ativo);
     }
 
-    public Unidade(String nome, String comandoArea, Set<PO> pos) {
+    public Unidade(String nome, String comandoArea, Set<PO> pos, Boolean ativo) {
         this.setNome(nome);
         this.setComandoDeArea(comandoArea);
         this.setPos(pos);
+        this.setAtivo(ativo);
     }
 
     /*
@@ -87,6 +91,11 @@ public class Unidade implements Serializable {
         return this.pos;
     }
 
+    @Column(name = "ATIVO")
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
     /*
     SETTERS
      */
@@ -106,6 +115,10 @@ public class Unidade implements Serializable {
         this.pos = value;
     }
 
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
     /*
     PROPERTY
      */
@@ -123,7 +136,7 @@ public class Unidade implements Serializable {
 
     @Override
     public String toString() {
-        return "Unidade{" + "id=" + id + ", nome=" + nome + ", comandoDeArea=" + comandoDeArea + ", pos=" + pos.size() + '}';
+        return "Unidade{" + "id=" + id + ", nome=" + nome + ", comandoDeArea=" + comandoDeArea.getName() + ", pos=" + pos.size() + ", ativo=" + ativo + '}';
     }
 
     @Override
@@ -133,6 +146,7 @@ public class Unidade implements Serializable {
         hash = 83 * hash + Objects.hashCode(this.nome);
         hash = 83 * hash + Objects.hashCode(this.comandoDeArea);
         hash = 83 * hash + Objects.hashCode(this.pos);
+        hash = 83 * hash + Objects.hashCode(this.ativo);
         return hash;
     }
 
@@ -158,6 +172,9 @@ public class Unidade implements Serializable {
             return false;
         }
         if (!Objects.equals(this.pos, other.pos)) {
+            return false;
+        }
+        if (!Objects.equals(this.ativo, other.ativo)) {
             return false;
         }
         return true;
