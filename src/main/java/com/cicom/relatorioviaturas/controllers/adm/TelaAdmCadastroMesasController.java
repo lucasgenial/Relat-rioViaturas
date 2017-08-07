@@ -64,7 +64,9 @@ public class TelaAdmCadastroMesasController implements Initializable {
     @FXML
     private Button btnVoltar;
     @FXML
-    private Button btnInserirMesa;
+    private Button btnInserirUnidade;
+    @FXML
+    private Button btnNovo;
     @FXML
     private TableView<Unidade> tableUnidades;
     @FXML
@@ -97,9 +99,9 @@ public class TelaAdmCadastroMesasController implements Initializable {
     private List<Mesa> listaDeMesa;
     private List<TipoMesa> listaDeTipoMesa;
     private List<Unidade> listaDeUnidades;
-    
-    Mesa mesaSelecionada;
 
+    Mesa mesaSelecionada;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         carregaDados();
@@ -186,143 +188,10 @@ public class TelaAdmCadastroMesasController implements Initializable {
                 public TableCell<Mesa, Boolean> call(TableColumn<Mesa, Boolean> data) {
                     return new ButtonCell(tableListaMesa);
                 }
-
-                //Define the button cell
-                class ButtonCell extends TableCell<Mesa, Boolean> {
-
-                    HBox hb = new HBox();
-
-                    //BOTAO REMOVER
-                    private Button botaoRemover = new Button();
-                    private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
-
-                    //BOTAO EDITAR
-                    private Button botaoEditar = new Button();
-                    private final ImageView imagemEditar = new ImageView(new Image(getClass().getResourceAsStream("/icons/editar.png")));
-
-                    //BOTAO EDITAR
-                    private Button botaoVisualizar = new Button();
-                    private final ImageView imagemVisualizar = new ImageView(new Image(getClass().getResourceAsStream("/icons/visualizar.png")));
-
-                    ButtonCell(final TableView tblView) {
-                        mesaSelecionada = (Mesa) tblView.getSelectionModel().getSelectedItem();
-                        
-                        //BOTAO VISUALIZAR
-                        imagemVisualizar.fitHeightProperty().set(16);
-                        imagemVisualizar.fitWidthProperty().set(16);
-
-                        botaoVisualizar.setGraphic(imagemVisualizar);
-
-                        botaoVisualizar.setOnAction(new EventHandler<ActionEvent>() {
-
-                            @Override
-                            public void handle(ActionEvent t) {
-                                if (mesaSelecionada != null) {
-                                    txtNome.setText(mesaSelecionada.getNome());
-                                    cbTipoMesa.setValue(mesaSelecionada.getTipoMesa());
-                                    tableUnidades.getItems().setAll(mesaSelecionada.getUnidades());
-                                    
-                                    txtNome.setDisable(false);
-                                    cbTipoMesa.setDisable(false);
-                                    tableUnidades.setDisable(false);
-                                    btnCadastrar.setDisable(false);
-                                    
-                                    root.getSelectionModel().select(tabCadastro);
-                                }
-                            }
-                        });
-
-                        //BOTAO EDITAR
-                        imagemEditar.fitHeightProperty().set(16);
-                        imagemEditar.fitWidthProperty().set(16);
-
-                        botaoEditar.setGraphic(imagemEditar);
-
-                        botaoEditar.setOnAction(new EventHandler<ActionEvent>() {
-
-                            @Override
-                            public void handle(ActionEvent t) {
-                                if (mesaSelecionada != null) {
-                                    txtNome.setText(mesaSelecionada.getNome());
-                                    cbTipoMesa.setValue(mesaSelecionada.getTipoMesa());
-                                    tableUnidades.getItems().setAll(mesaSelecionada.getUnidades());
-                                    
-                                    txtNome.setDisable(true);
-                                    cbTipoMesa.setDisable(true);
-                                    tableUnidades.setDisable(true);
-                                    btnCadastrar.setDisable(true);
-                                    
-                                    btnCadastrar.setText("SALVAR");
-                                    
-                                    root.getSelectionModel().select(tabCadastro);
-                                }
-                            }
-                        });
-
-                        //BOTAO REMOVER
-                        imagemRemover.fitHeightProperty().set(16);
-                        imagemRemover.fitWidthProperty().set(16);
-
-                        botaoRemover.setGraphic(imagemRemover);
-
-                        botaoRemover.setOnAction(new EventHandler<ActionEvent>() {
-
-                            @Override
-                            public void handle(ActionEvent t) {
-                                if (mesaSelecionada != null) {
-                                    Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
-                                    alertVoltar.setTitle("Atenção!");
-                                    alertVoltar.setHeaderText("Os dados referentes à esta Mesa serão perdidos, deseja continuar?");
-                                    alertVoltar.getButtonTypes().clear();
-                                    alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-
-                                    //Deactivate Defaultbehavior for yes-Button:
-                                    Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
-                                    yesButton.setDefaultButton(false);
-
-                                    //Activate Defaultbehavior for no-Button:
-                                    Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
-                                    noButton.setDefaultButton(true);
-
-                                    //Pega qual opção o usuario pressionou
-                                    final Optional<ButtonType> resultado = alertVoltar.showAndWait();
-
-                                    if (resultado.get() == ButtonType.YES) {
-                                        mesaSelecionada.setAtivo(false);
-                                        
-                                        daoMesa.alterar(mesaSelecionada);
-
-                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                        alert.setTitle("Sucesso!");
-                                        alert.setHeaderText("Tipo Mesa excluído com sucesso!");
-                                        alert.showAndWait();
-                                        carregaDados();
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    //Display button if the row is not empty
-                    @Override
-                    protected void updateItem(Boolean t, boolean empty) {
-                        hb.setAlignment(Pos.CENTER);
-
-                        super.updateItem(t, empty);
-                        if (!empty) {
-                            hb.getChildren().add(botaoVisualizar);
-                            hb.getChildren().add(botaoEditar);
-                            hb.getChildren().add(botaoRemover);
-
-                            setGraphic(hb);
-                        }
-                    }
-                }
             });
 
             // 5. Add sorted (and filtered) data to the table.
             tableListaMesa.setItems(sortedData);
-
         }
 
         if (!listaDeTipoMesa.isEmpty()) {
@@ -399,16 +268,168 @@ public class TelaAdmCadastroMesasController implements Initializable {
         }
     }
 
-    @FXML
-    private void clickedCadastrarServidor(MouseEvent event) {
+//    Define the button cell
+    private class ButtonCell extends TableCell<Mesa, Boolean> {
+
+        HBox hb = new HBox();
+
+        //BOTAO REMOVER
+        private Button botaoRemover = new Button();
+        private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
+
+        //BOTAO EDITAR
+        private Button botaoEditar = new Button();
+        private final ImageView imagemEditar = new ImageView(new Image(getClass().getResourceAsStream("/icons/editar.png")));
+
+        //BOTAO EDITAR
+        private Button botaoVisualizar = new Button();
+        private final ImageView imagemVisualizar = new ImageView(new Image(getClass().getResourceAsStream("/icons/visualizar.png")));
+
+        ButtonCell(final TableView<Mesa> tblView) {
+
+            //BOTAO VISUALIZAR
+            imagemVisualizar.fitHeightProperty().set(16);
+            imagemVisualizar.fitWidthProperty().set(16);
+            botaoVisualizar.setGraphic(imagemVisualizar);
+            botaoVisualizar.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent t) {
+                    Mesa mesaVisualizar = (Mesa) tblView.getItems().get(getIndex());
+                    System.out.println("MESA SELECIONADA: " + mesaVisualizar);
+
+                    if (mesaVisualizar != null) {
+                        txtNome.setText(mesaVisualizar.getNome());
+                        cbTipoMesa.setValue(mesaVisualizar.getTipoMesa());
+                        tableUnidades.getItems().setAll(mesaVisualizar.getUnidades());
+
+                        txtNome.setDisable(true);
+                        cbUnidade.setDisable(true);
+                        cbTipoMesa.setDisable(true);
+                        tableUnidades.setDisable(false);
+                        btnCadastrar.setDisable(true);
+                        btnInserirUnidade.setDisable(true);
+                        btnNovo.setDisable(false);
+
+                        root.getSelectionModel().select(tabCadastro);
+                    }
+                }
+            });
+
+            //BOTAO EDITAR
+            imagemEditar.fitHeightProperty().set(16);
+            imagemEditar.fitWidthProperty().set(16);
+
+            botaoEditar.setGraphic(imagemEditar);
+
+            botaoEditar.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent t) {
+                    Mesa mesaEditar = (Mesa) tblView.getItems().get(getIndex());
+                    System.out.println("MESA SELECIONADA: " + mesaEditar);
+
+                    if (mesaEditar != null) {
+                        txtNome.setText(mesaEditar.getNome());
+                        cbTipoMesa.setValue(mesaEditar.getTipoMesa());
+                        tableUnidades.getItems().setAll(mesaEditar.getUnidades());
+
+                        txtNome.setDisable(false);
+                        cbUnidade.setDisable(false);
+                        cbTipoMesa.setDisable(false);
+                        tableUnidades.setDisable(false);
+                        btnCadastrar.setDisable(false);
+                        btnInserirUnidade.setDisable(false);
+                        btnNovo.setDisable(false);
+                        btnCadastrar.setText("SALVAR");
+
+                        root.getSelectionModel().select(tabCadastro);
+                    }
+                }
+            });
+
+            //BOTAO REMOVER
+            imagemRemover.fitHeightProperty().set(16);
+            imagemRemover.fitWidthProperty().set(16);
+
+            botaoRemover.setGraphic(imagemRemover);
+
+            botaoRemover.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent t) {
+                    Mesa mesaRemover = (Mesa) tblView.getItems().get(getIndex());
+                    System.out.println("MESA SELECIONADA: " + mesaRemover);
+
+                    if (mesaRemover != null) {
+                        Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
+                        alertVoltar.setTitle("Atenção!");
+                        alertVoltar.setHeaderText("Os dados referentes à esta Mesa serão perdidos, deseja continuar?");
+                        alertVoltar.getButtonTypes().clear();
+                        alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+                        //Deactivate Defaultbehavior for yes-Button:
+                        Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+                        yesButton.setDefaultButton(false);
+
+                        //Activate Defaultbehavior for no-Button:
+                        Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+                        noButton.setDefaultButton(true);
+
+                        //Pega qual opção o usuario pressionou
+                        final Optional<ButtonType> resultado = alertVoltar.showAndWait();
+
+                        if (resultado.get() == ButtonType.YES) {
+                            mesaRemover.setAtivo(false);
+
+                            daoMesa.alterar(mesaRemover);
+
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Sucesso!");
+                            alert.setHeaderText("Tipo Mesa excluído com sucesso!");
+                            alert.showAndWait();
+                            carregaDados();
+                        }
+                    }
+                }
+            });
+        }
+//        Display button if the row is not empty
+
+        @Override
+        protected void updateItem(Boolean t, boolean empty) {
+            hb.setAlignment(Pos.CENTER);
+
+            super.updateItem(t, empty);
+            if (!empty) {
+                hb.getChildren().add(botaoVisualizar);
+                hb.getChildren().add(botaoEditar);
+                hb.getChildren().add(botaoRemover);
+
+                setGraphic(hb);
+            } else {
+                setGraphic(null);
+            }
+        }
     }
 
     @FXML
-    private void clickedVoltar(MouseEvent event) {
+    private void clickedBtnCadastrarMesa(MouseEvent event) {
+    }
+    
+    @FXML
+    private void clickedBtnNovo(MouseEvent event) {
+        txtNome.setText(null);
+        tableUnidades.getItems().clear();
+        btnNovo.setDisable(true);
     }
 
     @FXML
-    private void clickedInserirUnidade(MouseEvent event) {
+    private void clickedBtnVoltar(MouseEvent event) {
+    }
+
+    @FXML
+    private void clickedBtnInserirUnidade(MouseEvent event) {
     }
 
     @FXML
