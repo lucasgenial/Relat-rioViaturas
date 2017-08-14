@@ -345,8 +345,13 @@ public class MainApp extends Application {
 
         Set<Unidade> listaUnid = new HashSet<>();
         listaUnid.add(und1);
+        listaUnid.add(und2);
         listaUnid.add(und3);
+        listaUnid.add(und4);
         listaUnid.add(und5);
+        listaUnid.add(und6);
+        listaUnid.add(und7);
+        listaUnid.add(und8);
 //        listaUnid.add(und12);
 //        listaUnid.add(und14);
 //        listaUnid.add(und15);
@@ -368,7 +373,7 @@ public class MainApp extends Application {
         daoTipoMesa.salvar(tipoMesa2);
 
         MesaDAO daoMesa = new MesaDAO();
-        daoMesa.salvar(new Mesa("CICOM - PORTO SEGURO", listaUnid, tipoMesa, true));
+        daoMesa.salvar(new Mesa("CICOM - COSTA DO DESCOBRIMENTO", listaUnid, tipoMesa, true));
 //        daoMesa.salvar(new Mesa("ATL 02"));
 //        daoMesa.salvar(new Mesa("ATL 03"));
 //        daoMesa.salvar(new Mesa("ATL 04"));

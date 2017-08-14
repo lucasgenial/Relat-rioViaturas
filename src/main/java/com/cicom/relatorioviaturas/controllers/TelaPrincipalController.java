@@ -41,7 +41,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 /**
@@ -866,6 +865,7 @@ public class TelaPrincipalController implements Initializable {
 
             //Mostra a tela ate que o usuario feche
             dialogStageAtual.showAndWait();
+            carregaDadosTabelaResumo();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -892,6 +892,7 @@ public class TelaPrincipalController implements Initializable {
 
             //Mostra a tela ate que o usuario feche
             dialogStageAtual.showAndWait();
+            carregaDadosTabelaResumo();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -919,6 +920,7 @@ public class TelaPrincipalController implements Initializable {
 
             //Mostra a tela ate que o usuario feche
             dialogStageAtual.showAndWait();
+            carregaDadosTabelaResumo();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -946,6 +948,7 @@ public class TelaPrincipalController implements Initializable {
 
             //Mostra a tela ate que o usuario feche
             dialogStageAtual.showAndWait();
+            carregaDadosTabelaResumo();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

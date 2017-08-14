@@ -115,10 +115,11 @@ public class PO implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.id);
-        hash = 89 * hash + Objects.hashCode(this.nome);
-        hash = 89 * hash + Objects.hashCode(this.unidades);
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.id);
+        hash = 53 * hash + Objects.hashCode(this.nome);
+        hash = 53 * hash + Objects.hashCode(this.unidades);
+        hash = 53 * hash + Objects.hashCode(this.ativo);
         return hash;
     }
 
@@ -143,6 +144,11 @@ public class PO implements Serializable {
         if (!Objects.equals(this.unidades, other.unidades)) {
             return false;
         }
+        if (!Objects.equals(this.ativo, other.ativo)) {
+            return false;
+        }
         return true;
     }
+    
+    
 }

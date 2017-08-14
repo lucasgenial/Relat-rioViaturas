@@ -2,7 +2,6 @@ package com.cicom.relatorioviaturas.DAO;
 
 import static com.cicom.relatorioviaturas.DAO.AbstractDAO.transacao;
 import com.cicom.relatorioviaturas.model.Mesa;
-import com.cicom.relatorioviaturas.model.Servidor;
 import java.util.List;
 
 /**

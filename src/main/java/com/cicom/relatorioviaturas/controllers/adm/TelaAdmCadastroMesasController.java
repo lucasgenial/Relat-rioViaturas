@@ -3,17 +3,15 @@ package com.cicom.relatorioviaturas.controllers.adm;
 import com.cicom.relatorioviaturas.DAO.MesaDAO;
 import com.cicom.relatorioviaturas.DAO.TipoMesaDAO;
 import com.cicom.relatorioviaturas.DAO.UnidadeDAO;
-import com.cicom.relatorioviaturas.MainApp;
-import com.cicom.relatorioviaturas.model.Instituicao;
 import com.cicom.relatorioviaturas.model.Mesa;
-import com.cicom.relatorioviaturas.model.PO;
-import com.cicom.relatorioviaturas.model.Servidor;
 import com.cicom.relatorioviaturas.model.TipoMesa;
 import com.cicom.relatorioviaturas.model.Unidade;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -98,10 +96,15 @@ public class TelaAdmCadastroMesasController implements Initializable {
     private UnidadeDAO daoUnidade = new UnidadeDAO();
     private List<Mesa> listaDeMesa;
     private List<TipoMesa> listaDeTipoMesa;
-    private List<Unidade> listaDeUnidades;
+    private List<Unidade> listaDeUnidadesBanco;
+    private Set<Unidade> listaDeUnidadeCadastro;
 
-    Mesa mesaSelecionada;
-    
+    private Mesa mesaSelecionada;
+    private Mesa novaMesa;
+
+    private String tituloMensagem;
+    private String corpoMensagem;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         carregaDados();
@@ -110,7 +113,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
     private void carregaDados() {
         listaDeMesa = daoMesa.getListAtivos();
         listaDeTipoMesa = daoTipoMesa.getList("From TipoMesa");
-        listaDeUnidades = daoUnidade.getListAtivos();
+        listaDeUnidadesBanco = daoUnidade.getListAtivos();
 
         if (!listaDeMesa.isEmpty()) {
 
@@ -186,7 +189,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
             tbColumnAcaoMesa.setCellFactory(new Callback<TableColumn<Mesa, Boolean>, TableCell<Mesa, Boolean>>() {
                 @Override
                 public TableCell<Mesa, Boolean> call(TableColumn<Mesa, Boolean> data) {
-                    return new ButtonCell(tableListaMesa);
+                    return new ButtonCellMesa(tableListaMesa);
                 }
             });
 
@@ -239,7 +242,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
             root.getScene().getWindow().hide();
         }
 
-        if (!listaDeUnidades.isEmpty()) {
+        if (!listaDeUnidadesBanco.isEmpty()) {
             //Converte as opções para o modo String
             cbUnidade.setConverter(new StringConverter<Unidade>() {
                 @Override
@@ -257,7 +260,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
             });
 
             //Lança no combobox para busca
-            cbUnidade.setItems(FXCollections.observableList(listaDeUnidades));
+            cbUnidade.setItems(FXCollections.observableList(listaDeUnidadesBanco));
 
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -268,8 +271,186 @@ public class TelaAdmCadastroMesasController implements Initializable {
         }
     }
 
-//    Define the button cell
-    private class ButtonCell extends TableCell<Mesa, Boolean> {
+    @FXML
+    private void clickedBtnCadastrarMesa(MouseEvent event) {
+
+        if (verificaDados()) {
+            if (btnCadastrar.getText().equalsIgnoreCase("CADASTRAR")) {
+                novaMesa = new Mesa();
+                novaMesa.setNome(txtNome.getText());
+                novaMesa.setTipoMesa(cbTipoMesa.getSelectionModel().getSelectedItem());
+                novaMesa.setUnidades(listaDeUnidadeCadastro);
+                novaMesa.setAtivo(true);
+
+                daoMesa.salvar(novaMesa);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("MESA cadastrada com sucesso!");
+                alert.showAndWait();
+                carregaDados();
+                limparDados();
+            } else if (btnCadastrar.getText().equalsIgnoreCase("SALVAR")) {
+                novaMesa.setNome(txtNome.getText());
+                novaMesa.setTipoMesa(cbTipoMesa.getSelectionModel().getSelectedItem());
+                novaMesa.setUnidades(listaDeUnidadeCadastro);
+                novaMesa.setAtivo(true);
+
+                daoMesa.salvar(novaMesa);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("MESA modificada com sucesso!");
+                alert.showAndWait();
+                carregaDados();
+                limparDados();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(tituloMensagem);
+            alert.setHeaderText(corpoMensagem);
+            alert.showAndWait();
+        }
+
+    }
+
+    private boolean verificaDados() {
+        if (!txtNome.getText().isEmpty()) {
+            if (daoMesa.buscaPorNome(txtNome.getText()) != null) {
+                tituloMensagem = "Erro Nome Mesa";
+                corpoMensagem = "Já existe MESA cadastrada com este nome!";
+                return false;
+            }
+        } else {
+            tituloMensagem = "Erro Nome Mesa";
+            corpoMensagem = "O Nome da MESA é obrigatório!";
+            return false;
+        }
+
+        if (listaDeUnidadeCadastro.isEmpty()) {
+            tituloMensagem = "Erro Lista Unidade";
+            corpoMensagem = "É necessário pelo menos 1 unidade!";
+            return false;
+        }
+
+        return true;
+    }
+
+    @FXML
+    private void clickedBtnNovo(MouseEvent event) {
+        txtNome.setText(null);
+        tableUnidades.getItems().clear();
+        cbUnidade.setValue(null);
+        cbTipoMesa.setValue(null);
+        listaDeUnidadeCadastro.clear();
+
+        btnCadastrar.setText("CADASTRAR");
+        btnNovo.setDisable(true);
+        txtNome.setDisable(false);
+        cbTipoMesa.setDisable(false);
+        cbUnidade.setDisable(false);
+        btnInserirUnidade.setDisable(false);
+        tableUnidades.setDisable(false);
+    }
+
+    @FXML
+    private void clickedBtnVoltar(MouseEvent event) {
+        Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
+        alertVoltar.setTitle("Atenção!");
+        alertVoltar.setHeaderText("Os dados informados serão perdidos, deseja continuar?");
+        alertVoltar.getButtonTypes().clear();
+        alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+        //Deactivate Defaultbehavior for yes-Button:
+        Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+        yesButton.setDefaultButton(false);
+
+        //Activate Defaultbehavior for no-Button:
+        Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+        noButton.setDefaultButton(true);
+
+        //Pega qual opção o usuario pressionou
+        final Optional<ButtonType> resultado = alertVoltar.showAndWait();
+
+        if (resultado.get() == ButtonType.YES) {
+            root.getScene().getWindow().hide();
+        }
+    }
+
+    @FXML
+    private void clickedBtnInserirUnidade(MouseEvent event) {
+        Unidade unidadeSelecionada = cbUnidade.getSelectionModel().getSelectedItem();
+
+        if (unidadeSelecionada != null) {
+
+            if (listaDeUnidadeCadastro == null) {
+                listaDeUnidadeCadastro = new HashSet<>();
+            }
+
+            //Carrega o item na lista de POS que comporá a tabela/Unidade
+            listaDeUnidadeCadastro.add(unidadeSelecionada);
+
+            //Adiciono o item na Tabela
+            //tableUnidades.getItems().setAll(FXCollections.observableSet(listaDeUnidadeCadastro));
+            atualizarTabelaUnidade(listaDeUnidadeCadastro);
+
+//            labelNumeroUnidade.setText(tableUnidadesControladas.getItems().size() + " Unidades Controladas");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("É necessário selecionar uma Unidade!");
+            alert.showAndWait();
+        }
+        tableUnidades.setFocusTraversable(true);
+    }
+
+    @FXML
+    private void exitCbTipoBusca(MouseEvent event) {
+    }
+
+    private void limparDados() {
+        novaMesa = null;
+        mesaSelecionada = null;
+        txtNome.setText("");
+        cbTipoMesa.setValue(null);
+        cbUnidade.setValue(null);
+        tableUnidades.getItems().clear();
+
+        btnCadastrar.setText("CADASTRAR");
+    }
+
+    private void atualizarTabelaUnidade(Set<Unidade> listaUnidadeInserir) {
+        if (listaUnidadeInserir != null) {
+            tbColumnNomeUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Unidade, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Unidade, String> data) {
+                    return new SimpleStringProperty(data.getValue().getNome() + " - " + data.getValue().getComandoDeArea());
+                }
+            });
+
+            tbColumnAcaoUnidade.setSortable(false);
+
+            tbColumnAcaoUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Unidade, Boolean>, ObservableValue<Boolean>>() {
+                @Override
+                public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Unidade, Boolean> data) {
+                    return new SimpleBooleanProperty(data.getValue() != null);
+                }
+            });
+
+            tbColumnAcaoUnidade.setCellFactory(new Callback<TableColumn<Unidade, Boolean>, TableCell<Unidade, Boolean>>() {
+                @Override
+                public TableCell<Unidade, Boolean> call(TableColumn<Unidade, Boolean> data) {
+                    return new ButtonCellUnidade(tableUnidades);
+                }
+            });
+            
+            //tableUnidades.getItems().setAll(FXCollections.observableSet(listaUnidadeInserir));
+            tableUnidades.getItems().setAll(listaUnidadeInserir);
+        }
+    }
+
+    //    Define os botões de ação da MESA
+    private class ButtonCellMesa extends TableCell<Mesa, Boolean> {
 
         HBox hb = new HBox();
 
@@ -285,8 +466,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
         private Button botaoVisualizar = new Button();
         private final ImageView imagemVisualizar = new ImageView(new Image(getClass().getResourceAsStream("/icons/visualizar.png")));
 
-        ButtonCell(final TableView<Mesa> tblView) {
-
+        private ButtonCellMesa(TableView<Mesa> tblView) {
             //BOTAO VISUALIZAR
             imagemVisualizar.fitHeightProperty().set(16);
             imagemVisualizar.fitWidthProperty().set(16);
@@ -296,8 +476,6 @@ public class TelaAdmCadastroMesasController implements Initializable {
                 @Override
                 public void handle(ActionEvent t) {
                     Mesa mesaVisualizar = (Mesa) tblView.getItems().get(getIndex());
-                    System.out.println("MESA SELECIONADA: " + mesaVisualizar);
-
                     if (mesaVisualizar != null) {
                         txtNome.setText(mesaVisualizar.getNome());
                         cbTipoMesa.setValue(mesaVisualizar.getTipoMesa());
@@ -327,12 +505,13 @@ public class TelaAdmCadastroMesasController implements Initializable {
                 @Override
                 public void handle(ActionEvent t) {
                     Mesa mesaEditar = (Mesa) tblView.getItems().get(getIndex());
-                    System.out.println("MESA SELECIONADA: " + mesaEditar);
 
                     if (mesaEditar != null) {
                         txtNome.setText(mesaEditar.getNome());
                         cbTipoMesa.setValue(mesaEditar.getTipoMesa());
-                        tableUnidades.getItems().setAll(mesaEditar.getUnidades());
+                        listaDeUnidadeCadastro = mesaEditar.getUnidades();
+//                        tableUnidades.getItems().setAll(listaDeUnidadeCadastro);
+                        atualizarTabelaUnidade(listaDeUnidadeCadastro);
 
                         txtNome.setDisable(false);
                         cbUnidade.setDisable(false);
@@ -359,12 +538,11 @@ public class TelaAdmCadastroMesasController implements Initializable {
                 @Override
                 public void handle(ActionEvent t) {
                     Mesa mesaRemover = (Mesa) tblView.getItems().get(getIndex());
-                    System.out.println("MESA SELECIONADA: " + mesaRemover);
 
                     if (mesaRemover != null) {
                         Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
                         alertVoltar.setTitle("Atenção!");
-                        alertVoltar.setHeaderText("Os dados referentes à esta Mesa serão perdidos, deseja continuar?");
+                        alertVoltar.setHeaderText("Os dados referentes à esta MESA serão perdidos, deseja continuar?");
                         alertVoltar.getButtonTypes().clear();
                         alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
 
@@ -386,7 +564,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
 
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("Sucesso!");
-                            alert.setHeaderText("Tipo Mesa excluído com sucesso!");
+                            alert.setHeaderText("MESA excluída com sucesso!");
                             alert.showAndWait();
                             carregaDados();
                         }
@@ -394,7 +572,6 @@ public class TelaAdmCadastroMesasController implements Initializable {
                 }
             });
         }
-//        Display button if the row is not empty
 
         @Override
         protected void updateItem(Boolean t, boolean empty) {
@@ -413,27 +590,68 @@ public class TelaAdmCadastroMesasController implements Initializable {
         }
     }
 
-    @FXML
-    private void clickedBtnCadastrarMesa(MouseEvent event) {
-    }
-    
-    @FXML
-    private void clickedBtnNovo(MouseEvent event) {
-        txtNome.setText(null);
-        tableUnidades.getItems().clear();
-        btnNovo.setDisable(true);
-    }
+    //    Define os botões de ação da UNIDADE
+    private class ButtonCellUnidade extends TableCell<Unidade, Boolean> {
 
-    @FXML
-    private void clickedBtnVoltar(MouseEvent event) {
-    }
+        HBox hb = new HBox();
 
-    @FXML
-    private void clickedBtnInserirUnidade(MouseEvent event) {
-    }
+        //BOTAO REMOVER
+        private Button botaoRemover = new Button();
+        private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
 
-    @FXML
-    private void exitCbTipoBusca(MouseEvent event) {
+        private ButtonCellUnidade(TableView<Unidade> tblView) {
+            //BOTAO REMOVER
+            imagemRemover.fitHeightProperty().set(16);
+            imagemRemover.fitWidthProperty().set(16);
+
+            botaoRemover.setGraphic(imagemRemover);
+
+            botaoRemover.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent t) {
+                    Unidade unidadeRemover = (Unidade) tblView.getItems().get(getIndex());
+
+                    if (unidadeRemover != null) {
+                        Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
+                        alertVoltar.setTitle("Atenção!");
+                        alertVoltar.setHeaderText("Os dados referentes à esta UNIDADE serão perdidos, deseja continuar?");
+                        alertVoltar.getButtonTypes().clear();
+                        alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+                        //Deactivate Defaultbehavior for yes-Button:
+                        Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+                        yesButton.setDefaultButton(false);
+
+                        //Activate Defaultbehavior for no-Button:
+                        Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+                        noButton.setDefaultButton(true);
+
+                        //Pega qual opção o usuario pressionou
+                        final Optional<ButtonType> resultado = alertVoltar.showAndWait();
+
+                        if (resultado.get() == ButtonType.YES) {
+                            listaDeUnidadeCadastro.remove(unidadeRemover);
+                            atualizarTabelaUnidade(listaDeUnidadeCadastro);
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(Boolean t, boolean empty) {
+            hb.setAlignment(Pos.CENTER);
+
+            super.updateItem(t, empty);
+            if (!empty) {
+                hb.getChildren().add(botaoRemover);
+
+                setGraphic(hb);
+            } else {
+                setGraphic(null);
+            }
+        }
     }
 
 }

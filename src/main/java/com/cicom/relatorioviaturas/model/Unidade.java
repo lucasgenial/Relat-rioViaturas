@@ -141,12 +141,11 @@ public class Unidade implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.id);
-        hash = 83 * hash + Objects.hashCode(this.nome);
-        hash = 83 * hash + Objects.hashCode(this.comandoDeArea);
-        hash = 83 * hash + Objects.hashCode(this.pos);
-        hash = 83 * hash + Objects.hashCode(this.ativo);
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.nome);
+        hash = 79 * hash + Objects.hashCode(this.comandoDeArea);
+        hash = 79 * hash + Objects.hashCode(this.ativo);
         return hash;
     }
 
@@ -171,13 +170,11 @@ public class Unidade implements Serializable {
         if (!Objects.equals(this.comandoDeArea, other.comandoDeArea)) {
             return false;
         }
-        if (!Objects.equals(this.pos, other.pos)) {
-            return false;
-        }
         if (!Objects.equals(this.ativo, other.ativo)) {
             return false;
         }
         return true;
     }
-
+    
+    
 }
