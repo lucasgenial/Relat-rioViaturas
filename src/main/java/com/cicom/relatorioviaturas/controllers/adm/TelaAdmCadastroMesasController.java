@@ -97,9 +97,9 @@ public class TelaAdmCadastroMesasController implements Initializable {
     private List<Mesa> listaDeMesa;
     private List<TipoMesa> listaDeTipoMesa;
     private List<Unidade> listaDeUnidadesBanco;
-    private Set<Unidade> listaDeUnidadeCadastro;
+    private Set<Unidade> listaDeUnidadeCadastro = new HashSet<>();
 
-    private Mesa mesaSelecionada;
+    private Mesa mesaEditar;
     private Mesa novaMesa;
 
     private String tituloMensagem;
@@ -269,6 +269,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
             alert.showAndWait();
             root.getScene().getWindow().hide();
         }
+
     }
 
     @FXML
@@ -291,12 +292,12 @@ public class TelaAdmCadastroMesasController implements Initializable {
                 carregaDados();
                 limparDados();
             } else if (btnCadastrar.getText().equalsIgnoreCase("SALVAR")) {
-                novaMesa.setNome(txtNome.getText());
-                novaMesa.setTipoMesa(cbTipoMesa.getSelectionModel().getSelectedItem());
-                novaMesa.setUnidades(listaDeUnidadeCadastro);
-                novaMesa.setAtivo(true);
+                mesaEditar.setNome(txtNome.getText());
+                mesaEditar.setTipoMesa(cbTipoMesa.getSelectionModel().getSelectedItem());
+                mesaEditar.setUnidades(listaDeUnidadeCadastro);
+                mesaEditar.setAtivo(true);
 
-                daoMesa.salvar(novaMesa);
+                daoMesa.alterar(mesaEditar);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso!");
@@ -343,6 +344,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
         cbUnidade.setValue(null);
         cbTipoMesa.setValue(null);
         listaDeUnidadeCadastro.clear();
+        mesaEditar = null;
 
         btnCadastrar.setText("CADASTRAR");
         btnNovo.setDisable(true);
@@ -378,7 +380,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
     }
 
     @FXML
-    private void clickedBtnInserirUnidade(MouseEvent event) {
+    private void clickedBtnInserirUnidade() {
         Unidade unidadeSelecionada = cbUnidade.getSelectionModel().getSelectedItem();
 
         if (unidadeSelecionada != null) {
@@ -389,12 +391,8 @@ public class TelaAdmCadastroMesasController implements Initializable {
 
             //Carrega o item na lista de POS que comporá a tabela/Unidade
             listaDeUnidadeCadastro.add(unidadeSelecionada);
-
-            //Adiciono o item na Tabela
-            //tableUnidades.getItems().setAll(FXCollections.observableSet(listaDeUnidadeCadastro));
             atualizarTabelaUnidade(listaDeUnidadeCadastro);
 
-//            labelNumeroUnidade.setText(tableUnidadesControladas.getItems().size() + " Unidades Controladas");
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -408,9 +406,15 @@ public class TelaAdmCadastroMesasController implements Initializable {
     private void exitCbTipoBusca(MouseEvent event) {
     }
 
+    @FXML
+    private void selectedTabListagem() {
+//        limparDados();
+    }
+
     private void limparDados() {
         novaMesa = null;
-        mesaSelecionada = null;
+        mesaEditar = null;
+        listaDeUnidadeCadastro = null;
         txtNome.setText("");
         cbTipoMesa.setValue(null);
         cbUnidade.setValue(null);
@@ -419,34 +423,32 @@ public class TelaAdmCadastroMesasController implements Initializable {
         btnCadastrar.setText("CADASTRAR");
     }
 
-    private void atualizarTabelaUnidade(Set<Unidade> listaUnidadeInserir) {
-        if (listaUnidadeInserir != null) {
-            tbColumnNomeUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Unidade, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<Unidade, String> data) {
-                    return new SimpleStringProperty(data.getValue().getNome() + " - " + data.getValue().getComandoDeArea());
-                }
-            });
+    private void atualizarTabelaUnidade(Set<Unidade> dados) {
 
-            tbColumnAcaoUnidade.setSortable(false);
+        tbColumnNomeUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Unidade, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Unidade, String> data) {
+                return new SimpleStringProperty(data.getValue().getNome() + " - " + data.getValue().getComandoDeArea());
+            }
+        });
 
-            tbColumnAcaoUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Unidade, Boolean>, ObservableValue<Boolean>>() {
-                @Override
-                public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Unidade, Boolean> data) {
-                    return new SimpleBooleanProperty(data.getValue() != null);
-                }
-            });
+        tbColumnAcaoUnidade.setSortable(false);
 
-            tbColumnAcaoUnidade.setCellFactory(new Callback<TableColumn<Unidade, Boolean>, TableCell<Unidade, Boolean>>() {
-                @Override
-                public TableCell<Unidade, Boolean> call(TableColumn<Unidade, Boolean> data) {
-                    return new ButtonCellUnidade(tableUnidades);
-                }
-            });
-            
-            //tableUnidades.getItems().setAll(FXCollections.observableSet(listaUnidadeInserir));
-            tableUnidades.getItems().setAll(listaUnidadeInserir);
-        }
+        tbColumnAcaoUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Unidade, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Unidade, Boolean> param) {
+                return new SimpleBooleanProperty(param.getValue() != null);
+            }
+        });
+
+        tbColumnAcaoUnidade.setCellFactory(new Callback<TableColumn<Unidade, Boolean>, TableCell<Unidade, Boolean>>() {
+            @Override
+            public TableCell<Unidade, Boolean> call(TableColumn<Unidade, Boolean> data) {
+                return new ButtonCellUnidade(tableUnidades);
+            }
+        });
+
+        tableUnidades.getItems().setAll(FXCollections.observableSet(dados));
     }
 
     //    Define os botões de ação da MESA
@@ -479,6 +481,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
                     if (mesaVisualizar != null) {
                         txtNome.setText(mesaVisualizar.getNome());
                         cbTipoMesa.setValue(mesaVisualizar.getTipoMesa());
+
                         tableUnidades.getItems().setAll(mesaVisualizar.getUnidades());
 
                         txtNome.setDisable(true);
@@ -504,7 +507,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent t) {
-                    Mesa mesaEditar = (Mesa) tblView.getItems().get(getIndex());
+                    mesaEditar = (Mesa) tblView.getItems().get(getIndex());
 
                     if (mesaEditar != null) {
                         txtNome.setText(mesaEditar.getNome());
@@ -533,41 +536,37 @@ public class TelaAdmCadastroMesasController implements Initializable {
 
             botaoRemover.setGraphic(imagemRemover);
 
-            botaoRemover.setOnAction(new EventHandler<ActionEvent>() {
+            botaoRemover.setOnAction((ActionEvent t) -> {
+                Mesa mesaRemover = (Mesa) tblView.getItems().get(getIndex());
 
-                @Override
-                public void handle(ActionEvent t) {
-                    Mesa mesaRemover = (Mesa) tblView.getItems().get(getIndex());
+                if (mesaRemover != null) {
+                    Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
+                    alertVoltar.setTitle("Atenção!");
+                    alertVoltar.setHeaderText("Os dados referentes à esta MESA serão perdidos, deseja continuar?");
+                    alertVoltar.getButtonTypes().clear();
+                    alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
 
-                    if (mesaRemover != null) {
-                        Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
-                        alertVoltar.setTitle("Atenção!");
-                        alertVoltar.setHeaderText("Os dados referentes à esta MESA serão perdidos, deseja continuar?");
-                        alertVoltar.getButtonTypes().clear();
-                        alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+                    //Deactivate Defaultbehavior for yes-Button:
+                    Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+                    yesButton.setDefaultButton(false);
 
-                        //Deactivate Defaultbehavior for yes-Button:
-                        Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
-                        yesButton.setDefaultButton(false);
+                    //Activate Defaultbehavior for no-Button:
+                    Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+                    noButton.setDefaultButton(true);
 
-                        //Activate Defaultbehavior for no-Button:
-                        Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
-                        noButton.setDefaultButton(true);
+                    //Pega qual opção o usuario pressionou
+                    final Optional<ButtonType> resultado1 = alertVoltar.showAndWait();
 
-                        //Pega qual opção o usuario pressionou
-                        final Optional<ButtonType> resultado = alertVoltar.showAndWait();
+                    if (resultado1.get() == ButtonType.YES) {
+                        mesaRemover.setAtivo(false);
 
-                        if (resultado.get() == ButtonType.YES) {
-                            mesaRemover.setAtivo(false);
+                        daoMesa.alterar(mesaRemover);
 
-                            daoMesa.alterar(mesaRemover);
-
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Sucesso!");
-                            alert.setHeaderText("MESA excluída com sucesso!");
-                            alert.showAndWait();
-                            carregaDados();
-                        }
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Sucesso!");
+                        alert.setHeaderText("MESA excluída com sucesso!");
+                        alert.showAndWait();
+                        carregaDados();
                     }
                 }
             });
@@ -590,24 +589,20 @@ public class TelaAdmCadastroMesasController implements Initializable {
         }
     }
 
-    //    Define os botões de ação da UNIDADE
     private class ButtonCellUnidade extends TableCell<Unidade, Boolean> {
-
-        HBox hb = new HBox();
 
         //BOTAO REMOVER
         private Button botaoRemover = new Button();
         private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
 
         private ButtonCellUnidade(TableView<Unidade> tblView) {
+
             //BOTAO REMOVER
             imagemRemover.fitHeightProperty().set(16);
             imagemRemover.fitWidthProperty().set(16);
 
             botaoRemover.setGraphic(imagemRemover);
-
             botaoRemover.setOnAction(new EventHandler<ActionEvent>() {
-
                 @Override
                 public void handle(ActionEvent t) {
                     Unidade unidadeRemover = (Unidade) tblView.getItems().get(getIndex());
@@ -615,7 +610,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
                     if (unidadeRemover != null) {
                         Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
                         alertVoltar.setTitle("Atenção!");
-                        alertVoltar.setHeaderText("Os dados referentes à esta UNIDADE serão perdidos, deseja continuar?");
+                        alertVoltar.setHeaderText("Os dados referentes à esta Unidade serão perdidos, deseja continuar?");
                         alertVoltar.getButtonTypes().clear();
                         alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
 
@@ -641,17 +636,13 @@ public class TelaAdmCadastroMesasController implements Initializable {
 
         @Override
         protected void updateItem(Boolean t, boolean empty) {
-            hb.setAlignment(Pos.CENTER);
-
             super.updateItem(t, empty);
             if (!empty) {
-                hb.getChildren().add(botaoRemover);
-
-                setGraphic(hb);
+                setGraphic(botaoRemover);
+                setAlignment(Pos.CENTER);
             } else {
                 setGraphic(null);
             }
         }
     }
-
 }

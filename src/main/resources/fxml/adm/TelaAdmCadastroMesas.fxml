@@ -60,7 +60,7 @@
                 </AnchorPane>
             </content>
         </Tab>
-        <Tab fx:id="tabListagem" text="Listagem">
+        <Tab fx:id="tabListagem" onSelectionChanged="#selectedTabListagem" text="Listagem">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="405.0" prefWidth="580.0">
                     <children>

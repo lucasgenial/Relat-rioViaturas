@@ -306,15 +306,6 @@ public class TelaAdmCadastroServidorController implements Initializable {
                 novoServidor.setNome(txtNome.getText());
                 novoServidor.setObservacao(txtObservacao.getText());
 
-                //Converte a imagem
-//                if (imagemFoto.getImage() != null) {
-//                    BufferedImage bImage = SwingFXUtils.fromFXImage(imagemFoto.getImage(), null);
-//                    ByteArrayOutputStream s = new ByteArrayOutputStream();
-//                    ImageIO.write(bImage, "jpg", s);
-//                    byte[] res = s.toByteArray();
-//                    s.close();
-//                    novoServidor.setFoto(res);
-//                }
                 novoServidor.setAtivo(true);
 
                 daoServidor.salvar(novoServidor);
@@ -345,15 +336,6 @@ public class TelaAdmCadastroServidorController implements Initializable {
                 servidorSelecionado.setNome(txtNome.getText());
                 servidorSelecionado.setObservacao(txtObservacao.getText());
 
-                //Converte a imagem
-//                if (imagemFoto.getImage() != null) {
-//                    BufferedImage bImage = SwingFXUtils.fromFXImage(imagemFoto.getImage(), null);
-//                    ByteArrayOutputStream s = new ByteArrayOutputStream();
-//                    ImageIO.write(bImage, "jpg", s);
-//                    byte[] res = s.toByteArray();
-//                    s.close();
-//                    novoServidor.setFoto(res);
-//                }
                 servidorSelecionado.setAtivo(true);
 
                 daoServidor.alterar(servidorSelecionado);

@@ -920,7 +920,8 @@ public class TelaPrincipalController implements Initializable {
 
             //Mostra a tela ate que o usuario feche
             dialogStageAtual.showAndWait();
-            carregaDadosTabelaResumo();
+            dialogStageAtual.hide();
+//            carregaDadosTabelaResumo();
         } catch (IOException ex) {
             ex.printStackTrace();
         }

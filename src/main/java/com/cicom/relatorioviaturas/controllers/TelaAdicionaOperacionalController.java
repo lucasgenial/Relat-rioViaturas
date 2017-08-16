@@ -302,7 +302,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     }
 
     @FXML
-    private void clickedBtRemoveServidor(MouseEvent event) {
+    private void clickedBtRemoveServidor() {
         ServidorFuncao servidorParaExcluir = tableServidorGuarnicao.getSelectionModel().getSelectedItem();
 
         if (!tableServidorGuarnicao.getItems().isEmpty() && servidorParaExcluir != null) {
