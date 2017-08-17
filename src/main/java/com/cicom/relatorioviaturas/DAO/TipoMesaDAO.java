@@ -17,12 +17,17 @@ public class TipoMesaDAO extends AbstractDAO<TipoMesa> {
     @SuppressWarnings("unchecked")
     public TipoMesa buscaPorNome(String nome) {
         List<TipoMesa> resultados = null;
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+
         try {
             resultados = administracao.createQuery("SELECT u FROM TipoMesa u WHERE u.nome=:nome")
                     .setParameter("nome", nome)
                     .getResultList();
         } catch (Exception e) {
             throw e;
+        } finally {
+            administracao.close();
         }
 
         if (resultados.size() > 0) {

@@ -83,7 +83,7 @@ public class Unidade implements Serializable {
         return this.comandoDeArea.get();
     }
 
-    @ManyToMany(targetEntity = PO.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = PO.class, fetch = FetchType.EAGER)
     @JoinTable(name = "TBL_POS_UNIDADE", joinColumns = {
         @JoinColumn(name = "UNIDADE_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "PO_ID")})

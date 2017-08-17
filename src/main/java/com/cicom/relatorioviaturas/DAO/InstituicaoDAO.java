@@ -16,6 +16,9 @@ public class InstituicaoDAO extends AbstractDAO<Instituicao> {
     @SuppressWarnings("unchecked")
     public Instituicao buscaPorNome(String nome) {
         List<Instituicao> resultados = null;
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+        
         try {
             resultados = administracao.createQuery("SELECT u FROM Instituicao u WHERE u.nome=:nome")
                     .setParameter("nome", nome)
@@ -23,8 +26,7 @@ public class InstituicaoDAO extends AbstractDAO<Instituicao> {
         } catch (Exception e) {
             throw e;
         } finally {
-//            administracao.close();
-//            fabrica.close();
+            administracao.close();
         }
 
         if (resultados.size() > 0) {

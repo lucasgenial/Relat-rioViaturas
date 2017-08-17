@@ -11,8 +11,8 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
 
     static EntityManagerFactory fabrica = Persistence.createEntityManagerFactory("persistenciaBancoDeDados");
 //    static EntityManagerFactory fabrica = Persistence.createEntityManagerFactory("h2PU");
-    static EntityManager administracao = fabrica.createEntityManager();
-    static EntityTransaction transacao = administracao.getTransaction();
+    static EntityManager administracao;
+    static EntityTransaction transacao;
     private final Class<T> classeEntidade;
 
     public AbstractDAO(Class<T> classeEntidade) {
@@ -22,6 +22,9 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
 
     @Override
     public void salvar(T obj) {
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+
         try {
             if (obj != null) {
                 transacao.begin();
@@ -41,7 +44,9 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
     @Override
     public T buscaPorCodigo(int codigoBuscado) {
         T retorno = null;
-
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+        
         try {
             transacao.begin();
             retorno = administracao.find(classeEntidade, codigoBuscado);
@@ -57,7 +62,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
             e.printStackTrace();
         } finally {
             //Fecha a Tranção e a fabrica
-//            administracao.close();
+            administracao.close();
         }
         System.out.println("BUSCA POR CODIGO: " + retorno);
         return retorno;
@@ -66,7 +71,9 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
     @Override
     public T buscaPorObjeto(T obj) {
         T retorno = null;
-
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+        
         try {
             transacao.begin();
             retorno = administracao.find(classeEntidade, obj);
@@ -78,13 +85,16 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
             e.printStackTrace();
         } finally {
             //Fecha a Tranção e a fabrica
-//            administracao.close();
+            administracao.close();
         }
         return retorno;
     }
 
     @Override
     public T alterar(T obj) {
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+        
         try {
             transacao.begin();
             obj = administracao.merge(obj);
@@ -103,6 +113,9 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
 
     @Override
     public void deletar(int id) {
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+        
         try {
             transacao.begin();
             administracao.remove(administracao.find(classeEntidade, id));
@@ -112,6 +125,9 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
                 transacao.rollback();
             }
             e.printStackTrace();
+        } finally {
+            //Fecha a Tranção e a fabrica
+//            administracao.close();
         }
     }
 
@@ -119,6 +135,8 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
     public List<T> getList(String sql) {
 
         List<T> t = new ArrayList<>();
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
 
         try {
             transacao.begin();
@@ -131,7 +149,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
             e.printStackTrace();
         } finally {
             //Fecha a Tranção e a fabrica
-//            administracao.close();
+            administracao.close();
         }
         return t;
     }

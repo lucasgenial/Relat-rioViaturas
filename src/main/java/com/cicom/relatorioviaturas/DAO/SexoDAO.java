@@ -16,6 +16,9 @@ public class SexoDAO extends AbstractDAO<Sexo> {
     @SuppressWarnings("unchecked")
     public Sexo buscaPorNome(String nome) {
         List<Sexo> resultados = null;
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+
         try {
             resultados = administracao.createQuery("SELECT u FROM Sexo u WHERE u.nome=:nome")
                     .setParameter("nome", nome)
@@ -23,8 +26,7 @@ public class SexoDAO extends AbstractDAO<Sexo> {
         } catch (Exception e) {
             throw e;
         } finally {
-//            administracao.close();
-//            fabrica.close();
+            administracao.close();
         }
 
         if (resultados.size() > 0) {

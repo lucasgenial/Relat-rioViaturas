@@ -49,14 +49,14 @@ public class ServidorFuncao implements Serializable {
     }
 
     @NotNull
-    @OneToOne(targetEntity = Servidor.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = Servidor.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "SERVIDOR_FK")
     public Servidor getServidor() {
         return this.servidor;
     }
 
     @NotNull
-    @OneToOne(targetEntity = Funcao.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = Funcao.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "FUNCAO_FK")
     public Funcao getFuncao() {
         return this.funcao;

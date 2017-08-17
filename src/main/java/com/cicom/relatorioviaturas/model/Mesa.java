@@ -15,6 +15,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +24,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.criteria.Fetch;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -69,7 +71,7 @@ public class Mesa implements Serializable {
         return this.nome.get();
     }
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "TBL_MESA_UNIDADE",
             joinColumns = {
                 @JoinColumn(name = "MESA_ID_FK")},
@@ -79,7 +81,7 @@ public class Mesa implements Serializable {
         return this.unidades;
     }
 
-    @OneToOne(targetEntity = TipoMesa.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToOne(targetEntity = TipoMesa.class)
     @JoinColumn(name = "TIPO_MESA")
     public TipoMesa getTipoMesa() {
         return this.tipoMesa;

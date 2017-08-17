@@ -15,6 +15,9 @@ public class FuncaoDAO extends AbstractDAO<Funcao> {
 
     @SuppressWarnings("unchecked")
     public Funcao buscaPorNome(String nome) {
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+        
         List<Funcao> resultados = null;
         try {
             resultados = administracao.createQuery("SELECT u FROM Funcao u WHERE u.nome=:nome")
@@ -23,8 +26,7 @@ public class FuncaoDAO extends AbstractDAO<Funcao> {
         } catch (Exception e) {
             throw e;
         } finally {
-//            administracao.close();
-//            fabrica.close();
+            administracao.close();
         }
 
         if (resultados.size() > 0) {

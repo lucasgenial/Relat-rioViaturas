@@ -15,6 +15,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -112,7 +113,7 @@ public class Viatura implements Serializable {
         return this.tipoPO;
     }
     
-    @OneToMany(targetEntity = ServidorFuncao.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = ServidorFuncao.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(name = "TBL_SERVIDORES_VIATURAS", joinColumns = {
         @JoinColumn(name = "VIATURA_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "SERVIDOR_ID_FK")})

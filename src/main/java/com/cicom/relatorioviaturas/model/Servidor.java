@@ -92,13 +92,13 @@ public class Servidor implements Serializable {
         return this.matricula.get();
     }
 
-    @OneToOne(targetEntity = Instituicao.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToOne(targetEntity = Instituicao.class)
     @JoinColumn(name = "INSTITUICAO")
     public Instituicao getInstituicao() {
         return this.instituicao;
     }
 
-    @OneToOne(targetEntity = Sexo.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToOne(targetEntity = Sexo.class)
     @JoinColumn(name = "SEXO")
     public Sexo getSexo() {
         return this.sexo;

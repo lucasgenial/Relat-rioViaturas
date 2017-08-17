@@ -429,6 +429,12 @@ public class TelaCadastroMesaController implements Initializable {
 
     private boolean verificaDados() {
         //Data final é depois da data inicial
+        if (cbMesa.getSelectionModel().getSelectedItem() == null) {
+            mensagemErroTela = "Mesa Inválida";
+            mensagemErroCorpo = "Corrija o campo Mesa!\nÉ necessário selecionar uma mesa";
+            return false;
+        }
+        
         if (dataFinal.getValue().isBefore(dataInicial.getValue())) {
             mensagemErroTela = "Data Inválida";
             mensagemErroCorpo = "Corrija o campo Data Inicial!\nEsta não poderá anterior a data Inicial";

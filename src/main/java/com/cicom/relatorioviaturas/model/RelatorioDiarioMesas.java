@@ -20,6 +20,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -106,13 +107,13 @@ public class RelatorioDiarioMesas implements Serializable {
         return this.horaFinal;
     }
 
-    @OneToOne(targetEntity = Mesa.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToOne(targetEntity = Mesa.class)
     @JoinColumn(name = "MESA")
     public Mesa getMesa() {
         return this.mesa;
     }
 
-    @OneToMany(targetEntity = RelatorioDiarioViaturas.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = RelatorioDiarioViaturas.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(name = "TBL_RELATORIO_MESAS_VIATURAS", joinColumns = {
         @JoinColumn(name = "RELATORIO_MESAS_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "RELATORIO_VIATURAS_ID_FK")})
@@ -120,7 +121,7 @@ public class RelatorioDiarioMesas implements Serializable {
         return this.relatorioDiarioViaturas;
     }
 
-    @OneToMany(targetEntity = ServidorFuncao.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = ServidorFuncao.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(name = "TBL_SERVIDORES_RELATORIO_MESAS", joinColumns = {
         @JoinColumn(name = "RELATORIO_MESAS_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "SERVIDOR_ID")})

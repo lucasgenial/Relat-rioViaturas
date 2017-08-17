@@ -11,6 +11,7 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,7 +49,7 @@ public class RelatorioDiarioViaturas implements Serializable {
         return this.unidade;
     }
     
-    @OneToMany(targetEntity = Viatura.class, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(targetEntity = Viatura.class, cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(name = "TBL_VIATURAS_POR_RELATORIO", joinColumns = {
         @JoinColumn(name = "RELATORIO_VIATURAS_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "VIATURA_ID_FK")})

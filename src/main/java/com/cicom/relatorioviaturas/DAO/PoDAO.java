@@ -16,12 +16,17 @@ public class PoDAO extends AbstractDAO<PO> {
     @SuppressWarnings("unchecked")
     public PO buscaPorNome(String nome) {
         List<PO> resultados = null;
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+        
         try {
             resultados = administracao.createQuery("SELECT u FROM PO u WHERE u.nome=:nome")
                     .setParameter("nome", nome)
                     .getResultList();
         } catch (Exception e) {
             throw e;
+        } finally{
+            administracao.close();
         }
 
         if (resultados.size() > 0) {
@@ -34,13 +39,25 @@ public class PoDAO extends AbstractDAO<PO> {
     @SuppressWarnings("unchecked")
     public void deletar(PO po) {
         po.setAtivo(false);
-        administracao.merge(po);
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
+        
+        try {
+            transacao.begin();
+            administracao.merge(po);
+            transacao.commit();
+        } catch (Exception e) {
+            throw e;
+        } finally{
+            administracao.close();
+        }
     }
 
     @SuppressWarnings("unchecked")
     public List<PO> getListAtivos() {
-
         List<PO> t = null;
+        administracao = fabrica.createEntityManager();
+        transacao = administracao.getTransaction();
 
         try {
             transacao.begin();
@@ -51,6 +68,8 @@ public class PoDAO extends AbstractDAO<PO> {
                 transacao.rollback();
             }
             e.printStackTrace();
+        } finally{
+            administracao.close();
         }
         return t;
     }
