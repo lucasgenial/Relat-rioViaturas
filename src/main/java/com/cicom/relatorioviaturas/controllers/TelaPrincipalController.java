@@ -9,7 +9,6 @@ import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroUnidadesContro
 import com.cicom.relatorioviaturas.model.*;
 import java.io.IOException;
 import java.net.URL;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -402,7 +401,7 @@ public class TelaPrincipalController implements Initializable {
             btnEditarOperacional.setDisable(false);
             btnRemoverOperacional.setDisable(false);
             tableGuarnicao.setDisable(false);
-
+            
             tbColumnNomeServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<ServidorFuncao, String> data) {
@@ -417,7 +416,7 @@ public class TelaPrincipalController implements Initializable {
                 }
             });
 
-            tableGuarnicao.getItems().setAll(FXCollections.observableSet(guarnicaoSelecionada));
+            tableGuarnicao.getItems().setAll(guarnicaoSelecionada);
         } else {
             btnEditarOperacional.setDisable(true);
             btnRemoverOperacional.setDisable(true);
@@ -630,9 +629,11 @@ public class TelaPrincipalController implements Initializable {
     }
 
     private void carregaDadosTabelaViatura() {
+        
         //Limpa as tabelas
         tableViatura.getItems().clear();
         tableGuarnicao.getItems().clear();
+//        carregaDadosTabelaResumo();
 
         if (!relatorioViaturasSelecionado.getViaturas().isEmpty()) {
             tableViatura.setDisable(false);
@@ -664,7 +665,7 @@ public class TelaPrincipalController implements Initializable {
             });
 
             //Adiciona os itens
-            tableViatura.getItems().setAll(FXCollections.observableList(listaDeViaturas));
+            tableViatura.getItems().setAll(listaDeViaturas);
 
             ContextMenu listContextMenu = new ContextMenu();
             MenuItem novaViatura = new MenuItem("Novo");
@@ -714,23 +715,25 @@ public class TelaPrincipalController implements Initializable {
 
                 //Setando o cliente no Controller.
                 TelaAdicionaOperacionalController controller = loader.getController();
-                controller.setRelatorioDiarioViaturasSelecionado(relatorioViaturasSelecionado);
-                controller.setDialogStage(dialogStageAtual);
+                controller.setRelatorioDeMesa(relatorioDiarioMesasSelecionado);
+                controller.setRelatorioDeViatura(relatorioViaturasSelecionado);
+                controller.setViatura(new Viatura());
+//                controller.setListaPOS(relatorioViaturasSelecionado.getUnidade().getPos());
 
                 //Mostra a tela ate que o usuario feche
                 dialogStageAtual.showAndWait();
+//
+//                if (controller.getViatura() != null) {
+//                    relatorioViaturasSelecionado.getViaturas().add(controller.getViatura());
+//                    DataLoader.alterar(relatorioDiarioMesasSelecionado);
+//
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setTitle("Sucesso!");
+//                    alert.setHeaderText("Operacional cadastrado com Sucesso");
+//                    alert.showAndWait();
+//                }
 
-                if (controller.getViatura() != null) {
-                    relatorioViaturasSelecionado.getViaturas().add(controller.getViatura());
-                    DataLoader.alterar(relatorioDiarioMesasSelecionado);
-
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Sucesso!");
-                    alert.setHeaderText("Operacional cadastrado com Sucesso");
-                    alert.showAndWait();
-                }
-
-                carregaDadosTabelaViatura();
+                carregaDadosTabelaResumo();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -748,7 +751,7 @@ public class TelaPrincipalController implements Initializable {
         viaturaSelecionada = tableViatura.getSelectionModel().getSelectedItem();
 
         if (viaturaSelecionada != null) {
-            Set<ServidorFuncao> lista = viaturaSelecionada.getGuarnicao();
+//            Set<ServidorFuncao> lista = viaturaSelecionada.getGuarnicao();
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(this.getClass().getResource("/fxml/TelaAdicionaOperacional.fxml"));
@@ -765,29 +768,37 @@ public class TelaPrincipalController implements Initializable {
 
                 //Setando o cliente no Controller.
                 TelaAdicionaOperacionalController controller = loader.getController();
-                controller.setRelatorioDiarioViaturasSelecionado(relatorioViaturasSelecionado);
+                controller.setRelatorioDeMesa(relatorioDiarioMesasSelecionado);
+                controller.setRelatorioDeViatura(relatorioViaturasSelecionado);
                 controller.setViatura(viaturaSelecionada);
-                controller.setDialogStage(dialogStageAtual);
+//                controller.setListaPOS(relatorioViaturasSelecionado.getUnidade().getPos());
+//                controller.setViatura(viaturaSelecionada);
 
                 //Mostra a tela ate que o usuario feche
                 dialogStageAtual.showAndWait();
+                
+//                System.out.println("VIATURA SELECIONADA: " + viaturaSelecionada);
+//                System.out.println("VIATURA POS: "+ controller.getViatura());
 
-                if (!controller.getViatura().equals(viaturaSelecionada)) {
-                    //faz a alteração no banco
-                    DataLoader.alterar(relatorioDiarioMesasSelecionado);
+//                if (!viaturaSelecionada.equals(controller.getViatura())) {
+//                    //faz a alteração no banco
+//                    DataLoader.alterar(relatorioDiarioMesasSelecionado);
+//
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setTitle("Sucesso!");
+//                    alert.setHeaderText("Operacional editado com Sucesso");
+//                    alert.showAndWait();
+//                } else{
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setTitle("Atenção!");
+//                    alert.setHeaderText("Nenhum dado modificado");
+//                    alert.showAndWait();
+//                }
 
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Sucesso!");
-                    alert.setHeaderText("Operacional editado com Sucesso");
-                    alert.showAndWait();
-                } else{
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Atenção!");
-                    alert.setHeaderText("Nenhum dado modificado");
-                    alert.showAndWait();
-                }
-
-                carregaDadosTabelaViatura();
+                carregaDadosTabelaResumo();
+                
+//                tableUnidade.getSelectionModel().select(relatorioViaturasSelecionado);
+                tableResumo.getSelectionModel().select(relatorioDiarioMesasSelecionado);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

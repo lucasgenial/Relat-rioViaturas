@@ -30,7 +30,6 @@ public class Instituicao implements Serializable {
     private StringProperty nome = new SimpleStringProperty();
 
     public Instituicao() {
-
     }
 
     public Instituicao(String nome) {

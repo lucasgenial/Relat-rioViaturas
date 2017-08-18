@@ -8,7 +8,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.Camera;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
@@ -46,8 +45,7 @@ public class Viatura implements Serializable {
     private Set<ServidorFuncao> guarnicao = new HashSet<>();
     private boolean vtrBaixada;
     private StringProperty hrDaBaixa = new SimpleStringProperty();
-    
-    
+
     /*
     GETTERS
      */
@@ -84,17 +82,16 @@ public class Viatura implements Serializable {
 
     @Basic
     @Column(name = "CAMERA")
-    public boolean isCamera(){
-            return this.camera;
-            
+    public boolean isCamera() {
+        return this.camera;
     }
-    
+
     @Basic
     @Column(name = "ESTADO_CAM")
     public String getEstadoCam() {
         return this.estadoCam.get();
     }
-    
+
     @Basic
     @Column(name = "HT")
     public String getHt() {
@@ -112,8 +109,8 @@ public class Viatura implements Serializable {
     public PO getTipoPO() {
         return this.tipoPO;
     }
-    
-    @OneToMany(targetEntity = ServidorFuncao.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+
+    @OneToMany(targetEntity = ServidorFuncao.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinTable(name = "TBL_SERVIDORES_VIATURAS", joinColumns = {
         @JoinColumn(name = "VIATURA_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "SERVIDOR_ID_FK")})
@@ -126,13 +123,13 @@ public class Viatura implements Serializable {
     public boolean isVtrBaixada() {
         return this.vtrBaixada;
     }
-    
+
     @Basic
     @Column(name = "HR_DA_BAIXA")
     public String getHrDaBaixa() {
         return this.hrDaBaixa.get();
     }
-    
+
     /*
     SETTERS
      */
@@ -155,12 +152,12 @@ public class Viatura implements Serializable {
     public void setGps(boolean value) {
         this.gps = value;
     }
-    
-    public void setCamera (boolean value){
+
+    public void setCamera(boolean value) {
         this.camera = value;
     }
-    
-    public void setEstadoCam (String value){
+
+    public void setEstadoCam(String value) {
         this.estadoCam.set(value);
     }
 
@@ -183,11 +180,11 @@ public class Viatura implements Serializable {
     public void setVtrBaixada(boolean value) {
         this.vtrBaixada = value;
     }
-    
+
     public void setHrDaBaixa(String value) {
         this.hrDaBaixa.set(value);
     }
-    
+
     /*
     PROPERTY
      */
@@ -199,10 +196,10 @@ public class Viatura implements Serializable {
         return this.estado;
     }
 
-    public StringProperty estadoCamProperty(){
+    public StringProperty estadoCamProperty() {
         return this.estadoCam;
     }
-    
+
     public StringProperty htProperty() {
         return this.ht;
     }
@@ -211,7 +208,7 @@ public class Viatura implements Serializable {
         return this.prefixo;
     }
 
-     public StringProperty hrDaBaixaProperty() {
+    public StringProperty hrDaBaixaProperty() {
         return this.hrDaBaixa;
     }
 
@@ -293,8 +290,4 @@ public class Viatura implements Serializable {
         return true;
     }
 
-   
-    
 }
-     
-    

@@ -2,8 +2,11 @@ package com.cicom.relatorioviaturas.controllers;
 
 import com.cicom.relatorioviaturas.DAO.FuncaoDAO;
 import com.cicom.relatorioviaturas.DAO.PoDAO;
+import com.cicom.relatorioviaturas.DAO.RelatorioDiarioMesasDAO;
+import com.cicom.relatorioviaturas.DAO.RelatorioDiarioViaturasDAO;
 import com.cicom.relatorioviaturas.model.Funcao;
 import com.cicom.relatorioviaturas.model.PO;
+import com.cicom.relatorioviaturas.model.RelatorioDiarioMesas;
 import com.cicom.relatorioviaturas.model.RelatorioDiarioViaturas;
 import com.cicom.relatorioviaturas.model.Servidor;
 import com.cicom.relatorioviaturas.model.ServidorFuncao;
@@ -98,11 +101,12 @@ public class TelaAdicionaOperacionalController implements Initializable {
     /*
     
      */
-    private RelatorioDiarioViaturas relatorioDiarioViaturasSelecionado;
-    private Stage dialogStage;
     private PoDAO daoPO = new PoDAO();
     private FuncaoDAO daoFuncao = new FuncaoDAO();
-    private Viatura viatura = null;
+    private RelatorioDiarioMesasDAO daoRelatorioMesa = new RelatorioDiarioMesasDAO();
+    private RelatorioDiarioViaturasDAO daoRelatorioViatura = new RelatorioDiarioViaturasDAO();
+
+    private Viatura viatura;
     private Servidor servidor = new Servidor();
     private Funcao funcao = new Funcao();
     private ServidorFuncao servidorFuncao = new ServidorFuncao();
@@ -112,6 +116,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
     private PO tipoPO;
     private String tituloMensagem;
     private String corpoMensagem;
+    private RelatorioDiarioMesas relatorioDeMesa;
+    private RelatorioDiarioViaturas relatorioDeViatura;
 
     /**
      * Initializes the controller class.
@@ -131,7 +137,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-
                         if (viatura != null) {
 
                             if (viatura.isVtrBaixada()) {
@@ -139,8 +144,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
                             }
 
                         }
-
-                        listaPOS.addAll(relatorioDiarioViaturasSelecionado.getUnidade().getPos());
 
                         if (!listaPOS.isEmpty()) {
                             cbTipoPO.setConverter(new StringConverter<PO>() {
@@ -169,7 +172,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                         }
 
                         //Carrega a lista de Funções
-                        listaFuncao = daoFuncao.getList("FROM Funcao");
+                        listaFuncao.addAll(daoFuncao.getList("FROM Funcao"));
 
                         if (!listaFuncao.isEmpty()) {
                             cbFuncao.setConverter(new StringConverter<Funcao>() {
@@ -197,6 +200,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                             alert.showAndWait();
                             root.getScene().getWindow().hide();
                         }
+                        
                     }
                 });
             } catch (InterruptedException ex) {
@@ -322,7 +326,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
     @FXML
     private void clickedExitedTableServidorGuarnicao(MouseEvent event) {
-
     }
 
     @FXML
@@ -359,7 +362,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
             tbGPS.setText("NÃO");
         }
     }
-    
+
     @FXML
     private void tbCamera() {
         if (tbCamera.isSelected()) {
@@ -404,7 +407,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
             tbEstadoCam.setText("INATIVO");
         }
     }
-    
+
     @FXML
     private void tbVtrBaixada() {
         if (tbVtrBaixada.isSelected()) {
@@ -428,12 +431,12 @@ public class TelaAdicionaOperacionalController implements Initializable {
             final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
 
             if (resultado.get() == ButtonType.YES) {
-                 tbVtrBaixada.setText("SIM");
-                 
+                tbVtrBaixada.setText("SIM");
+
             } else {
-             tbVtrBaixada.setSelected(false);
+                tbVtrBaixada.setSelected(false);
             }
-                       
+
         } else {
             tbVtrBaixada.setText("NÃO");
         }
@@ -470,7 +473,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 } else {
                     viatura.setEstadoCam("INATIVO");
                 }
-                
+
                 //Verfica estado HT
                 if (tbHT.isSelected()) {
                     viatura.setHt("POSSUI");
@@ -482,8 +485,17 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 viatura.setPrefixo(txtPrefixo.getText());
                 viatura.setTipoPO(tipoPO);
 
+                relatorioDeViatura.getViaturas().add(viatura);
+                daoRelatorioViatura.alterar(relatorioDeViatura);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Operacional cadastrado com Sucesso");
+                alert.showAndWait();
+
                 root.getScene().getWindow().hide();
             } else {
+                viatura.setId(0);
                 viatura.setAudio(tbAudio.isSelected());
                 viatura.setBcs(tbBCS.isSelected());
                 viatura.setGps(tbGPS.isSelected());
@@ -504,7 +516,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     viatura.setHt("NÃO POSSUI");
                 }
                 //Limpa os servidores
-//                viatura.getGuarnicao().clear();
+                viatura.getGuarnicao().clear();
 
                 //adiciona os servidores novos
                 viatura.setGuarnicao(listaDeServidores);
@@ -512,6 +524,23 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 viatura.setPrefixo(txtPrefixo.getText());
                 viatura.setTipoPO(tipoPO);
 
+//                if (relatorioDeViatura.getViaturas().contains(viatura)) {
+                    //faz a alteração no banco
+                    daoRelatorioViatura.alterar(relatorioDeViatura);
+                    
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Sucesso!");
+                    alert.setHeaderText("Operacional editado com Sucesso");
+                    alert.showAndWait();
+//                } else{
+//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                    alert.setTitle("Atenção!");
+//                    alert.setHeaderText("Nenhum dado modificado");
+//                    alert.showAndWait();
+//                }
+                
+                
+                
                 root.getScene().getWindow().hide();
             }
 
@@ -626,20 +655,16 @@ public class TelaAdicionaOperacionalController implements Initializable {
         }
     }
 
-    public RelatorioDiarioViaturas getRelatorioDiarioViaturasSelecionado() {
-        return relatorioDiarioViaturasSelecionado;
+    void setRelatorioDeMesa(RelatorioDiarioMesas value) {
+        this.relatorioDeMesa = value;
     }
 
-    public void setRelatorioDiarioViaturasSelecionado(RelatorioDiarioViaturas relatorioDiarioViaturasSelecionado) {
-        this.relatorioDiarioViaturasSelecionado = relatorioDiarioViaturasSelecionado;
-    }
+    void setRelatorioDeViatura(RelatorioDiarioViaturas value) {
+        this.relatorioDeViatura = value;
 
-    public Stage getDialogStage() {
-        return dialogStage;
-    }
-
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
+        if (value != null) {
+            listaPOS.addAll(relatorioDeViatura.getUnidade().getPos());
+        }
     }
 
     public Viatura getViatura() {
@@ -647,50 +672,54 @@ public class TelaAdicionaOperacionalController implements Initializable {
     }
 
     public void setViatura(Viatura value) {
-        this.viatura = value;
-        //Habilitar Tudo
+        if (value.getTipoPO() != null) {
+            this.viatura = new Viatura();
 
-        this.cbTipoPO.setConverter(new StringConverter<PO>() {
-            @Override
-            public String toString(PO item) {
-                if (item != null) {
-                    return item.getNome();
+            this.cbTipoPO.setConverter(new StringConverter<PO>() {
+                @Override
+                public String toString(PO item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
                 }
-                return "";
+
+                @Override
+                public PO fromString(String string) {
+                    return daoPO.buscaPorNome(string);
+                }
+            });
+            this.cbTipoPO.getSelectionModel().select(value.getTipoPO());
+
+            this.viatura.setId(value.getId());
+            this.tipoPO = value.getTipoPO();
+            this.txtPrefixo.setText(value.getPrefixo());
+            this.tbBCS.setSelected(value.isBcs());
+            this.tbGPS.setSelected(value.isGps());
+            this.tbCamera.setSelected(value.isCamera());
+            this.tbVtrBaixada.setSelected(value.isVtrBaixada());
+
+            if (value.getHt().equals("POSSUI")) {
+                this.tbHT.setSelected(true);
+
+            } else {
+                this.tbHT.setSelected(false);
             }
 
-            @Override
-            public PO fromString(String string) {
-                return daoPO.buscaPorNome(string);
+            this.tbAudio.setSelected(value.isAudio());
+
+            if (value.getHt().equals("ATIVO")) {
+                this.tbEstado.setSelected(true);
+            } else {
+                this.tbEstado.setSelected(false);
             }
-        });
-        this.cbTipoPO.getSelectionModel().select(value.getTipoPO());
-        this.tipoPO = value.getTipoPO();
-        this.txtPrefixo.setText(value.getPrefixo());
-        this.tbBCS.setSelected(value.isBcs());
-        this.tbGPS.setSelected(value.isGps());
-        this.tbCamera.setSelected(value.isCamera());
-        this.tbVtrBaixada.setSelected(value.isVtrBaixada());
 
-        if (value.getHt().equals("POSSUI")) {
-            this.tbHT.setSelected(true);
-
-        } else {
-            this.tbHT.setSelected(false);
+            verificaTipoPO(value.getTipoPO());
+            
+            this.listaDeServidores = value.getGuarnicao();
+            
+            carregaDadosTablelaServidorGuarnicao(listaDeServidores);
         }
-
-        this.tbAudio.setSelected(value.isAudio());
-
-        if (value.getHt().equals("ATIVO")) {
-            this.tbEstado.setSelected(true);
-        } else {
-            this.tbEstado.setSelected(false);
-        }
-
-        verificaTipoPO(value.getTipoPO());
-        listaDeServidores = value.getGuarnicao();
-        carregaDadosTablelaServidorGuarnicao(listaDeServidores);
-
     }
 
     private void verificaTipoPO(PO tipoPO) {

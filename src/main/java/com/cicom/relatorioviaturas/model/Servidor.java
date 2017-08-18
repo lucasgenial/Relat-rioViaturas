@@ -9,7 +9,6 @@ import javafx.beans.property.StringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,7 +41,7 @@ public class Servidor implements Serializable {
     public Servidor() {
     }
 
-    public Servidor(String nome, String matricula, Instituicao instituicao, String grauHierarquico, Sexo sexo, 
+    public Servidor(String nome, String matricula, Instituicao instituicao, String grauHierarquico, Sexo sexo,
             String observacao, Boolean ativo) {
         this.setNome(nome);
         this.setGrauHierarquico(grauHierarquico);

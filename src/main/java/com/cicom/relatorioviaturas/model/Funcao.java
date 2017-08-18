@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "TBL_FUNCAO")
 @Access(AccessType.PROPERTY)
 public class Funcao implements Serializable {
-
+    
     private IntegerProperty id = new SimpleIntegerProperty();
     private StringProperty nome = new SimpleStringProperty();
 
@@ -51,7 +51,7 @@ public class Funcao implements Serializable {
     public String getNome() {
         return nome.get();
     }
-
+    
     /*
     SETTERS
      */

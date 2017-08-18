@@ -1,5 +1,6 @@
 package com.cicom.relatorioviaturas.DAO;
 
+import com.cicom.relatorioviaturas.model.Funcao;
 import java.util.List;
 
 public interface FabricaDAO<T> {
@@ -34,8 +35,19 @@ public interface FabricaDAO<T> {
      */
     public void deletar(int id);
     
+    /**
+     * Busca por Objeto no banco de Dados.
+     *
+     * @param obj
+     */
     public T buscaPorObjeto(T obj);
     
+    /**
+     * Lita objetos de uma classe persistido no banco de Dados.
+     * "Select * From nomeDaClasse "
+     *
+     * @param query
+     */
     public List<T> getList(String query);
-   
+    
 }

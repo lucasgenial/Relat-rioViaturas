@@ -11,7 +11,6 @@ import javafx.beans.property.StringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -175,6 +174,5 @@ public class Unidade implements Serializable {
         }
         return true;
     }
-    
-    
+
 }

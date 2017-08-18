@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.collections.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<Pane fx:id="root" prefHeight="354.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaAdicionaOperacionalController">
+<Pane fx:id="root" prefHeight="354.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaAdicionaOperacionalController">
     <children>
         <Label layoutX="17.0" layoutY="4.0" text="Dados PO" />
         <GridPane layoutX="17.0" layoutY="25.0" prefHeight="264.0" prefWidth="400.0">
@@ -93,7 +97,7 @@
         <Separator layoutX="432.0" layoutY="3.0" orientation="VERTICAL" prefHeight="306.0" prefWidth="4.0" />
         <Separator layoutX="14.0" layoutY="22.0" prefHeight="4.0" prefWidth="803.0" />
         <Separator layoutX="10.0" layoutY="308.0" prefHeight="4.0" prefWidth="792.0" />
-      <TextField fx:id="txtVtrBaixada" layoutX="292.0" layoutY="263.0" prefHeight="25.0" prefWidth="114.0" />
+      <TextField fx:id="txtVtrBaixada" disable="true" layoutX="292.0" layoutY="263.0" prefHeight="25.0" prefWidth="114.0" />
       <Label layoutX="312.0" layoutY="290.0" text="Hora da Baixa" />
     </children>
 </Pane>

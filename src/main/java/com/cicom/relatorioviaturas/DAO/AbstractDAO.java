@@ -10,7 +10,6 @@ import javax.persistence.Persistence;
 public abstract class AbstractDAO<T> implements FabricaDAO<T> {
 
     static EntityManagerFactory fabrica = Persistence.createEntityManagerFactory("persistenciaBancoDeDados");
-//    static EntityManagerFactory fabrica = Persistence.createEntityManagerFactory("h2PU");
     static EntityManager administracao;
     static EntityTransaction transacao;
     private final Class<T> classeEntidade;
@@ -37,7 +36,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
             }
             e.printStackTrace();
         } finally {
-//            administracao.close();
+            administracao.close();
         }
     }
 
@@ -46,7 +45,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
         T retorno = null;
         administracao = fabrica.createEntityManager();
         transacao = administracao.getTransaction();
-        
+
         try {
             transacao.begin();
             retorno = administracao.find(classeEntidade, codigoBuscado);
@@ -73,7 +72,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
         T retorno = null;
         administracao = fabrica.createEntityManager();
         transacao = administracao.getTransaction();
-        
+
         try {
             transacao.begin();
             retorno = administracao.find(classeEntidade, obj);
@@ -94,7 +93,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
     public T alterar(T obj) {
         administracao = fabrica.createEntityManager();
         transacao = administracao.getTransaction();
-        
+
         try {
             transacao.begin();
             obj = administracao.merge(obj);
@@ -106,7 +105,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
             e.printStackTrace();
         } finally {
             //Fecha a Tranção e a fabrica
-//            administracao.close();
+            administracao.close();
         }
         return obj;
     }
@@ -115,7 +114,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
     public void deletar(int id) {
         administracao = fabrica.createEntityManager();
         transacao = administracao.getTransaction();
-        
+
         try {
             transacao.begin();
             administracao.remove(administracao.find(classeEntidade, id));
@@ -127,7 +126,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
             e.printStackTrace();
         } finally {
             //Fecha a Tranção e a fabrica
-//            administracao.close();
+            administracao.close();
         }
     }
 

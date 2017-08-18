@@ -45,7 +45,7 @@ public class PO implements Serializable {
         this.setNome(nome);
         this.setAtivo(ativo);
     }
-    
+
     public PO(String nome, Set<Unidade> unidades) {
         this.setNome(nome);
         this.setUnidades(unidades);
@@ -149,6 +149,5 @@ public class PO implements Serializable {
         }
         return true;
     }
-    
-    
+
 }

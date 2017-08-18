@@ -4,16 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
@@ -151,13 +146,13 @@ public class RelatorioDiarioMesas implements Serializable {
 
     @Transient
     public String getHorarioMesa() {
-        return horaInicial.format(DateTimeFormatter.ISO_TIME) + " - " 
+        return horaInicial.format(DateTimeFormatter.ISO_TIME) + " - "
                 + horaFinal.format(DateTimeFormatter.ISO_TIME);
     }
 
     @Transient
     public String getDiaMesa() {
-        return dataInicial.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " - " 
+        return dataInicial.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " - "
                 + dataFinal.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
