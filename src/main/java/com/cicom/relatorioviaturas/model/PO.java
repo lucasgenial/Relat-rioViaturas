@@ -68,7 +68,7 @@ public class PO implements Serializable {
         return this.nome.get();
     }
 
-    @ManyToMany(mappedBy = "pos", targetEntity = Unidade.class, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "pos", targetEntity = Unidade.class, fetch = FetchType.LAZY)
     public Set<Unidade> getUnidades() {
         return this.unidades;
     }

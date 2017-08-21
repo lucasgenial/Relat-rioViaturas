@@ -73,7 +73,12 @@
             <artifactId>jfxtras-labs</artifactId>
             <version>8.0-r5</version>
         </dependency>
-
+        
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.3</version>
+        </dependency>
 
     </dependencies>
         

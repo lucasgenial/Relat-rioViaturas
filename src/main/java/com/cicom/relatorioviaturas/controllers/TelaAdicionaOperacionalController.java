@@ -4,6 +4,7 @@ import com.cicom.relatorioviaturas.DAO.FuncaoDAO;
 import com.cicom.relatorioviaturas.DAO.PoDAO;
 import com.cicom.relatorioviaturas.DAO.RelatorioDiarioMesasDAO;
 import com.cicom.relatorioviaturas.DAO.RelatorioDiarioViaturasDAO;
+import com.cicom.relatorioviaturas.DAO.ViaturaDAO;
 import com.cicom.relatorioviaturas.model.Funcao;
 import com.cicom.relatorioviaturas.model.PO;
 import com.cicom.relatorioviaturas.model.RelatorioDiarioMesas;
@@ -25,6 +26,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -42,6 +44,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -97,10 +100,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private Button btRemoveServidor;
 
-
-    /*
-    
-     */
     private PoDAO daoPO = new PoDAO();
     private FuncaoDAO daoFuncao = new FuncaoDAO();
     private RelatorioDiarioMesasDAO daoRelatorioMesa = new RelatorioDiarioMesasDAO();
@@ -118,6 +117,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
     private String corpoMensagem;
     private RelatorioDiarioMesas relatorioDeMesa;
     private RelatorioDiarioViaturas relatorioDeViatura;
+    private Stage stage;
+    private ViaturaDAO daoViatura = new ViaturaDAO();
 
     /**
      * Initializes the controller class.
@@ -125,6 +126,10 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         new CarregaDados().start();
+    }
+
+    void setStage(Stage value) {
+        stage = value;
     }
 
     class CarregaDados extends Thread {
@@ -200,7 +205,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
                             alert.showAndWait();
                             root.getScene().getWindow().hide();
                         }
-                        
+
                     }
                 });
             } catch (InterruptedException ex) {
@@ -495,7 +500,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
                 root.getScene().getWindow().hide();
             } else {
-                viatura.setId(0);
                 viatura.setAudio(tbAudio.isSelected());
                 viatura.setBcs(tbBCS.isSelected());
                 viatura.setGps(tbGPS.isSelected());
@@ -523,24 +527,23 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
                 viatura.setPrefixo(txtPrefixo.getText());
                 viatura.setTipoPO(tipoPO);
+                
+//                relatorioDeViatura.getViaturas().add(viatura);
 
-//                if (relatorioDeViatura.getViaturas().contains(viatura)) {
-                    //faz a alteração no banco
-                    daoRelatorioViatura.alterar(relatorioDeViatura);
-                    
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Sucesso!");
-                    alert.setHeaderText("Operacional editado com Sucesso");
-                    alert.showAndWait();
+                //faz a alteração no banco
+                daoViatura.alterar(viatura);
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso!");
+                alert.setHeaderText("Operacional editado com Sucesso");
+                alert.showAndWait();
 //                } else{
 //                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
 //                    alert.setTitle("Atenção!");
 //                    alert.setHeaderText("Nenhum dado modificado");
 //                    alert.showAndWait();
 //                }
-                
-                
-                
+
                 root.getScene().getWindow().hide();
             }
 
@@ -629,7 +632,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     }
 
     @FXML
-    private void clickedBtVoltar(MouseEvent event) {
+    private void clickedBtVoltar() {
         Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
         alertAntesExcluir.setTitle("Atenção!");
         alertAntesExcluir.setHeaderText("Os dados informados serão perdidos, deseja continuar?");
@@ -672,7 +675,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
     }
 
     public void setViatura(Viatura value) {
-        if (value.getTipoPO() != null) {
+        if (value != null) {
+
             this.viatura = new Viatura();
 
             this.cbTipoPO.setConverter(new StringConverter<PO>() {
@@ -715,10 +719,10 @@ public class TelaAdicionaOperacionalController implements Initializable {
             }
 
             verificaTipoPO(value.getTipoPO());
-            
-            this.listaDeServidores = value.getGuarnicao();
-            
-            carregaDadosTablelaServidorGuarnicao(listaDeServidores);
+
+            this.listaDeServidores.addAll(value.getGuarnicao());
+
+            carregaDadosTablelaServidorGuarnicao(value.getGuarnicao());
         }
     }
 

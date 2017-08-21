@@ -104,13 +104,13 @@ public class Viatura implements Serializable {
         return this.prefixo.get();
     }
 
-    @OneToOne(targetEntity = PO.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToOne(targetEntity = PO.class)
     @JoinColumn(name = "TIPO_PO_ID")
     public PO getTipoPO() {
         return this.tipoPO;
     }
 
-    @OneToMany(targetEntity = ServidorFuncao.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(targetEntity = ServidorFuncao.class, cascade = {CascadeType.DETACH,CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinTable(name = "TBL_SERVIDORES_VIATURAS", joinColumns = {
         @JoinColumn(name = "VIATURA_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "SERVIDOR_ID_FK")})

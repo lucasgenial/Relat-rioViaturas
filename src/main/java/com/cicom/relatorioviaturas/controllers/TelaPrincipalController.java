@@ -1,6 +1,7 @@
 package com.cicom.relatorioviaturas.controllers;
 
 import com.cicom.relatorioviaturas.DAO.RelatorioDiarioMesasDAO;
+import com.cicom.relatorioviaturas.DAO.RelatorioDiarioViaturasDAO;
 import com.cicom.relatorioviaturas.DAO.ViaturaDAO;
 import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroMesasController;
 import com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroServidorController;
@@ -177,6 +178,7 @@ public class TelaPrincipalController implements Initializable {
     CRIA OS DAOS
      */
     private final RelatorioDiarioMesasDAO DataLoader = new RelatorioDiarioMesasDAO();
+    private final RelatorioDiarioViaturasDAO daoRelatorioDeViatura = new RelatorioDiarioViaturasDAO();
     private final ViaturaDAO daoViatura = new ViaturaDAO();
     private Stage dialogStage;
 //    private RelatorioDiarioMesas relatorioDiarioMesasSelecionado;
@@ -241,7 +243,142 @@ public class TelaPrincipalController implements Initializable {
         listContextMenu.getItems().add(editarMesa);
 
         tableResumo.setContextMenu(listContextMenu);
+    }
 
+    private void carregaTableUnidade(Set<RelatorioDiarioViaturas> data) {
+        tbColumnIdUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioViaturas, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<RelatorioDiarioViaturas, Integer> data) {
+                return data.getValue().getUnidade().idProperty().asObject();
+            }
+        });
+
+        tbColumnCipmUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioViaturas, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioViaturas, String> data) {
+                return data.getValue().getUnidade().nomeProperty();
+            }
+        });
+        tableUnidade.getItems().setAll(FXCollections.observableSet(data));
+
+        ContextMenu listContextMenu = new ContextMenu();
+        MenuItem novaUnidade = new MenuItem("Adicionar");
+        MenuItem excluirUnidade = new MenuItem("Excluir");
+        novaUnidade.setOnAction((ActionEvent event) -> {
+            clickedAdicionarUnidade();
+        });
+        excluirUnidade.setOnAction((ActionEvent event) -> {
+            clickedRemoverUnidade();
+        });
+
+        listContextMenu.getItems().add(novaUnidade);
+        listContextMenu.getItems().add(excluirUnidade);
+
+        tableUnidade.setContextMenu(listContextMenu);
+    }
+
+    private void carregaTablePO(Map<PO, Integer> data) {
+        tbColumnNomePO.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String> param) {
+                return param.getValue().getKey().nomeProperty();
+            }
+        });
+
+        tbColumnQtdPO.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String> param) {
+                return new SimpleStringProperty(Integer.toString(param.getValue().getValue()));
+            }
+        });
+
+        tablePO.getItems().setAll(FXCollections.observableArrayList(data.entrySet()));
+    }
+
+    private void carregaDadosTabelaViatura(List<Viatura> listaDeViaturas) {
+
+        //Limpa as tabelas
+        tableViatura.getItems().clear();
+        tableGuarnicao.getItems().clear();
+
+        if (!listaDeViaturas.isEmpty()) {
+            tableViatura.setDisable(false);
+
+            /* COLUNA STATUS VIATURA */
+            tbColumnBcsViatura.setCellValueFactory((TableColumn.CellDataFeatures<Viatura, String> data) -> {
+                if (data.getValue().isBcs()) {
+                    return new SimpleStringProperty("PERTENCE");
+                } else {
+                    return new SimpleStringProperty("NÃO PERTENCE");
+                }
+            });
+
+            tbColumnGpsViatura.setCellValueFactory((TableColumn.CellDataFeatures<Viatura, String> data) -> {
+                if (data.getValue().isGps()) {
+                    return new SimpleStringProperty("POSSUI");
+                } else {
+                    return new SimpleStringProperty("NÃO POSSUI");
+                }
+            });
+
+            tbColumnAudioViatura.setCellValueFactory((TableColumn.CellDataFeatures<Viatura, String> data) -> {
+                if (data.getValue().isAudio()) {
+                    return new SimpleStringProperty("POSSUI");
+                } else {
+                    return new SimpleStringProperty("NÃO POSSUI");
+                }
+            });
+
+            //Adiciona os itens
+            tableViatura.getItems().setAll(FXCollections.observableList(listaDeViaturas));
+
+            ContextMenu listContextMenu = new ContextMenu();
+            MenuItem novaViatura = new MenuItem("Novo");
+            MenuItem removeViatura = new MenuItem("Excluir");
+            MenuItem editaViatura = new MenuItem("Editar");
+            novaViatura.setOnAction((ActionEvent event) -> {
+                clickedAdicionarOperacional();
+            });
+            removeViatura.setOnAction((ActionEvent event) -> {
+                clickedRemoverOperacional();
+            });
+            editaViatura.setOnAction((ActionEvent event) -> {
+                clickedEditarOperacional();
+            });
+
+            listContextMenu.getItems().add(novaViatura);
+            listContextMenu.getItems().add(removeViatura);
+            listContextMenu.getItems().add(editaViatura);
+
+            tableViatura.setContextMenu(listContextMenu);
+        } else {
+            btnEditarOperacional.setDisable(true);
+            btnRemoverOperacional.setDisable(true);
+            tableViatura.setDisable(true);
+            tableGuarnicao.setDisable(true);
+        }
+    }
+
+    private void carregaTableGuarnicao(Set<ServidorFuncao> data) {
+        btnEditarOperacional.setDisable(false);
+        btnRemoverOperacional.setDisable(false);
+        tableGuarnicao.setDisable(false);
+
+        tbColumnNomeServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ServidorFuncao, String> data) {
+                return data.getValue().getServidor().nomeProperty();
+            }
+        });
+
+        tbColumnFuncaoServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ServidorFuncao, String> data) {
+                return data.getValue().getFuncao().nomeProperty();
+            }
+        });
+
+        tableGuarnicao.getItems().setAll(FXCollections.observableSet(data));
     }
 
     private void limparDados() {
@@ -281,36 +418,7 @@ public class TelaPrincipalController implements Initializable {
             Set<RelatorioDiarioViaturas> relatorioDeViaturas = relatorioDiarioMesasSelecionado.getRelatorioDiarioViaturas();
 
             if (relatorioDeViaturas != null) {
-
-                tbColumnIdUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioViaturas, Integer>, ObservableValue<Integer>>() {
-                    @Override
-                    public ObservableValue<Integer> call(TableColumn.CellDataFeatures<RelatorioDiarioViaturas, Integer> data) {
-                        return data.getValue().getUnidade().idProperty().asObject();
-                    }
-                });
-
-                tbColumnCipmUnidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioViaturas, String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioViaturas, String> data) {
-                        return data.getValue().getUnidade().nomeProperty();
-                    }
-                });
-                tableUnidade.getItems().setAll(FXCollections.observableSet(relatorioDeViaturas));
-
-                ContextMenu listContextMenu = new ContextMenu();
-                MenuItem novaUnidade = new MenuItem("Adicionar");
-                MenuItem excluirUnidade = new MenuItem("Excluir");
-                novaUnidade.setOnAction((ActionEvent event) -> {
-                    clickedAdicionarUnidade();
-                });
-                excluirUnidade.setOnAction((ActionEvent event) -> {
-                    clickedRemoverUnidade();
-                });
-
-                listContextMenu.getItems().add(novaUnidade);
-                listContextMenu.getItems().add(excluirUnidade);
-
-                tableUnidade.setContextMenu(listContextMenu);
+                carregaTableUnidade(relatorioDiarioMesasSelecionado.getRelatorioDiarioViaturas());
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Atenção");
@@ -348,21 +456,7 @@ public class TelaPrincipalController implements Initializable {
                     listaPOsCadastrados.put(viatura.getTipoPO(), viatura.getGuarnicao().size());
                 }
 
-                tbColumnNomePO.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String> param) {
-                        return param.getValue().getKey().nomeProperty();
-                    }
-                });
-
-                tbColumnQtdPO.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String> param) {
-                        return new SimpleStringProperty(Integer.toString(param.getValue().getValue()));
-                    }
-                });
-
-                tablePO.getItems().setAll(FXCollections.observableArrayList(listaPOsCadastrados.entrySet()));
+                carregaTablePO(listaPOsCadastrados);
 
                 /**
                  *
@@ -391,25 +485,7 @@ public class TelaPrincipalController implements Initializable {
 
         if (!guarnicaoSelecionada.isEmpty()) {
             //Ativa a tabela Servidor
-            btnEditarOperacional.setDisable(false);
-            btnRemoverOperacional.setDisable(false);
-            tableGuarnicao.setDisable(false);
-
-            tbColumnNomeServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ServidorFuncao, String> data) {
-                    return data.getValue().getServidor().nomeProperty();
-                }
-            });
-
-            tbColumnFuncaoServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ServidorFuncao, String> data) {
-                    return data.getValue().getFuncao().nomeProperty();
-                }
-            });
-
-            tableGuarnicao.getItems().setAll(guarnicaoSelecionada);
+            carregaTableGuarnicao(guarnicaoSelecionada);
         } else {
             btnEditarOperacional.setDisable(true);
             btnRemoverOperacional.setDisable(true);
@@ -622,70 +698,6 @@ public class TelaPrincipalController implements Initializable {
         }
     }
 
-    private void carregaDadosTabelaViatura(List<Viatura> listaDeViaturas) {
-
-        //Limpa as tabelas
-        tableViatura.getItems().clear();
-        tableGuarnicao.getItems().clear();
-
-        if (!listaDeViaturas.isEmpty()) {
-            tableViatura.setDisable(false);
-
-            /* COLUNA STATUS VIATURA */
-            tbColumnBcsViatura.setCellValueFactory((TableColumn.CellDataFeatures<Viatura, String> data) -> {
-                if (data.getValue().isBcs()) {
-                    return new SimpleStringProperty("PERTENCE");
-                } else {
-                    return new SimpleStringProperty("NÃO PERTENCE");
-                }
-            });
-
-            tbColumnGpsViatura.setCellValueFactory((TableColumn.CellDataFeatures<Viatura, String> data) -> {
-                if (data.getValue().isGps()) {
-                    return new SimpleStringProperty("POSSUI");
-                } else {
-                    return new SimpleStringProperty("NÃO POSSUI");
-                }
-            });
-
-            tbColumnAudioViatura.setCellValueFactory((TableColumn.CellDataFeatures<Viatura, String> data) -> {
-                if (data.getValue().isAudio()) {
-                    return new SimpleStringProperty("POSSUI");
-                } else {
-                    return new SimpleStringProperty("NÃO POSSUI");
-                }
-            });
-
-            //Adiciona os itens
-            tableViatura.getItems().setAll(listaDeViaturas);
-
-            ContextMenu listContextMenu = new ContextMenu();
-            MenuItem novaViatura = new MenuItem("Novo");
-            MenuItem removeViatura = new MenuItem("Excluir");
-            MenuItem editaViatura = new MenuItem("Editar");
-            novaViatura.setOnAction((ActionEvent event) -> {
-                clickedAdicionarOperacional();
-            });
-            removeViatura.setOnAction((ActionEvent event) -> {
-                clickedRemoverOperacional();
-            });
-            editaViatura.setOnAction((ActionEvent event) -> {
-                clickedEditarOperacional();
-            });
-
-            listContextMenu.getItems().add(novaViatura);
-            listContextMenu.getItems().add(removeViatura);
-            listContextMenu.getItems().add(editaViatura);
-
-            tableViatura.setContextMenu(listContextMenu);
-        } else {
-            btnEditarOperacional.setDisable(true);
-            btnRemoverOperacional.setDisable(true);
-            tableViatura.setDisable(true);
-            tableGuarnicao.setDisable(true);
-        }
-    }
-
     @FXML
     private void clickedAdicionarOperacional() {
         RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
@@ -710,16 +722,22 @@ public class TelaPrincipalController implements Initializable {
                 TelaAdicionaOperacionalController controller = loader.getController();
                 controller.setRelatorioDeMesa(relatorioDiarioMesasSelecionado);
                 controller.setRelatorioDeViatura(relatorioViaturasSelecionado);
-                controller.setViatura(new Viatura());
+                controller.setViatura(null);
 
                 //Mostra a tela ate que o usuario feche
                 dialogStageAtual.showAndWait();
-                
-//                clikedRowtableResumo();
-                tableGuarnicao.getItems().clear();
-                tableGuarnicao.setDisable(true);
 
-                carregaDadosTabelaResumo();
+//                clikedRowtableResumo();
+//                tableGuarnicao.getItems().clear();
+//                tableGuarnicao.setDisable(true);
+                
+                tableResumo.refresh();
+                tableUnidade.refresh();
+                tableViatura.refresh();
+//                tableGuarnicao.refresh();
+
+                
+//                carregaDadosTabelaViatura(daoRelatorioDeViatura.buscaPorObjeto(relatorioViaturasSelecionado).getViaturas());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -753,21 +771,29 @@ public class TelaPrincipalController implements Initializable {
                 dialogStageAtual.setResizable(false);
                 dialogStageAtual.setScene(scene);
 
+                System.out.println("RELATORIO SELECIONADA: " + relatorioViaturasSelecionado);
+
                 //Setando o cliente no Controller.
                 TelaAdicionaOperacionalController controller = loader.getController();
                 controller.setRelatorioDeMesa(relatorioDiarioMesasSelecionado);
                 controller.setRelatorioDeViatura(relatorioViaturasSelecionado);
                 controller.setViatura(viaturaSelecionada);
+                controller.setStage(dialogStageAtual);
 
                 //Mostra a tela ate que o usuario feche
                 dialogStageAtual.showAndWait();
 
                 //limpar dados antigos da unidade
-//                limparDados();
-                tableGuarnicao.getItems().clear();
-                tableGuarnicao.setDisable(true);
+//                tableGuarnicao.getItems().clear();
+//                tableGuarnicao.setDisable(true);
+//                
+//                tableUnidade.getItems().clear();
+                tableResumo.refresh();
+                tableUnidade.refresh();
+                tableViatura.refresh();
 
-                clikedRowtableResumo();
+                carregaDadosTabelaResumo();
+//                limparDados();
 
             } catch (IOException ex) {
                 ex.printStackTrace();

@@ -22,6 +22,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -33,6 +34,9 @@ public class MainApp extends Application {
 //        lancarDados();
         setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SplashScreen.fxml"));
+
+        Image iconApp = new Image(getClass().getResourceAsStream("/Imagens/ic_app_sisef.png"));
+        stage.getIcons().add(iconApp);
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -127,8 +131,7 @@ public class MainApp extends Application {
         Servidor ser10 = new Servidor("LUCAS INOCENCIO DOS SANTOS", "655", inst2, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
         Servidor ser11 = new Servidor("ARILSON ZARELLI CUSTODIO DA SILVA", "656", inst2, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
         Servidor ser12 = new Servidor("IRWING CESAR BONDAR", "666", inst2, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
-        
-        
+
         daoServidor.salvar(ser1);
         daoServidor.salvar(ser2);
         daoServidor.salvar(ser3);
@@ -140,7 +143,7 @@ public class MainApp extends Application {
         daoServidor.salvar(ser9);
         daoServidor.salvar(ser10);
         daoServidor.salvar(ser11);
-        daoServidor.salvar(ser12);        
+        daoServidor.salvar(ser12);
 
 //        Servidor ser3 = new Servidor("ANNA KARINA DO NASCIMENTO BONATO", "Tenente", "89492", true);
 //        Servidor ser4 = new Servidor("MONICA GONCALVES PETRY", "Tenente", "8748", true);

@@ -76,6 +76,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
         try {
             transacao.begin();
             retorno = administracao.find(classeEntidade, obj);
+//            administracao.detach(retorno);
             transacao.commit();
         } catch (Exception e) {
             if (transacao != null) {
@@ -118,6 +119,7 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
         try {
             transacao.begin();
             administracao.remove(administracao.find(classeEntidade, id));
+            administracao.flush();
             transacao.commit();
         } catch (Exception e) {
             if (transacao != null) {
