@@ -49,7 +49,7 @@ public class RelatorioDiarioViaturas implements Serializable {
         return this.unidade;
     }
     
-    @OneToMany(targetEntity = Viatura.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Viatura.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinTable(name = "TBL_VIATURAS_POR_RELATORIO", joinColumns = {
         @JoinColumn(name = "RELATORIO_VIATURAS_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "VIATURA_ID_FK")})

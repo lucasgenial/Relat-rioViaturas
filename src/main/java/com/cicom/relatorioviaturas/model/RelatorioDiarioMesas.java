@@ -108,7 +108,7 @@ public class RelatorioDiarioMesas implements Serializable {
         return this.mesa;
     }
 
-    @OneToMany(targetEntity = RelatorioDiarioViaturas.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = RelatorioDiarioViaturas.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinTable(name = "TBL_RELATORIO_MESAS_VIATURAS", joinColumns = {
         @JoinColumn(name = "RELATORIO_MESAS_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "RELATORIO_VIATURAS_ID_FK")})
@@ -116,7 +116,7 @@ public class RelatorioDiarioMesas implements Serializable {
         return this.relatorioDiarioViaturas;
     }
 
-    @OneToMany(targetEntity = ServidorFuncao.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = ServidorFuncao.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinTable(name = "TBL_SERVIDORES_RELATORIO_MESAS", joinColumns = {
         @JoinColumn(name = "RELATORIO_MESAS_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "SERVIDOR_ID")})

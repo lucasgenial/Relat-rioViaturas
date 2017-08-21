@@ -179,9 +179,9 @@ public class TelaPrincipalController implements Initializable {
     private final RelatorioDiarioMesasDAO DataLoader = new RelatorioDiarioMesasDAO();
     private final ViaturaDAO daoViatura = new ViaturaDAO();
     private Stage dialogStage;
-    private RelatorioDiarioMesas relatorioDiarioMesasSelecionado;
-    private RelatorioDiarioViaturas relatorioViaturasSelecionado;
-    private Viatura viaturaSelecionada;
+//    private RelatorioDiarioMesas relatorioDiarioMesasSelecionado;
+//    private RelatorioDiarioViaturas relatorioViaturasSelecionado;
+//    private Viatura viaturaSelecionada;
     private int i = 0;
 
     /**
@@ -205,7 +205,7 @@ public class TelaPrincipalController implements Initializable {
                 return new SimpleStringProperty(data.getValue().getDiaMesa());
             }
         });
-        
+
         tbColumnHoraResumo.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<RelatorioDiarioMesas, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<RelatorioDiarioMesas, String> data) {
@@ -266,7 +266,7 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private void clikedRowtableResumo() {
-        relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
+        RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
 
         if (relatorioDiarioMesasSelecionado != null) {
             //Ativa a Tabela Unidade
@@ -278,7 +278,7 @@ public class TelaPrincipalController implements Initializable {
             //limpar dados antigos da unidade
             limparDados();
 
-            Set<RelatorioDiarioViaturas> relatorioDeViaturas = tableResumo.getSelectionModel().getSelectedItem().getRelatorioDiarioViaturas();
+            Set<RelatorioDiarioViaturas> relatorioDeViaturas = relatorioDiarioMesasSelecionado.getRelatorioDiarioViaturas();
 
             if (relatorioDeViaturas != null) {
 
@@ -323,15 +323,9 @@ public class TelaPrincipalController implements Initializable {
     @FXML
     private void clikedRowTabelaUnidade() {
 
-        relatorioViaturasSelecionado = tableUnidade.getSelectionModel().getSelectedItem();
-        Unidade unidadeSelecionada = null;
+        RelatorioDiarioViaturas relatorioViaturasSelecionado = tableUnidade.getSelectionModel().getSelectedItem();
 
         if (relatorioViaturasSelecionado != null) {
-            unidadeSelecionada = relatorioViaturasSelecionado.getUnidade();
-        }
-
-        if (relatorioViaturasSelecionado != null) {
-//        if (unidadeSelecionada != null) {
             //Ativa o Paine de Abas
             painelTab.setDisable(false);
 
@@ -348,16 +342,12 @@ public class TelaPrincipalController implements Initializable {
 
             //Verifica se existem VIATURAS cadastrados na Unidade
             if (!relatorioViaturasSelecionado.getViaturas().isEmpty()) {
-                //Verifica quais os POs tem cadastrados já neste relatório
-//                List<PO> listaPOsCadastrados = new ArrayList<>();
-//                String[][] listaPOsCadastrados = new String();
                 Map<PO, Integer> listaPOsCadastrados = new HashMap<>();
 
                 for (Viatura viatura : relatorioViaturasSelecionado.getViaturas()) {
                     listaPOsCadastrados.put(viatura.getTipoPO(), viatura.getGuarnicao().size());
                 }
 
-//                TableColumn<Map.Entry<String, String>, String> column1 = new TableColumn<>("Key");
                 tbColumnNomePO.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String>, ObservableValue<String>>() {
                     @Override
                     public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<PO, Integer>, String> param) {
@@ -374,15 +364,18 @@ public class TelaPrincipalController implements Initializable {
 
                 tablePO.getItems().setAll(FXCollections.observableArrayList(listaPOsCadastrados.entrySet()));
 
+                /**
+                 *
+                 * Verifica se existem VIATURAS cadastrados na Unidade para isso
+                 * FAÇO UMA BUSCA NO BANCO POR TODAS AS VIATURAS DA UNIDADE E
+                 * RESUMODIARIO SELECIONADO
+                 *
+                 */
+                carregaDadosTabelaViatura(relatorioViaturasSelecionado.getViaturas());
+
             }
             //Ativa o botão 'Adicionar Operacional' 
             btnAdicionaOperacional.setDisable(false);
-
-            /*
-            Verifica se existem VIATURAS cadastrados na Unidade para isso
-            FAÇO UMA BUSCA NO BANCO POR TODAS AS VIATURAS DA UNIDADE E RESUMODIARIO SELECIONADO
-             */
-            carregaDadosTabelaViatura();
         }
     }
 
@@ -401,7 +394,7 @@ public class TelaPrincipalController implements Initializable {
             btnEditarOperacional.setDisable(false);
             btnRemoverOperacional.setDisable(false);
             tableGuarnicao.setDisable(false);
-            
+
             tbColumnNomeServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<ServidorFuncao, String> data) {
@@ -457,7 +450,7 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private void clickedRemoverMesa() {
-        relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
+        RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
 
         if (relatorioDiarioMesasSelecionado != null) {
             Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
@@ -504,7 +497,7 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private void clickedEditarMesa() {
-        relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
+        RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
 
         if (relatorioDiarioMesasSelecionado != null) {
             try {
@@ -543,9 +536,9 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private void clickedAdicionarUnidade() {
-        Mesa mesaSelecionada = tableResumo.getSelectionModel().getSelectedItem().getMesa();
+        RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
 
-        if (mesaSelecionada != null) {
+        if (relatorioDiarioMesasSelecionado != null) {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(this.getClass().getResource("/fxml/TelaCadastroUnidade.fxml"));
@@ -583,7 +576,8 @@ public class TelaPrincipalController implements Initializable {
     }
 
     private void clickedRemoverUnidade() {
-        relatorioViaturasSelecionado = tableUnidade.getSelectionModel().getSelectedItem();
+        RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
+        RelatorioDiarioViaturas relatorioViaturasSelecionado = tableUnidade.getSelectionModel().getSelectedItem();
 
         if (relatorioViaturasSelecionado != null) {
             Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
@@ -628,17 +622,15 @@ public class TelaPrincipalController implements Initializable {
         }
     }
 
-    private void carregaDadosTabelaViatura() {
-        
+    private void carregaDadosTabelaViatura(List<Viatura> listaDeViaturas) {
+
         //Limpa as tabelas
         tableViatura.getItems().clear();
         tableGuarnicao.getItems().clear();
-//        carregaDadosTabelaResumo();
 
-        if (!relatorioViaturasSelecionado.getViaturas().isEmpty()) {
+        if (!listaDeViaturas.isEmpty()) {
             tableViatura.setDisable(false);
 
-            List<Viatura> listaDeViaturas = relatorioViaturasSelecionado.getViaturas();
             /* COLUNA STATUS VIATURA */
             tbColumnBcsViatura.setCellValueFactory((TableColumn.CellDataFeatures<Viatura, String> data) -> {
                 if (data.getValue().isBcs()) {
@@ -696,7 +688,8 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private void clickedAdicionarOperacional() {
-        relatorioViaturasSelecionado = tableUnidade.getSelectionModel().getSelectedItem();
+        RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
+        RelatorioDiarioViaturas relatorioViaturasSelecionado = tableUnidade.getSelectionModel().getSelectedItem();
 
         if (relatorioViaturasSelecionado != null) {
             try {
@@ -718,20 +711,13 @@ public class TelaPrincipalController implements Initializable {
                 controller.setRelatorioDeMesa(relatorioDiarioMesasSelecionado);
                 controller.setRelatorioDeViatura(relatorioViaturasSelecionado);
                 controller.setViatura(new Viatura());
-//                controller.setListaPOS(relatorioViaturasSelecionado.getUnidade().getPos());
 
                 //Mostra a tela ate que o usuario feche
                 dialogStageAtual.showAndWait();
-//
-//                if (controller.getViatura() != null) {
-//                    relatorioViaturasSelecionado.getViaturas().add(controller.getViatura());
-//                    DataLoader.alterar(relatorioDiarioMesasSelecionado);
-//
-//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                    alert.setTitle("Sucesso!");
-//                    alert.setHeaderText("Operacional cadastrado com Sucesso");
-//                    alert.showAndWait();
-//                }
+                
+//                clikedRowtableResumo();
+                tableGuarnicao.getItems().clear();
+                tableGuarnicao.setDisable(true);
 
                 carregaDadosTabelaResumo();
             } catch (IOException ex) {
@@ -748,10 +734,11 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private void clickedEditarOperacional() {
-        viaturaSelecionada = tableViatura.getSelectionModel().getSelectedItem();
+        Viatura viaturaSelecionada = tableViatura.getSelectionModel().getSelectedItem();
+        RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
+        RelatorioDiarioViaturas relatorioViaturasSelecionado = tableUnidade.getSelectionModel().getSelectedItem();
 
         if (viaturaSelecionada != null) {
-//            Set<ServidorFuncao> lista = viaturaSelecionada.getGuarnicao();
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(this.getClass().getResource("/fxml/TelaAdicionaOperacional.fxml"));
@@ -771,34 +758,17 @@ public class TelaPrincipalController implements Initializable {
                 controller.setRelatorioDeMesa(relatorioDiarioMesasSelecionado);
                 controller.setRelatorioDeViatura(relatorioViaturasSelecionado);
                 controller.setViatura(viaturaSelecionada);
-//                controller.setListaPOS(relatorioViaturasSelecionado.getUnidade().getPos());
-//                controller.setViatura(viaturaSelecionada);
 
                 //Mostra a tela ate que o usuario feche
                 dialogStageAtual.showAndWait();
-                
-//                System.out.println("VIATURA SELECIONADA: " + viaturaSelecionada);
-//                System.out.println("VIATURA POS: "+ controller.getViatura());
 
-//                if (!viaturaSelecionada.equals(controller.getViatura())) {
-//                    //faz a alteração no banco
-//                    DataLoader.alterar(relatorioDiarioMesasSelecionado);
-//
-//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                    alert.setTitle("Sucesso!");
-//                    alert.setHeaderText("Operacional editado com Sucesso");
-//                    alert.showAndWait();
-//                } else{
-//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                    alert.setTitle("Atenção!");
-//                    alert.setHeaderText("Nenhum dado modificado");
-//                    alert.showAndWait();
-//                }
+                //limpar dados antigos da unidade
+//                limparDados();
+                tableGuarnicao.getItems().clear();
+                tableGuarnicao.setDisable(true);
 
-                carregaDadosTabelaResumo();
-                
-//                tableUnidade.getSelectionModel().select(relatorioViaturasSelecionado);
-                tableResumo.getSelectionModel().select(relatorioDiarioMesasSelecionado);
+                clikedRowtableResumo();
+
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -812,7 +782,9 @@ public class TelaPrincipalController implements Initializable {
 
     @FXML
     private void clickedRemoverOperacional() {
-        viaturaSelecionada = tableViatura.getSelectionModel().getSelectedItem();
+        Viatura viaturaSelecionada = tableViatura.getSelectionModel().getSelectedItem();
+        RelatorioDiarioMesas relatorioDiarioMesasSelecionado = tableResumo.getSelectionModel().getSelectedItem();
+        RelatorioDiarioViaturas relatorioViaturasSelecionado = tableUnidade.getSelectionModel().getSelectedItem();
 
         if (viaturaSelecionada != null) {
             Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
@@ -843,7 +815,7 @@ public class TelaPrincipalController implements Initializable {
                 alertDepoisExcluir.setHeaderText("Excluído com sucesso!");
                 alertDepoisExcluir.showAndWait();
 
-                carregaDadosTabelaViatura();
+                carregaDadosTabelaViatura(relatorioViaturasSelecionado.getViaturas());
             }
 
         } else {
@@ -903,6 +875,7 @@ public class TelaPrincipalController implements Initializable {
 
             //Mostra a tela ate que o usuario feche
             dialogStageAtual.showAndWait();
+            limparDados();
             carregaDadosTabelaResumo();
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -927,12 +900,11 @@ public class TelaPrincipalController implements Initializable {
 
             //Setando o cliente no Controller.
             TelaAdmCadastroMesasController controller = loader.getController();
-//            controller.setDialogStage(dialogStageAtual);
 
             //Mostra a tela ate que o usuario feche
             dialogStageAtual.showAndWait();
             dialogStageAtual.hide();
-//            carregaDadosTabelaResumo();
+            limparDados();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -956,10 +928,10 @@ public class TelaPrincipalController implements Initializable {
 
             //Setando o cliente no Controller.
             TelaAdmCadastroServidorController controller = loader.getController();
-//            controller.setDialogStage(dialogStageAtual);
 
             //Mostra a tela ate que o usuario feche
             dialogStageAtual.showAndWait();
+            limparDados();
             carregaDadosTabelaResumo();
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -972,6 +944,7 @@ public class TelaPrincipalController implements Initializable {
         alert.setTitle("Erro ao excecutar!");
         alert.setHeaderText("Funcionalidade não implementada!");
         alert.showAndWait();
+        limparDados();
     }
 
     @FXML
@@ -980,6 +953,7 @@ public class TelaPrincipalController implements Initializable {
         alert.setTitle("Erro ao excecutar!");
         alert.setHeaderText("Funcionalidade não implementada!");
         alert.showAndWait();
+        limparDados();
     }
 
     @FXML
@@ -988,5 +962,6 @@ public class TelaPrincipalController implements Initializable {
         alert.setTitle("Erro ao excecutar!");
         alert.setHeaderText("Funcionalidade não implementada!");
         alert.showAndWait();
+        limparDados();
     }
 }
