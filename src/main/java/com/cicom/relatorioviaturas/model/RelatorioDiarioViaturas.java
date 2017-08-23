@@ -2,8 +2,10 @@ package com.cicom.relatorioviaturas.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javax.persistence.Access;
@@ -31,7 +33,7 @@ public class RelatorioDiarioViaturas implements Serializable {
 
     private IntegerProperty id = new SimpleIntegerProperty();
     private Unidade unidade;
-    private List<Viatura> viaturas = new ArrayList<>();
+    private Set<Viatura> viaturas = new HashSet<>();
 
     /*
     GETTERS
@@ -53,7 +55,7 @@ public class RelatorioDiarioViaturas implements Serializable {
     @JoinTable(name = "TBL_VIATURAS_POR_RELATORIO", joinColumns = {
         @JoinColumn(name = "RELATORIO_VIATURAS_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "VIATURA_ID_FK")})
-    public List<Viatura> getViaturas() {
+    public Set<Viatura> getViaturas() {
         return this.viaturas;
     }
 
@@ -68,7 +70,7 @@ public class RelatorioDiarioViaturas implements Serializable {
         this.unidade = value;
     }
 
-    public void setViaturas(List<Viatura> value) {
+    public void setViaturas(Set<Viatura> value) {
         this.viaturas = value;
     }
 

@@ -489,14 +489,14 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 viatura.setGuarnicao(listaDeServidores);
                 viatura.setPrefixo(txtPrefixo.getText());
                 viatura.setTipoPO(tipoPO);
-
-                relatorioDeViatura.getViaturas().add(viatura);
-                daoRelatorioViatura.alterar(relatorioDeViatura);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso!");
-                alert.setHeaderText("Operacional cadastrado com Sucesso");
-                alert.showAndWait();
+//
+//                relatorioDeViatura.getViaturas().add(viatura);
+//                daoRelatorioViatura.alterar(relatorioDeViatura);
+//
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setTitle("Sucesso!");
+//                alert.setHeaderText("Operacional cadastrado com Sucesso");
+//                alert.showAndWait();
 
                 root.getScene().getWindow().hide();
             } else {
@@ -529,14 +529,14 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 viatura.setTipoPO(tipoPO);
                 
 //                relatorioDeViatura.getViaturas().add(viatura);
-
-                //faz a alteração no banco
-                daoViatura.alterar(viatura);
-                
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso!");
-                alert.setHeaderText("Operacional editado com Sucesso");
-                alert.showAndWait();
+//
+//                //faz a alteração no banco
+//                daoViatura.alterar(viatura);
+//                
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setTitle("Sucesso!");
+//                alert.setHeaderText("Operacional editado com Sucesso");
+//                alert.showAndWait();
 //                } else{
 //                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
 //                    alert.setTitle("Atenção!");
@@ -546,6 +546,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
                 root.getScene().getWindow().hide();
             }
+            
+            relatorioDeViatura.getViaturas().add(viatura);
 
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -553,6 +555,10 @@ public class TelaAdicionaOperacionalController implements Initializable {
             alert.setHeaderText(corpoMensagem);
             alert.showAndWait();
         }
+    }
+    
+    public RelatorioDiarioViaturas getRelatorioDeViatura(){
+        return this.relatorioDeViatura;
     }
 
     private boolean verificaDados() {
