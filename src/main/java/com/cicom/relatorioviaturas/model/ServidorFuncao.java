@@ -28,10 +28,12 @@ public class ServidorFuncao implements Serializable {
     private IntegerProperty id = new SimpleIntegerProperty();
     private Servidor servidor;
     private Funcao funcao;
+    private Boolean ativo;
 
-    public ServidorFuncao(Servidor servidor, Funcao funcao) {
+    public ServidorFuncao(Servidor servidor, Funcao funcao, Boolean ativo) {
         this.servidor = servidor;
         this.funcao = funcao;
+        this.ativo = ativo;
     }
 
     public ServidorFuncao() {
@@ -61,6 +63,11 @@ public class ServidorFuncao implements Serializable {
         return this.funcao;
     }
     
+    @Column(name = "ATIVO")
+    public Boolean getAtivo() {
+        return ativo;
+    }
+    
     /*
     SETTERS
      */
@@ -75,6 +82,10 @@ public class ServidorFuncao implements Serializable {
     public void setFuncao(Funcao value) {
         this.funcao = value;
     }
+    
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
 
     /*
     PROPERTY
@@ -85,14 +96,16 @@ public class ServidorFuncao implements Serializable {
 
     @Override
     public String toString() {
-        return "ServidorFuncao{" + "id=" + id + ", servidor=" + servidor + ", funcao=" + funcao + '}';
+        return "ServidorFuncao{" + "id=" + id + ", servidor=" + servidor + ", funcao=" + funcao + ", ativo=" + ativo + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.servidor);
-        hash = 59 * hash + Objects.hashCode(this.funcao);
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.id);
+        hash = 41 * hash + Objects.hashCode(this.servidor);
+        hash = 41 * hash + Objects.hashCode(this.funcao);
+        hash = 41 * hash + Objects.hashCode(this.ativo);
         return hash;
     }
 
@@ -108,13 +121,18 @@ public class ServidorFuncao implements Serializable {
             return false;
         }
         final ServidorFuncao other = (ServidorFuncao) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
         if (!Objects.equals(this.servidor, other.servidor)) {
             return false;
         }
         if (!Objects.equals(this.funcao, other.funcao)) {
             return false;
         }
+        if (!Objects.equals(this.ativo, other.ativo)) {
+            return false;
+        }
         return true;
     }
-
 }

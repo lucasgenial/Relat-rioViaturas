@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  *
- * @author icaro.bastos
+ * @author Lucas Matos
  */
 public class UnidadeDAO extends AbstractDAO<Unidade> {
 

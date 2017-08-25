@@ -311,7 +311,7 @@ public class TelaCadastroMesaController implements Initializable {
     @FXML
     private void clickedAdicionarServidor() {
         if (servidor != null && funcao != null) {
-            listaDeServidores.add(new ServidorFuncao(servidor, funcao));
+            listaDeServidores.add(new ServidorFuncao(servidor, funcao, true));
 
             //Carrega os dados na tabela Servidores
             carregaDadosTableServidoresMesa(listaDeServidores);
@@ -339,7 +339,6 @@ public class TelaCadastroMesaController implements Initializable {
         ServidorFuncao servidorParaExcluir = tableServidorMesa.getSelectionModel().getSelectedItem();
 
         if (!tableServidorMesa.getItems().isEmpty() && servidorParaExcluir != null) {
-
             listaDeServidores.remove(servidorParaExcluir);
 
             //Carrega os dados na tabela Servidores

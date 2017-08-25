@@ -1,6 +1,5 @@
 package com.cicom.relatorioviaturas.DAO;
 
-import com.cicom.relatorioviaturas.model.Funcao;
 import java.util.List;
 
 public interface FabricaDAO<T> {

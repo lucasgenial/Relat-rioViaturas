@@ -71,6 +71,7 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
     private PoDAO daoPO = new PoDAO();
     private UnidadeDAO daoUnidade = new UnidadeDAO();
     private Unidade novaUnidade;
+    private Unidade unidadeSelecionda;
     private Set<PO> listaPOs;
     private List<PO> listaPOsCombo;
     private List<Unidade> listaUnidade;
@@ -85,11 +86,11 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
 
     @FXML
     private void clickedTableUnidades() {
-        novaUnidade = tableUnidades.getSelectionModel().getSelectedItem();
-        txtNomeUnidade.setText(novaUnidade.getNome());
-        txtComandoArea.setText(novaUnidade.getComandoDeArea());
-        labelNumeroTipoPO.setText((novaUnidade.getPos() != null) ? (novaUnidade.getPos().size() + " Tipo P.O.") : ("0 Tipo P.O."));
-        listaPOs = (novaUnidade.getPos() != null) ? novaUnidade.getPos() : null;
+        unidadeSelecionda = tableUnidades.getSelectionModel().getSelectedItem();
+        txtNomeUnidade.setText(unidadeSelecionda.getNome());
+        txtComandoArea.setText(unidadeSelecionda.getComandoDeArea());
+        labelNumeroTipoPO.setText((unidadeSelecionda.getPos() != null) ? (unidadeSelecionda.getPos().size() + " Tipo P.O.") : ("0 Tipo P.O."));
+        listaPOs = (unidadeSelecionda.getPos() != null) ? unidadeSelecionda.getPos() : null;
         tableTipoPO.getItems().setAll(FXCollections.observableSet(listaPOs));
 
         btnSalvar.setText("Editar");
@@ -119,11 +120,11 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
         } else if (btnSalvar.getText().equals("Salvar") && editar) {
             if (verificaDados()) {
                 //Altera o nome do PO
-                novaUnidade.setNome(txtNomeUnidade.getText());
-                novaUnidade.setComandoDeArea(txtComandoArea.getText());
-                novaUnidade.setPos(listaPOs);
+                unidadeSelecionda.setNome(txtNomeUnidade.getText());
+                unidadeSelecionda.setComandoDeArea(txtComandoArea.getText());
+                unidadeSelecionda.setPos(listaPOs);
 
-                daoUnidade.alterar(novaUnidade);
+                daoUnidade.alterar(unidadeSelecionda);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso!");
@@ -140,7 +141,6 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
             //Adicionando novo tipo P.O.
         } else if (btnSalvar.getText().equals("Salvar") && !editar) {
             if (verificaDados()) {
-                //Altera o nome do PO
                 novaUnidade = new Unidade();
                 novaUnidade.setNome(txtNomeUnidade.getText());
                 novaUnidade.setComandoDeArea(txtComandoArea.getText());
@@ -270,7 +270,7 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
             return false;
         }
 
-        if (daoUnidade.buscaPorObjeto(novaUnidade) != null) {
+        if (!(txtNomeUnidade.getText().equals(unidadeSelecionda.getNome()))&& (daoUnidade.buscaPorNome(txtNomeUnidade.getText()) != null)) {
             tituloMensagem = "Erro Salvar Unidade";
             corpoMensagem = "Esta Unidade já está cadastrada no banco!";
             return false;
