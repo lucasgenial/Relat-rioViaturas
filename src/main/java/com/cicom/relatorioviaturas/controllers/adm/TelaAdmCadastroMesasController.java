@@ -454,7 +454,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
     //    Define os botões de ação da MESA
     private class ButtonCellMesa extends TableCell<Mesa, Boolean> {
 
-        HBox hb = new HBox();
+        HBox hb = new HBox(3);
 
         //BOTAO REMOVER
         private Button botaoRemover = new Button();
