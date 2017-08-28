@@ -520,7 +520,7 @@ public class TelaPrincipalController implements Initializable {
     private void clickedAdicionarMesa() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/TelaCadastroMesa.fxml"));
+            loader.setLocation(getClass().getResource("/fxml/TelaCadastroRelatorioMesa.fxml"));
             Parent page = loader.load();
 
             Scene scene = new Scene(page);
@@ -533,7 +533,7 @@ public class TelaPrincipalController implements Initializable {
             dialogStageAtual.setScene(scene);
 
             // Setando o cliente no Controller.
-            TelaCadastroMesaController controller = loader.getController();
+            TelaCadastroRelatorioMesaController controller = loader.getController();
             controller.setDialogStage(dialogStageAtual);
 
             //Mostra a tela ate que o usuario feche
@@ -597,7 +597,7 @@ public class TelaPrincipalController implements Initializable {
         if (relatorioDiarioMesasSelecionado != null) {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(this.getClass().getResource("/fxml/TelaCadastroMesa.fxml"));
+                loader.setLocation(this.getClass().getResource("/fxml/TelaCadastroRelatorioMesa.fxml"));
                 Parent page = loader.load();
 
                 Scene scene = new Scene(page);
@@ -610,7 +610,7 @@ public class TelaPrincipalController implements Initializable {
                 dialogStageAtual.setScene(scene);
 
                 //Setando o cliente no Controller.
-                TelaCadastroMesaController controller = loader.getController();
+                TelaCadastroRelatorioMesaController controller = loader.getController();
                 controller.setRelatorio(relatorioDiarioMesasSelecionado);
                 controller.setDialogStage(dialogStageAtual);
 

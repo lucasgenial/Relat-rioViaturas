@@ -292,7 +292,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private void clickedBtAdicionarServidor(MouseEvent event) {
 
-        listaDeServidores.add(new ServidorFuncao(servidor, funcao, true));
+        listaDeServidores.add(new ServidorFuncao(servidor, funcao, null, null, null, null, true));
 
         //Carrega os dados na tabela Servidores
         carregaDadosTablelaServidorGuarnicao(listaDeServidores);

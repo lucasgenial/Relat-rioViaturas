@@ -51,7 +51,7 @@
             </font>
         </Label>
         
-        <TableView fx:id="tableServidorMesa" layoutX="17.0" layoutY="324.0" prefHeight="126.0" prefWidth="332.0" stylesheets="@../styles/JMetroLightTheme.css">
+        <TableView fx:id="tableServidorMesa" layoutX="17.0" layoutY="324.0" prefHeight="126.0" prefWidth="332.0" >
             <columns>
                 <TableColumn fx:id="tbColumnNomeServidor" prefWidth="172.0" text="Nome" />
                 <TableColumn fx:id="tbColumnFuncaoServidor" minWidth="0.0" prefWidth="159.0" text="Função" />

@@ -31,7 +31,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        lancarDados();
+//        lancarDados();
         setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SplashScreen.fxml"));
 

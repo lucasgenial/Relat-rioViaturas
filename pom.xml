@@ -74,10 +74,11 @@
             <version>8.0-r5</version>
         </dependency>
         
+        <!-- https://mvnrepository.com/artifact/com.guigarage/responsivefx -->
         <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.3</version>
+            <groupId>com.guigarage</groupId>
+            <artifactId>responsivefx</artifactId>
+            <version>0.8</version>
         </dependency>
 
     </dependencies>

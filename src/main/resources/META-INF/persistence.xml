@@ -16,8 +16,8 @@
             <!--<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>-->
             <property name="hibernate.connection.pool_size" value="1"/>
 <!--            <property name="current.session.context.class">thread</property>-->
-            <!--<property name="hibernate.show_sql" value="true"/>-->
-            <!--<property name="hibernate.format_sql" value="true"/>-->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             
             <!-- Configurações do H2 Database -->

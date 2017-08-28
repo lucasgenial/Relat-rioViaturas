@@ -78,7 +78,7 @@
             <Font name="Roboto Bold" size="12.0" />
          </font></JFXButton>
         
-        <TableView fx:id="tableServidorMesa" layoutX="16.0" layoutY="372.0" prefHeight="126.0" prefWidth="389.0" stylesheets="@../styles/JMetroLightTheme.css">
+        <TableView fx:id="tableServidorMesa" layoutX="16.0" layoutY="372.0" prefHeight="126.0" prefWidth="389.0" >
             <columns>
                 <TableColumn fx:id="tbColumnNomeServidor" prefWidth="172.0" text="Nome" />
                 <TableColumn fx:id="tbColumnFuncaoServidor" minWidth="0.0" prefWidth="216.0" text="Função" />
