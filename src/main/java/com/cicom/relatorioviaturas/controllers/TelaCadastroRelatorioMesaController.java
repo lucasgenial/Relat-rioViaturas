@@ -40,10 +40,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -214,8 +210,27 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
             tableServidorMesa.setDisable(false);
         } else {
             tableServidorMesa.getItems().clear();
+            btnAdicionarServidor.setText("Adicionar");
+            
+            limparDadosServidor();
             tableServidorMesa.setDisable(true);
         }
+    }
+
+    private void limparDadosServidor() {
+        txtNomeServidor.setText(null);
+        cbFuncao.setValue(null);
+        horaInicialPlantao.setLocalTime(null);
+        horaFinalPlantao.setLocalTime(null);
+        horaPausa1.setLocalTime(null);
+        horaPausa2.setLocalTime(null);
+
+        txtNomeServidor.setDisable(false);
+        cbFuncao.setDisable(false);
+        horaInicialPlantao.setDisable(false);
+        horaFinalPlantao.setDisable(false);
+        horaPausa1.setDisable(false);
+        horaPausa2.setDisable(false);
     }
 
     @FXML
@@ -324,7 +339,6 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
             mensagemErroCorpo = "Possivelmente não há funções cadastradas/diponiveis no sitema!";
             return false;
         }
-
         return true;
     }
 
@@ -332,14 +346,10 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
     private void clickedBtnAdicionar() {
 
         if (btnAdicionarServidor.getText().equalsIgnoreCase("novo")) {
-            cbFuncao.setValue(null);
-            cbFuncao.setDisable(true);
-            horaInicialPlantao.setLocalTime(null);
-            horaFinalPlantao.setLocalTime(null);
-            horaPausa1.setLocalTime(null);
-            horaPausa2.setLocalTime(null);
-            txtNomeServidor.clear();
             btnAdicionarServidor.setText("Adicionar");
+            
+            limparDadosServidor();
+
             servidorEditar = null;
             servidor = null;
             funcao = null;
@@ -357,16 +367,8 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
                     carregaDadosTableServidoresMesa(listaDeServidores);
 
                     //Desabilitar e Limpa dados para um novo ServidorFunção
-                    cbFuncao.setValue(null);
-                    cbFuncao.setDisable(true);
-                    txtNomeServidor.clear();
-                    horaInicialPlantao.setLocalTime(null);
-                    horaFinalPlantao.setLocalTime(null);
-                    horaPausa1.setLocalTime(null);
-                    horaPausa2.setLocalTime(null);
-                    servidorEditar = null;
-                    servidor = null;
-                    funcao = null;
+                    btnAdicionarServidor.setText("Adicionar");
+                    limparDadosServidor();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Servidor Modificado");
@@ -382,17 +384,9 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
                     carregaDadosTableServidoresMesa(listaDeServidores);
 
                     //Desabilitar e Limpa dados para um novo ServidorFunção
-                    cbFuncao.setValue(null);
-                    cbFuncao.setDisable(true);
-                    txtNomeServidor.clear();
-                    horaInicialPlantao.setLocalTime(null);
-                    horaFinalPlantao.setLocalTime(null);
-                    horaPausa1.setLocalTime(null);
-                    horaPausa2.setLocalTime(null);
-                    servidorEditar = null;
-                    servidor = null;
-                    funcao = null;
-
+                    btnAdicionarServidor.setText("Adicionar");
+                    limparDadosServidor();
+            
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Servidor Adicionado");
                     alert.setHeaderText("Servidor adicionado!");
@@ -599,8 +593,6 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
         //BOTAO EDITAR
         private Button botaoVisualizar = new Button();
         private final ImageView imagemVisualizar = new ImageView(new Image(getClass().getResourceAsStream("/icons/visualizar.png")));
-        
-        HBox hb = new HBox(3);
 
         private ButtonCellServidorMesa(TableView<ServidorFuncao> tblView) {
             //BOTAO VISUALIZAR
@@ -627,7 +619,8 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
                         horaFinalPlantao.setDisable(true);
                         horaPausa1.setDisable(true);
                         horaPausa2.setDisable(true);
-
+                        
+                        btnAdicionarServidor.setDisable(false);
                         btnAdicionarServidor.setText("Novo");
                     }
                 }
@@ -653,13 +646,14 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
                         horaFinalPlantao.setLocalTime(servidorEditar.getHoraFinalPlantao());
                         horaPausa1.setLocalTime(servidorEditar.getHoraPausa1());
                         horaPausa2.setLocalTime(servidorEditar.getHoraPausa2());
-                        
+
                         cbFuncao.setDisable(false);
                         horaInicialPlantao.setDisable(false);
                         horaFinalPlantao.setDisable(false);
                         horaPausa1.setDisable(false);
                         horaPausa2.setDisable(false);
 
+                        btnAdicionarServidor.setDisable(false);
                         btnAdicionarServidor.setText("Salvar");
                     }
                 }
@@ -694,16 +688,12 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
 
                     if (resultado1.get() == ButtonType.YES) {
                         listaDeServidores.remove(servidorRemover);
-                        
-                        txtNomeServidor.setDisable(true);
-                        cbFuncao.setDisable(true);
-                        horaInicialPlantao.setDisable(true);
-                        horaFinalPlantao.setDisable(true);
-                        horaPausa1.setDisable(true);
-                        horaPausa2.setDisable(true);
 
-                        btnAdicionarServidor.setText("Novo");
+                        btnAdicionarServidor.setDisable(false);
+                        btnAdicionarServidor.setText("novo");
                         
+                        limparDadosServidor();
+
                         carregaDadosTableServidoresMesa(listaDeServidores);
                     }
                 }
@@ -713,17 +703,15 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
         @Override
         protected void updateItem(Boolean t, boolean empty) {
             super.updateItem(t, empty);
+            
             if (!empty) {
-//                hb.setAlignment(Pos.CENTER);
-//                hb.getChildren().add(botaoEditar);
-//                hb.getChildren().add(botaoVisualizar);
-//                hb.getChildren().add(botaoRemover);
-                
-//                setGraphic(hb);
-                setGraphic(botaoEditar);
-                setGraphic(botaoVisualizar);
-                setGraphic(botaoRemover);
-//                setAlignment(Pos.CENTER);
+                HBox hb = new HBox();
+                hb.setAlignment(Pos.CENTER);
+                hb.getChildren().addAll(botaoEditar);
+                hb.getChildren().addAll(botaoVisualizar);
+                hb.getChildren().addAll(botaoRemover);
+                setGraphic(hb);
+                setAlignment(Pos.CENTER);
             } else {
                 setGraphic(null);
             }

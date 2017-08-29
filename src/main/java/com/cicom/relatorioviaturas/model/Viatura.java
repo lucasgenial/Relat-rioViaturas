@@ -1,6 +1,7 @@
 package com.cicom.relatorioviaturas.model;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -44,7 +45,7 @@ public class Viatura implements Serializable {
     private PO tipoPO;
     private Set<ServidorFuncao> guarnicao = new HashSet<>();
     private boolean vtrBaixada;
-    private StringProperty hrDaBaixa = new SimpleStringProperty();
+    private LocalTime hrDaBaixa;
 
     /*
     GETTERS
@@ -110,7 +111,7 @@ public class Viatura implements Serializable {
         return this.tipoPO;
     }
 
-    @OneToMany(targetEntity = ServidorFuncao.class, cascade = {CascadeType.DETACH,CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(targetEntity = ServidorFuncao.class, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinTable(name = "TBL_SERVIDORES_VIATURAS", joinColumns = {
         @JoinColumn(name = "VIATURA_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "SERVIDOR_ID_FK")})
@@ -126,8 +127,8 @@ public class Viatura implements Serializable {
 
     @Basic
     @Column(name = "HR_DA_BAIXA")
-    public String getHrDaBaixa() {
-        return this.hrDaBaixa.get();
+    public LocalTime getHrDaBaixa() {
+        return this.hrDaBaixa;
     }
 
     /*
@@ -181,8 +182,8 @@ public class Viatura implements Serializable {
         this.vtrBaixada = value;
     }
 
-    public void setHrDaBaixa(String value) {
-        this.hrDaBaixa.set(value);
+    public void setHrDaBaixa(LocalTime value) {
+        this.hrDaBaixa = value;
     }
 
     /*
@@ -208,10 +209,6 @@ public class Viatura implements Serializable {
         return this.prefixo;
     }
 
-    public StringProperty hrDaBaixaProperty() {
-        return this.hrDaBaixa;
-    }
-
     @Override
     public String toString() {
         return "Viatura{" + "id=" + id + ", audio=" + audio + ", bcs=" + bcs + ", estado=" + estado + ", gps=" + gps + ", camera=" + camera + ", estadoCam=" + estadoCam + ", ht=" + ht + ", prefixo=" + prefixo + ", tipoPO=" + tipoPO + ", guarnicao=" + guarnicao + ", vtrBaixada=" + vtrBaixada + ", hrDaBaixa=" + hrDaBaixa + '}';
@@ -219,20 +216,20 @@ public class Viatura implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.id);
-        hash = 79 * hash + (this.audio ? 1 : 0);
-        hash = 79 * hash + (this.bcs ? 1 : 0);
-        hash = 79 * hash + Objects.hashCode(this.estado);
-        hash = 79 * hash + (this.gps ? 1 : 0);
-        hash = 79 * hash + (this.camera ? 1 : 0);
-        hash = 79 * hash + Objects.hashCode(this.estadoCam);
-        hash = 79 * hash + Objects.hashCode(this.ht);
-        hash = 79 * hash + Objects.hashCode(this.prefixo);
-        hash = 79 * hash + Objects.hashCode(this.tipoPO);
-        hash = 79 * hash + Objects.hashCode(this.guarnicao);
-        hash = 79 * hash + (this.vtrBaixada ? 1 : 0);
-        hash = 79 * hash + Objects.hashCode(this.hrDaBaixa);
+        int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + (this.audio ? 1 : 0);
+        hash = 29 * hash + (this.bcs ? 1 : 0);
+        hash = 29 * hash + Objects.hashCode(this.estado);
+        hash = 29 * hash + (this.gps ? 1 : 0);
+        hash = 29 * hash + (this.camera ? 1 : 0);
+        hash = 29 * hash + Objects.hashCode(this.estadoCam);
+        hash = 29 * hash + Objects.hashCode(this.ht);
+        hash = 29 * hash + Objects.hashCode(this.prefixo);
+        hash = 29 * hash + Objects.hashCode(this.tipoPO);
+        hash = 29 * hash + Objects.hashCode(this.guarnicao);
+        hash = 29 * hash + (this.vtrBaixada ? 1 : 0);
+        hash = 29 * hash + Objects.hashCode(this.hrDaBaixa);
         return hash;
     }
 
@@ -289,5 +286,4 @@ public class Viatura implements Serializable {
         }
         return true;
     }
-
 }

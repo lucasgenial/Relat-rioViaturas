@@ -4,6 +4,7 @@ import com.cicom.relatorioviaturas.DAO.FuncaoDAO;
 import com.cicom.relatorioviaturas.DAO.PoDAO;
 import com.cicom.relatorioviaturas.DAO.RelatorioDiarioMesasDAO;
 import com.cicom.relatorioviaturas.DAO.RelatorioDiarioViaturasDAO;
+import com.cicom.relatorioviaturas.DAO.UnidadeDAO;
 import com.cicom.relatorioviaturas.DAO.ViaturaDAO;
 import com.cicom.relatorioviaturas.model.Funcao;
 import com.cicom.relatorioviaturas.model.PO;
@@ -11,6 +12,7 @@ import com.cicom.relatorioviaturas.model.RelatorioDiarioMesas;
 import com.cicom.relatorioviaturas.model.RelatorioDiarioViaturas;
 import com.cicom.relatorioviaturas.model.Servidor;
 import com.cicom.relatorioviaturas.model.ServidorFuncao;
+import com.cicom.relatorioviaturas.model.Unidade;
 import com.cicom.relatorioviaturas.model.Viatura;
 import java.io.IOException;
 import java.net.URL;
@@ -23,28 +25,38 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import jfxtras.scene.control.LocalTimeTextField;
 
 /**
  * FXML Controller class
@@ -54,54 +66,85 @@ import javafx.util.StringConverter;
 public class TelaAdicionaOperacionalController implements Initializable {
 
     @FXML
-    private Pane root;
+    private TabPane root;
     @FXML
-    private ComboBox<PO> cbTipoPO = new ComboBox<>();
+    private ComboBox<PO> cbTipoPO;
+    @FXML
+    private ComboBox<Unidade> cbUnidade;
     @FXML
     private TextField txtPrefixo;
-    @FXML
-    private TextField txtVtrBaixada;
     @FXML
     private ToggleButton tbBCS;
     @FXML
     private ToggleButton tbGPS;
     @FXML
-    private ToggleButton tbCamera;
+    private ToggleButton tbEstado;
     @FXML
     private ToggleButton tbHT;
     @FXML
     private ToggleButton tbAudio;
     @FXML
-    private ToggleButton tbEstado;
+    private ToggleButton tbCamera;
     @FXML
     private ToggleButton tbEstadoCam;
     @FXML
-    private ToggleButton tbVtrBaixada;
-    @FXML
-    private TextField txtBuscaServidor;
-    @FXML
-    private Button btBuscaServidor;
-    @FXML
-    private ComboBox<Funcao> cbFuncao = new ComboBox<>();
-    @FXML
     private TableView<ServidorFuncao> tableServidorGuarnicao;
     @FXML
-    private TableColumn<ServidorFuncao, String> tbColumnNomeServidor = new TableColumn<>("servidor");
+    private TableColumn<ServidorFuncao, String> tbColumnNomeServidor;
     @FXML
-    private TableColumn<ServidorFuncao, String> tbColumnFuncaoServidor = new TableColumn<>("funcao");
+    private TableColumn<ServidorFuncao, String> tbColumnFuncaoServidor;
     @FXML
-    private Button btSalvar;
+    private TableColumn<ServidorFuncao, Boolean> tbColumnAcaoServidor;
     @FXML
-    private Button btCancelar;
+    private ComboBox<Funcao> cbFuncao;
     @FXML
-    private Button btAdicionarServidor;
+    private TextField txtNomeServidor;
     @FXML
-    private Button btRemoveServidor;
+    private Tab tabDadosViatura;
+    @FXML
+    private Button btnAvancar;
+    @FXML
+    private TextField txtTomboHT;
+    @FXML
+    private LocalTimeTextField horaBaixaViatura;
+    @FXML
+    private ToggleButton tbViaturaAtiva;
+    @FXML
+    private LocalTimeTextField horaInicialPlantaoViatura;
+    @FXML
+    private LocalTimeTextField horaFinalPlantaoViatura;
+    @FXML
+    private LocalTimeTextField horaPausa1Viatura;
+    @FXML
+    private LocalTimeTextField horaPausa2Viatura;
+    @FXML
+    private Tab tabDadosGuarnicao;
+    @FXML
+    private Button btnSalvar;
+    @FXML
+    private Button btnCancelar;
+    @FXML
+    private Button btnAdicionarServidor;
 
-    private PoDAO daoPO = new PoDAO();
-    private FuncaoDAO daoFuncao = new FuncaoDAO();
-    private RelatorioDiarioMesasDAO daoRelatorioMesa = new RelatorioDiarioMesasDAO();
-    private RelatorioDiarioViaturasDAO daoRelatorioViatura = new RelatorioDiarioViaturasDAO();
+    @FXML
+    private LocalTimeTextField horaInicialPlantaoServidor;
+    @FXML
+    private LocalTimeTextField horaFinalPlantaoServidor;
+    @FXML
+    private LocalTimeTextField horaPausa1Servidor;
+    @FXML
+    private LocalTimeTextField horaPausa2Servidor;
+    @FXML
+    private CheckBox chcMesmoHorario;
+
+    private final PoDAO daoPO = new PoDAO();
+    private final UnidadeDAO daoUnidade = new UnidadeDAO();
+    private final FuncaoDAO daoFuncao = new FuncaoDAO();
+    private final RelatorioDiarioMesasDAO daoRelatorioMesa = new RelatorioDiarioMesasDAO();
+    private final RelatorioDiarioViaturasDAO daoRelatorioViatura = new RelatorioDiarioViaturasDAO();
+
+    private String mensagemErroTela = "";
+    private String mensagemErroCorpo = "";
 
     private Viatura viatura;
     private Servidor servidor = new Servidor();
@@ -129,7 +172,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
     void setStage(Stage value) {
         stage = value;
-    }   
+    }
 
     class CarregaDados extends Thread {
 
@@ -142,11 +185,15 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     @Override
                     public void run() {
                         if (viatura != null) {
-
+                            tabDadosGuarnicao.setDisable(false);
+                            txtNomeServidor.setDisable(false);
+                            cbTipoPO.setDisable(false);
+                            tableServidorGuarnicao.setDisable(false);
                             if (viatura.isVtrBaixada()) {
-                                btSalvar.setDisable(true);
+                                btnSalvar.setDisable(true);
+                            } else {
+                                btnSalvar.setDisable(false);
                             }
-
                         }
 
                         if (!listaPOS.isEmpty()) {
@@ -204,7 +251,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
                             alert.showAndWait();
                             root.getScene().getWindow().hide();
                         }
-
                     }
                 });
             } catch (InterruptedException ex) {
@@ -216,7 +262,6 @@ public class TelaAdicionaOperacionalController implements Initializable {
     private void carregaDadosTablelaServidorGuarnicao(Set<ServidorFuncao> dados) {
 
         if (!dados.isEmpty()) {
-            btRemoveServidor.setDisable(false);
             tableServidorGuarnicao.setDisable(false);
             tbColumnNomeServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, String>, ObservableValue<String>>() {
                 @Override
@@ -230,15 +275,244 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     return data.getValue().getFuncao().nomeProperty();
                 }
             });
-            tableServidorGuarnicao.getItems().setAll(dados);
+            tbColumnAcaoServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, Boolean>, ObservableValue<Boolean>>() {
+                @Override
+                public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<ServidorFuncao, Boolean> data) {
+                    return new SimpleBooleanProperty(data.getValue() != null);
+                }
+            });
+
+            tbColumnAcaoServidor.setCellFactory(new Callback<TableColumn<ServidorFuncao, Boolean>, TableCell<ServidorFuncao, Boolean>>() {
+                @Override
+                public TableCell<ServidorFuncao, Boolean> call(TableColumn<ServidorFuncao, Boolean> data) {
+                    return new ButtonCellServidorGuarnicao(tableServidorGuarnicao);
+                }
+            });
+
+            tableServidorGuarnicao.getItems().addAll(FXCollections.observableSet(dados));
+            tableServidorGuarnicao.setDisable(false);
         } else {
+            tableServidorGuarnicao.getItems().clear();
+            btnAdicionarServidor.setText("Adicionar");
+
+            limparDadosServidor();
             tableServidorGuarnicao.setDisable(true);
-            btRemoveServidor.setDisable(true);
         }
     }
 
+    private void limparDadosServidor() {
+        txtNomeServidor.setText(null);
+        cbFuncao.setValue(null);
+        horaInicialPlantaoServidor.setLocalTime(null);
+        horaFinalPlantaoServidor.setLocalTime(null);
+        horaPausa1Servidor.setLocalTime(null);
+        horaPausa2Servidor.setLocalTime(null);
+
+        txtNomeServidor.setDisable(false);
+        cbFuncao.setDisable(false);
+        horaInicialPlantaoServidor.setDisable(false);
+        horaFinalPlantaoServidor.setDisable(false);
+        horaPausa1Servidor.setDisable(false);
+        horaPausa2Servidor.setDisable(false);
+    }
+
     @FXML
-    private void clikedBtBuscaServidor(MouseEvent event) {
+    private void clickedCbTipoPO(ActionEvent event) {
+        tipoPO = cbTipoPO.getSelectionModel().getSelectedItem();
+
+        //Retorna ao valor padrão
+        tbAudio.setSelected(false);
+        tbBCS.setSelected(false);
+        tbEstado.setSelected(false);
+        tbGPS.setSelected(false);
+        tbCamera.setSelected(false);
+        tbEstadoCam.setSelected(false);
+        tbHT.setSelected(false);
+        tbViaturaAtiva.setSelected(false);
+
+        verificaTipoPO(tipoPO);
+    }
+
+    @FXML
+    private void clickedBtnAvançar(MouseEvent event) {
+        if (verificaDadosPaneDadosPO()) {
+            tabDadosGuarnicao.setDisable(false);
+            root.getSelectionModel().select(tabDadosGuarnicao);
+            txtNomeServidor.setDisable(false);
+            clickedChcMesmoHorario();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(mensagemErroTela);
+            alert.setHeaderText(mensagemErroCorpo);
+            alert.showAndWait();
+        }
+    }
+    
+    private void clickedChcMesmoHorario() {
+        if(chcMesmoHorario.isSelected()){
+            //Pega os memos horários da viatura
+            horaInicialPlantaoServidor.setLocalTime(horaInicialPlantaoViatura.getLocalTime());
+            horaFinalPlantaoServidor.setLocalTime(horaFinalPlantaoViatura.getLocalTime());
+            horaPausa1Servidor.setLocalTime(horaPausa1Viatura.getLocalTime());
+            horaPausa2Servidor.setLocalTime(horaPausa2Viatura.getLocalTime());
+            horaInicialPlantaoServidor.setDisable(true);
+            horaFinalPlantaoServidor.setDisable(true);
+            horaPausa1Servidor.setDisable(true);
+            horaPausa2Servidor.setDisable(true);
+        } else{
+            //Novos horarios para cada servidor
+            horaInicialPlantaoServidor.setLocalTime(horaInicialPlantaoViatura.getLocalTime());
+            horaFinalPlantaoServidor.setLocalTime(horaFinalPlantaoViatura.getLocalTime());
+            horaPausa1Servidor.setLocalTime(horaPausa1Viatura.getLocalTime());
+            horaPausa2Servidor.setLocalTime(horaPausa2Viatura.getLocalTime());
+            horaInicialPlantaoServidor.setDisable(false);
+            horaFinalPlantaoServidor.setDisable(false);
+            horaPausa1Servidor.setDisable(false);
+            horaPausa2Servidor.setDisable(false);
+        }
+    }
+
+    private boolean verificaDadosPaneDadosPO() {
+        if (horaInicialPlantaoViatura.getLocalTime() == null) {
+            tituloMensagem = "Erro Horário Viatura";
+            corpoMensagem = "É necessário informar o horário de inicio plantão para o PO!";
+            return false;
+        }
+
+        if (horaFinalPlantaoViatura.getLocalTime() == null) {
+            tituloMensagem = "Erro Horário Viatura";
+            corpoMensagem = "É necessário informar o horário de fim do plantão para o PO!";
+            return false;
+        }
+        return true;
+    }
+
+    private boolean verificaDados() {
+        boolean retorno = false;
+        if (tipoPO != null) {
+
+            switch (tipoPO.getNome()) {
+                case "VIATURA 2 RODAS":
+                    if (txtPrefixo.getText().isEmpty()) {
+                        tituloMensagem = "Erro Prefixo";
+                        corpoMensagem = "O prefixo é necessário!";
+                        break;
+                    }
+
+                    if (listaDeServidores.isEmpty() && btnSalvar.isPressed()) {
+                        tituloMensagem = "Erro Guarnição";
+                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
+                        break;
+                    } else if (listaDeServidores.size() > 2 && btnSalvar.isPressed()) {
+                        tituloMensagem = "Erro Guarnição";
+                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é possivel cadastrar apenas 2 servidores!";
+                        break;
+                    }
+
+                    if (tbHT.isSelected() && txtTomboHT.getText() == null) {
+                        tituloMensagem = "Erro Tombo HT";
+                        corpoMensagem = "A opção HT foi selecionada, devendo ser fornecido o tombo do mesmo!";
+                        break;
+                    }
+
+                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                        tituloMensagem = "Erro Hora Baixa";
+                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        break;
+                    }
+
+                    retorno = true;
+                case "BARCO":
+                    if (txtPrefixo.getText().isEmpty()) {
+                        tituloMensagem = "Erro Prefixo";
+                        corpoMensagem = "O prefixo é necessário!";
+                        break;
+                    }
+
+                    if (listaDeServidores.isEmpty() && btnSalvar.isPressed()) {
+                        tituloMensagem = "Erro Guarnição";
+                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
+                        break;
+                    } else if (listaDeServidores.size() > 6 && btnSalvar.isPressed()) {
+                        tituloMensagem = "Erro Guarnição";
+                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é possivel cadastrar 6 servidores!";
+                        break;
+                    }
+
+                    if (tbHT.isSelected() && txtTomboHT.getText() == null) {
+                        tituloMensagem = "Erro Tombo HT";
+                        corpoMensagem = "A opção HT foi selecionada, devendo ser fornecido o tombo do mesmo!";
+                        break;
+                    }
+
+                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                        tituloMensagem = "Erro Hora Baixa";
+                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        break;
+                    }
+
+                    retorno = true;
+                case "A PÉ":
+                    if (listaDeServidores.isEmpty()) {
+                        tituloMensagem = "Erro Guarnição";
+                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
+                        break;
+                    }
+
+                    if (tbHT.isSelected() && txtTomboHT.getText() == null) {
+                        tituloMensagem = "Erro Tombo HT";
+                        corpoMensagem = "A opção HT foi selecionada, devendo ser fornecido o tombo do mesmo!";
+                        break;
+                    }
+
+                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                        tituloMensagem = "Erro Hora Baixa";
+                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        break;
+                    }
+
+                    retorno = true;
+                case "VIATURA 4 RODAS":
+                    if (txtPrefixo.getText().isEmpty()) {
+                        tituloMensagem = "Erro Prefixo";
+                        corpoMensagem = "O prefixo é necessário!";
+                        break;
+                    }
+
+                    if (listaDeServidores.isEmpty() && btnSalvar.isPressed()) {
+                        tituloMensagem = "Erro Guarnição";
+                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
+                        break;
+                    } else if (listaDeServidores.size() > 4 && btnSalvar.isPressed()) {
+                        tituloMensagem = "Erro Guarnição";
+                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é possivel cadastrar apenas 4 servidores!";
+                        break;
+                    }
+
+                    if (tbHT.isSelected() && txtTomboHT.getText() == null) {
+                        tituloMensagem = "Erro Tombo HT";
+                        corpoMensagem = "A opção HT foi selecionada, devendo ser fornecido o tombo do mesmo!";
+                        break;
+                    }
+
+                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                        tituloMensagem = "Erro Hora Baixa";
+                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        break;
+                    }
+
+                    retorno = true;
+            }
+        } else {
+            tituloMensagem = "Erro Tipo P.O.";
+            corpoMensagem = "O P.O. não foi selecionado!";
+        }
+
+        return retorno;
+    }
+
+    @FXML
+    private void clickedTxtNomeServidor() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(this.getClass().getResource("/fxml/TelaListarServidores.fxml"));
@@ -265,7 +539,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
             servidor = controller.getServidor();
 
             if (servidor != null) {
-                txtBuscaServidor.setText(servidor.getNome());
+                txtNomeServidor.setText(servidor.getNome());
                 cbFuncao.setDisable(false);
             } else {
                 cbFuncao.setDisable(true);
@@ -283,172 +557,18 @@ public class TelaAdicionaOperacionalController implements Initializable {
         funcao = cbFuncao.getSelectionModel().getSelectedItem();
 
         if (funcao != null && servidor != null) {
-            btAdicionarServidor.setDisable(false);
+            btnAdicionarServidor.setDisable(false);
         } else {
-            btAdicionarServidor.setDisable(true);
+            btnAdicionarServidor.setDisable(true);
         }
     }
 
     @FXML
-    private void clickedBtAdicionarServidor(MouseEvent event) {
-
-        listaDeServidores.add(new ServidorFuncao(servidor, funcao, null, null, null, null, true));
-
-        //Carrega os dados na tabela Servidores
-        carregaDadosTablelaServidorGuarnicao(listaDeServidores);
-
-        //Desabilitar e Limpa dados para um novo ServidorFunção
-        cbFuncao.setValue(null);
-        cbFuncao.setDisable(true);
-        txtBuscaServidor.clear();
-        servidor = null;
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Servidor Adicionado");
-        alert.setHeaderText("Servidor adicionado!");
-        alert.showAndWait();
+    private void clickedCbUnidadeOperacional(ActionEvent event) {
     }
 
     @FXML
-    private void clickedBtRemoveServidor() {
-        ServidorFuncao servidorParaExcluir = tableServidorGuarnicao.getSelectionModel().getSelectedItem();
-
-        if (!tableServidorGuarnicao.getItems().isEmpty() && servidorParaExcluir != null) {
-
-            listaDeServidores.remove(servidorParaExcluir);
-
-            //Carrega os dados na tabela Servidores
-            carregaDadosTablelaServidorGuarnicao(listaDeServidores);
-
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("É necessário clicar no Servidor abaixo!");
-            alert.showAndWait();
-        }
-    }
-
-    @FXML
-    private void clickedExitedTableServidorGuarnicao(MouseEvent event) {
-    }
-
-    @FXML
-    private void clickedCbTipoPO(ActionEvent event) {
-        tipoPO = cbTipoPO.getSelectionModel().getSelectedItem();
-
-        //Retorna ao valor padrão
-        tbAudio.setSelected(false);
-        tbBCS.setSelected(false);
-        tbEstado.setSelected(false);
-        tbGPS.setSelected(false);
-        tbCamera.setSelected(false);
-        tbEstadoCam.setSelected(false);
-        tbHT.setSelected(false);
-        tbVtrBaixada.setSelected(false);
-
-        verificaTipoPO(tipoPO);
-    }
-
-    @FXML
-    private void tbBCS() {
-        if (tbBCS.isSelected()) {
-            tbBCS.setText("SIM");
-        } else {
-            tbBCS.setText("NÃO");
-        }
-    }
-
-    @FXML
-    private void tbGPS() {
-        if (tbGPS.isSelected()) {
-            tbGPS.setText("SIM");
-        } else {
-            tbGPS.setText("NÃO");
-        }
-    }
-
-    @FXML
-    private void tbCamera() {
-        if (tbCamera.isSelected()) {
-            tbCamera.setText("SIM");
-        } else {
-            tbCamera.setText("NÃO");
-        }
-    }
-
-    @FXML
-    private void tbHT() {
-        if (tbHT.isSelected()) {
-            tbHT.setText("SIM");
-        } else {
-            tbHT.setText("NÃO");
-        }
-    }
-
-    @FXML
-    private void tbAudio() {
-        if (tbAudio.isSelected()) {
-            tbAudio.setText("SIM");
-        } else {
-            tbAudio.setText("NÃO");
-        }
-    }
-
-    @FXML
-    private void tbEstado() {
-        if (tbEstado.isSelected()) {
-            tbEstado.setText("ATIVO");
-        } else {
-            tbEstado.setText("INATIVO");
-        }
-    }
-
-    @FXML
-    private void tbEstadoCam() {
-        if (tbEstadoCam.isSelected()) {
-            tbEstadoCam.setText("ATIVO");
-        } else {
-            tbEstadoCam.setText("INATIVO");
-        }
-    }
-
-    @FXML
-    private void tbVtrBaixada() {
-        if (tbVtrBaixada.isSelected()) {
-
-            Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
-            alertAntesExcluir.setTitle("Atenção!");
-            alertAntesExcluir.setHeaderText("A viatura selecionada será BAIXADA!. Será necessário"
-                    + "\ncriar uma nova viatura com a mesma guarnição,\nvocê tem certeza que deseja continuar?");
-            alertAntesExcluir.getButtonTypes().clear();
-            alertAntesExcluir.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-
-            //Deactivate Defaultbehavior for yes-Button:
-            Button yesButton = (Button) alertAntesExcluir.getDialogPane().lookupButton(ButtonType.YES);
-            yesButton.setDefaultButton(false);
-
-            //Activate Defaultbehavior for no-Button:
-            Button noButton = (Button) alertAntesExcluir.getDialogPane().lookupButton(ButtonType.NO);
-            noButton.setDefaultButton(true);
-
-            //Pega qual opção o usuario pressionou
-            final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
-
-            if (resultado.get() == ButtonType.YES) {
-                tbVtrBaixada.setText("SIM");
-
-            } else {
-                tbVtrBaixada.setSelected(false);
-            }
-
-        } else {
-            tbVtrBaixada.setText("NÃO");
-        }
-    }
-
-    @FXML
-    private void clickedBtSalvar(MouseEvent event) {
-
+    private void clickedBtnSalvar(MouseEvent event) {
         if (verificaDados()) {
             /*
                 Verifica se está editando ou salvando nova viatura
@@ -462,7 +582,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 viatura.setBcs(tbBCS.isSelected());
                 viatura.setGps(tbGPS.isSelected());
                 viatura.setCamera(tbCamera.isSelected());
-                viatura.setVtrBaixada(tbVtrBaixada.isSelected());
+                viatura.setVtrBaixada(tbViaturaAtiva.isSelected());
+                viatura.setHrDaBaixa(horaBaixaViatura.getLocalTime());
 
                 //Verifica estado GPS
                 if (tbEstado.isSelected()) {
@@ -490,14 +611,15 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 viatura.setTipoPO(tipoPO);
 
                 relatorioDeViatura.getViaturas().add(viatura);
-                        
+
                 root.getScene().getWindow().hide();
             } else {
                 viatura.setAudio(tbAudio.isSelected());
                 viatura.setBcs(tbBCS.isSelected());
                 viatura.setGps(tbGPS.isSelected());
                 viatura.setCamera(tbCamera.isSelected());
-                viatura.setVtrBaixada(tbVtrBaixada.isSelected());
+                viatura.setVtrBaixada(tbViaturaAtiva.isSelected());
+                viatura.setHrDaBaixa(horaBaixaViatura.getLocalTime());
 
                 //Verifica estado GPS
                 if (tbEstado.isSelected()) {
@@ -520,98 +642,18 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
                 viatura.setPrefixo(txtPrefixo.getText());
                 viatura.setTipoPO(tipoPO);
-                
+
                 root.getScene().getWindow().hide();
             }
-            
+
             botaoSalvarClicado = true;
-            
+
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(tituloMensagem);
             alert.setHeaderText(corpoMensagem);
             alert.showAndWait();
         }
-    }
-    
-    public RelatorioDiarioViaturas getRelatorioDeViatura(){
-        return this.relatorioDeViatura;
-    }
-
-    private boolean verificaDados() {
-        boolean retorno = false;
-        if (tipoPO != null) {
-
-            switch (tipoPO.getNome()) {
-                case "VIATURA 2 RODAS":
-                    if (txtPrefixo.getText().isEmpty()) {
-                        tituloMensagem = "Erro Prefixo";
-                        corpoMensagem = "O prefixo é necessário!";
-                        break;
-                    }
-
-                    if (listaDeServidores.isEmpty()) {
-                        tituloMensagem = "Erro Guarnição";
-                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
-                        break;
-                    } else if (listaDeServidores.size() > 2) {
-                        tituloMensagem = "Erro Guarnição";
-                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é possivel cadastrar apenas 2 servidores!";
-                        break;
-                    }
-
-                    retorno = true;
-                case "BARCO":
-                    if (txtPrefixo.getText().isEmpty()) {
-                        tituloMensagem = "Erro Prefixo";
-                        corpoMensagem = "O prefixo é necessário!";
-                        break;
-                    }
-
-                    if (listaDeServidores.isEmpty()) {
-                        tituloMensagem = "Erro Guarnição";
-                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
-                        break;
-                    } else if (listaDeServidores.size() > 6) {
-                        tituloMensagem = "Erro Guarnição";
-                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é possivel cadastrar 6 servidores!";
-                        break;
-                    }
-
-                    retorno = true;
-                case "A PÉ":
-                    if (listaDeServidores.isEmpty()) {
-                        tituloMensagem = "Erro Guarnição";
-                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
-                        break;
-                    }
-
-                    retorno = true;
-                case "VIATURA 4 RODAS":
-                    if (txtPrefixo.getText().isEmpty()) {
-                        tituloMensagem = "Erro Prefixo";
-                        corpoMensagem = "O prefixo é necessário!";
-                        break;
-                    }
-
-                    if (listaDeServidores.isEmpty()) {
-                        tituloMensagem = "Erro Guarnição";
-                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
-                        break;
-                    } else if (listaDeServidores.size() > 4) {
-                        tituloMensagem = "Erro Guarnição";
-                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é possivel cadastrar apenas 4 servidores!";
-                        break;
-                    }
-
-                    retorno = true;
-            }
-        } else {
-            tituloMensagem = "Erro Tipo P.O.";
-            corpoMensagem = "O P.O. não foi selecionado!";
-        }
-
-        return retorno;
     }
 
     @FXML
@@ -641,16 +683,142 @@ public class TelaAdicionaOperacionalController implements Initializable {
         }
     }
 
-    void setRelatorioDeMesa(RelatorioDiarioMesas value) {
-        this.relatorioDeMesa = value;
+    @FXML
+    private void clickedBtnAdicionarServidor(MouseEvent event) {
+        listaDeServidores.add(new ServidorFuncao(servidor, funcao, horaInicialPlantaoServidor.getLocalTime(),
+                horaFinalPlantaoServidor.getLocalTime(), horaPausa1Servidor.getLocalTime(), horaPausa2Servidor.getLocalTime(), true));
+
+        //Carrega os dados na tabela Servidores
+        carregaDadosTablelaServidorGuarnicao(listaDeServidores);
+
+        //Desabilitar e Limpa dados para um novo ServidorFunção
+        cbFuncao.setValue(null);
+        cbFuncao.setDisable(true);
+        txtNomeServidor.clear();
+        servidor = null;
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Servidor Adicionado");
+        alert.setHeaderText("Servidor adicionado!");
+        alert.showAndWait();
+    }
+    
+    @FXML
+    private void clickedTbGPS() {
+        if (tbGPS.isSelected()) {
+            tbGPS.setText("Possui GPS");
+        } else {
+            tbGPS.setText("Sem GPS");
+        }
+    }
+    
+    @FXML
+    private void clickedTbBCS() {
+        if (tbBCS.isSelected()) {
+            tbBCS.setText("Pertence a BCS");
+        } else {
+            tbBCS.setText("Não Pertence a BCS");
+        }
     }
 
-    void setRelatorioDeViatura(RelatorioDiarioViaturas value) {
-        this.relatorioDeViatura = value;
-
-        if (value != null) {
-            listaPOS.addAll(relatorioDeViatura.getUnidade().getPos());
+    @FXML
+    private void clickedTbEstadoGPS() {
+        if (tbGPS.isSelected()) {
+            tbGPS.setText("GPS Ativo");
+        } else {
+            tbGPS.setText("GPS Inativo");
         }
+    }
+
+    @FXML
+    private void clickedTbCamera() {
+        if (tbCamera.isSelected()) {
+            tbCamera.setText("Possui Câmera");
+        } else {
+            tbCamera.setText("Sem Câmera");
+        }
+    }
+
+    @FXML
+    private void clickedTbEstadoCam() {
+        if (tbEstadoCam.isSelected()) {
+            tbEstadoCam.setText("Câmera Ativa");
+        } else {
+            tbEstadoCam.setText("Cãmera Inativa");
+        }
+    }
+
+    @FXML
+    private void clickedTbHT() {
+        if (tbHT.isSelected()) {
+            Alert alertVoltar = new Alert(Alert.AlertType.INFORMATION);
+            alertVoltar.setTitle("Atenção!");
+            alertVoltar.setHeaderText("Informe o tombo do HT");
+            alertVoltar.getButtonTypes().clear();
+
+            tbHT.setText("Possui HT");
+            txtTomboHT.setDisable(false);
+        } else {
+            txtTomboHT.setDisable(true);
+            txtTomboHT.setText("");
+            tbHT.setText("Sem HT");
+        }
+    }
+
+    @FXML
+    private void clickedTbAudio() {
+        if (tbAudio.isSelected()) {
+            tbAudio.setText("Possui Audio");
+        } else {
+            tbAudio.setText("Sem Audio");
+        }
+    }
+
+    @FXML
+    private void clickedTbViaturaAtiva() {
+        if (tbViaturaAtiva.isSelected()) {
+
+            if (horaBaixaViatura.getLocalTime() == null) {
+                Alert alertVoltar = new Alert(Alert.AlertType.ERROR);
+                alertVoltar.setTitle("Atenção!");
+                alertVoltar.setHeaderText("Informe o horário da Baixa da Viatura");
+                alertVoltar.getButtonTypes().clear();
+
+                tbViaturaAtiva.setSelected(false);
+                tbViaturaAtiva.setText("Ativa");
+            } else {
+                Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
+                alertAntesExcluir.setTitle("Atenção!");
+                alertAntesExcluir.setHeaderText("A viatura selecionada será BAIXADA!. Será necessário"
+                        + "\ncriar uma nova viatura com a mesma guarnição?");
+                alertAntesExcluir.getButtonTypes().clear();
+                alertAntesExcluir.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+                //Deactivate Defaultbehavior for yes-Button:
+                Button yesButton = (Button) alertAntesExcluir.getDialogPane().lookupButton(ButtonType.YES);
+                yesButton.setDefaultButton(false);
+
+                //Activate Defaultbehavior for no-Button:
+                Button noButton = (Button) alertAntesExcluir.getDialogPane().lookupButton(ButtonType.NO);
+                noButton.setDefaultButton(true);
+
+                //Pega qual opção o usuario pressionou
+                final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
+
+                if (resultado.get() == ButtonType.YES) {
+                    tbViaturaAtiva.setText("Inativa");
+
+                } else {
+                    tbViaturaAtiva.setSelected(false);
+                }
+            }
+        } else {
+            tbViaturaAtiva.setText("Ativa");
+        }
+    }
+
+    void setRelatorioDeMesa(RelatorioDiarioMesas value) {
+        this.relatorioDeMesa = value;
     }
 
     public Viatura getViatura() {
@@ -684,7 +852,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
             this.tbBCS.setSelected(value.isBcs());
             this.tbGPS.setSelected(value.isGps());
             this.tbCamera.setSelected(value.isCamera());
-            this.tbVtrBaixada.setSelected(value.isVtrBaixada());
+            this.tbViaturaAtiva.setSelected(value.isVtrBaixada());
+            this.horaBaixaViatura.setLocalTime(value.getHrDaBaixa());
 
             if (value.getHt().equals("POSSUI")) {
                 this.tbHT.setSelected(true);
@@ -708,6 +877,34 @@ public class TelaAdicionaOperacionalController implements Initializable {
             carregaDadosTablelaServidorGuarnicao(value.getGuarnicao());
         }
     }
+    
+    public RelatorioDiarioViaturas getRelatorioDeViatura() {
+        return this.relatorioDeViatura;
+    }
+
+    void setRelatorioDeViatura(RelatorioDiarioViaturas value) {
+        this.relatorioDeViatura = value;
+
+        if (value != null) {
+            listaPOS.addAll(relatorioDeViatura.getUnidade().getPos());
+            cbUnidade.setConverter(new StringConverter<Unidade>() {
+                @Override
+                public String toString(Unidade item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
+                }
+
+                @Override
+                public Unidade fromString(String string) {
+                    return daoUnidade.buscaPorNome(string);
+                }
+
+            });
+            cbUnidade.setValue(value.getUnidade());
+        }
+    }
 
     private void verificaTipoPO(PO tipoPO) {
         if (tipoPO != null) {
@@ -719,9 +916,9 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
                     tbCamera.setDisable(false);
-                    tbVtrBaixada.setDisable(false);
+                    horaBaixaViatura.setDisable(false);
                     tbHT.setDisable(false);
-                    btBuscaServidor.setDisable(false);
+                    txtNomeServidor.setDisable(false);
                     break;
                 case "BARCO":
                     txtPrefixo.setDisable(false);
@@ -730,9 +927,9 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
                     tbCamera.setDisable(false);
-                    tbVtrBaixada.setDisable(false);
+                    horaBaixaViatura.setDisable(false);
                     tbHT.setDisable(false);
-                    btBuscaServidor.setDisable(false);
+                    txtNomeServidor.setDisable(false);
                     break;
                 case "A PÉ":
                     tbAudio.setDisable(false);
@@ -740,9 +937,9 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
                     tbCamera.setDisable(false);
-                    tbVtrBaixada.setDisable(false);
+                    horaBaixaViatura.setDisable(false);
                     tbHT.setDisable(false);
-                    btBuscaServidor.setDisable(false);
+                    txtNomeServidor.setDisable(false);
                     break;
                 case "VIATURA 4 RODAS":
                     txtPrefixo.setDisable(false);
@@ -751,9 +948,9 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
                     tbCamera.setDisable(false);
-                    tbVtrBaixada.setDisable(false);
+                    horaBaixaViatura.setDisable(false);
                     tbHT.setDisable(false);
-                    btBuscaServidor.setDisable(false);
+                    txtNomeServidor.setDisable(false);
                     break;
                 default:
                     txtPrefixo.setDisable(true);
@@ -762,26 +959,165 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     tbEstado.setDisable(true);
                     tbGPS.setDisable(true);
                     tbCamera.setDisable(false);
-                    tbVtrBaixada.setDisable(false);
+                    horaBaixaViatura.setDisable(false);
                     tbHT.setDisable(true);
-                    btBuscaServidor.setDisable(true);
+                    txtNomeServidor.setDisable(true);
                     break;
             }
 
             //Habilita Botão Salvar
-            btSalvar.setDisable(false);
+            btnSalvar.setDisable(false);
         }
 
         //Trocar os nomes
-        tbAudio();
-        tbBCS();
-        tbEstado();
-        tbGPS();
-        tbCamera();
-        tbHT();
-        tbVtrBaixada();
+        clickedTbAudio();
+        clickedTbBCS();
+        clickedTbGPS();
+        clickedTbEstadoGPS();
+        clickedTbCamera();
+        clickedTbHT();
+        clickedTbViaturaAtiva();
     }
-    
+
+    //    Define os botões de ação do Servidor na Guarnicao
+    private class ButtonCellServidorGuarnicao extends TableCell<ServidorFuncao, Boolean> {
+
+        //BOTAO REMOVER
+        private Button botaoRemover = new Button();
+        private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
+
+        //BOTAO EDITAR
+        private Button botaoEditar = new Button();
+        private final ImageView imagemEditar = new ImageView(new Image(getClass().getResourceAsStream("/icons/editar.png")));
+
+        //BOTAO EDITAR
+        private Button botaoVisualizar = new Button();
+        private final ImageView imagemVisualizar = new ImageView(new Image(getClass().getResourceAsStream("/icons/visualizar.png")));
+
+        private ButtonCellServidorGuarnicao(TableView<ServidorFuncao> tblView) {
+            //BOTAO VISUALIZAR
+            imagemVisualizar.fitHeightProperty().set(16);
+            imagemVisualizar.fitWidthProperty().set(16);
+            botaoVisualizar.setGraphic(imagemVisualizar);
+            botaoVisualizar.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent t) {
+                    ServidorFuncao servidorVisualizar = (ServidorFuncao) tblView.getItems().get(getIndex());
+                    if (servidorVisualizar != null) {
+                        txtNomeServidor.setText(servidorVisualizar.getServidor().getNome());
+                        cbFuncao.setValue(servidorVisualizar.getFuncao());
+                        horaInicialPlantaoServidor.setLocalTime(servidorVisualizar.getHoraInicialPlantao());
+                        horaFinalPlantaoServidor.setLocalTime(servidorVisualizar.getHoraFinalPlantao());
+                        horaPausa1Servidor.setLocalTime(servidorVisualizar.getHoraPausa1());
+                        horaPausa2Servidor.setLocalTime(servidorVisualizar.getHoraPausa2());
+
+                        //Desabilita Tudo
+                        txtNomeServidor.setDisable(true);
+                        cbFuncao.setDisable(true);
+                        horaInicialPlantaoServidor.setDisable(true);
+                        horaFinalPlantaoServidor.setDisable(true);
+                        horaPausa1Servidor.setDisable(true);
+                        horaPausa2Servidor.setDisable(true);
+
+                        btnAdicionarServidor.setDisable(false);
+                        btnAdicionarServidor.setText("Novo");
+                    }
+                }
+            });
+
+            //BOTAO EDITAR
+            imagemEditar.fitHeightProperty().set(16);
+            imagemEditar.fitWidthProperty().set(16);
+
+            botaoEditar.setGraphic(imagemEditar);
+
+            botaoEditar.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent t) {
+                    ServidorFuncao servidorEditar = (ServidorFuncao) tblView.getItems().get(getIndex());
+
+                    if (servidorEditar != null) {
+                        txtNomeServidor.setText(servidorEditar.getServidor().getNome());
+                        txtNomeServidor.setDisable(true);
+                        cbFuncao.setValue(servidorEditar.getFuncao());
+                        horaInicialPlantaoServidor.setLocalTime(servidorEditar.getHoraInicialPlantao());
+                        horaFinalPlantaoServidor.setLocalTime(servidorEditar.getHoraFinalPlantao());
+                        horaPausa1Servidor.setLocalTime(servidorEditar.getHoraPausa1());
+                        horaPausa2Servidor.setLocalTime(servidorEditar.getHoraPausa2());
+
+                        cbFuncao.setDisable(false);
+                        horaInicialPlantaoServidor.setDisable(false);
+                        horaFinalPlantaoServidor.setDisable(false);
+                        horaPausa1Servidor.setDisable(false);
+                        horaPausa2Servidor.setDisable(false);
+
+                        btnAdicionarServidor.setDisable(false);
+                        btnAdicionarServidor.setText("Salvar");
+                    }
+                }
+            });
+
+            //BOTAO REMOVER
+            imagemRemover.fitHeightProperty().set(16);
+            imagemRemover.fitWidthProperty().set(16);
+
+            botaoRemover.setGraphic(imagemRemover);
+
+            botaoRemover.setOnAction((ActionEvent t) -> {
+                ServidorFuncao servidorRemover = (ServidorFuncao) tblView.getItems().get(getIndex());
+
+                if (servidorRemover != null) {
+                    Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
+                    alertVoltar.setTitle("Atenção!");
+                    alertVoltar.setHeaderText("Os dados referentes à este Servidor serão perdidos, deseja continuar?");
+                    alertVoltar.getButtonTypes().clear();
+                    alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+                    //Deactivate Defaultbehavior for yes-Button:
+                    Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+                    yesButton.setDefaultButton(false);
+
+                    //Activate Defaultbehavior for no-Button:
+                    Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+                    noButton.setDefaultButton(true);
+
+                    //Pega qual opção o usuario pressionou
+                    final Optional<ButtonType> resultado1 = alertVoltar.showAndWait();
+
+                    if (resultado1.get() == ButtonType.YES) {
+                        listaDeServidores.remove(servidorRemover);
+
+                        btnAdicionarServidor.setDisable(false);
+                        btnAdicionarServidor.setText("novo");
+
+                        limparDadosServidor();
+
+                        carregaDadosTablelaServidorGuarnicao(listaDeServidores);
+                    }
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(Boolean t, boolean empty) {
+            super.updateItem(t, empty);
+
+            if (!empty) {
+                HBox hb = new HBox();
+                hb.setAlignment(Pos.CENTER);
+                hb.getChildren().addAll(botaoEditar);
+                hb.getChildren().addAll(botaoVisualizar);
+                hb.getChildren().addAll(botaoRemover);
+                setGraphic(hb);
+                setAlignment(Pos.CENTER);
+            } else {
+                setGraphic(null);
+            }
+        }
+    }
+
     public boolean isBotaoSalvarClicado() {
         return botaoSalvarClicado;
     }
@@ -789,6 +1125,5 @@ public class TelaAdicionaOperacionalController implements Initializable {
     public void setBotaoSalvarClicado(boolean botaoSalvarClicado) {
         this.botaoSalvarClicado = botaoSalvarClicado;
     }
-    
 
 }

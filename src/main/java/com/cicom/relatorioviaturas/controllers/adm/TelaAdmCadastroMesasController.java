@@ -454,8 +454,6 @@ public class TelaAdmCadastroMesasController implements Initializable {
     //    Define os botões de ação da MESA
     private class ButtonCellMesa extends TableCell<Mesa, Boolean> {
 
-        HBox hb = new HBox(3);
-
         //BOTAO REMOVER
         private Button botaoRemover = new Button();
         private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
@@ -574,14 +572,13 @@ public class TelaAdmCadastroMesasController implements Initializable {
 
         @Override
         protected void updateItem(Boolean t, boolean empty) {
-            hb.setAlignment(Pos.CENTER);
-
             super.updateItem(t, empty);
             if (!empty) {
+                HBox hb = new HBox(3);
+                hb.setAlignment(Pos.CENTER);
                 hb.getChildren().add(botaoVisualizar);
                 hb.getChildren().add(botaoEditar);
                 hb.getChildren().add(botaoRemover);
-
                 setGraphic(hb);
             } else {
                 setGraphic(null);

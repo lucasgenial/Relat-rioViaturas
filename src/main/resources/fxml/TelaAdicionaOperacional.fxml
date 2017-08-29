@@ -1,103 +1,161 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import jfxtras.scene.control.LocalTimeTextField?>
 
-<Pane fx:id="root" prefHeight="354.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaAdicionaOperacionalController">
-    <children>
-        <Label layoutX="17.0" layoutY="4.0" text="Dados PO" />
-        <GridPane layoutX="17.0" layoutY="25.0" prefHeight="264.0" prefWidth="400.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="169.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="363.0" minWidth="10.0" prefWidth="231.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-                <ComboBox fx:id="cbTipoPO" onAction="#clickedCbTipoPO" prefHeight="25.0" prefWidth="244.0" GridPane.columnIndex="1" />
-                <Label text="Tipo Pat. Operacional" />
-                <Label text="Prefixo" GridPane.rowIndex="1" />
-                <TextField fx:id="txtPrefixo" disable="true" prefHeight="25.0" prefWidth="240.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Label text="Pertence a Base Comunitária" GridPane.rowIndex="2" />
-                <Label text="Possui GPS?" GridPane.rowIndex="5" />
-                <Label text="Estado do GPS" GridPane.rowIndex="6" />
-                <Label text="Possui HT?" GridPane.rowIndex="7" />
-                <Label text="Possui Audio?" GridPane.rowIndex="8" />
-                <ToggleButton fx:id="tbBCS" disable="true" mnemonicParsing="false" onMouseClicked="#tbBCS" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <ToggleButton fx:id="tbGPS" disable="true" mnemonicParsing="false" onMouseClicked="#tbGPS" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                <ToggleButton fx:id="tbEstado" disable="true" mnemonicParsing="false" onMouseClicked="#tbEstado" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                <ToggleButton fx:id="tbHT" disable="true" mnemonicParsing="false" onMouseClicked="#tbHT" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                <ToggleButton fx:id="tbAudio" disable="true" mnemonicParsing="false" onMouseClicked="#tbAudio" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <Label text="Viatura Baixada" GridPane.rowIndex="9" />
-            <ToggleButton fx:id="tbVtrBaixada" disable="true" mnemonicParsing="false" onMouseClicked="#tbVtrBaixada" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-            <Label text="Possui Câmera Embarcada?" GridPane.rowIndex="3" />
-            <ToggleButton fx:id="tbCamera" disable="true" mnemonicParsing="false" onMouseClicked="#tbCamera" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="Estado da Câmera Embarcada" GridPane.rowIndex="4" />
-            <ToggleButton fx:id="tbEstadoCam" disable="true" mnemonicParsing="false" onMouseClicked="#tbEstadoCam" prefHeight="25.0" prefWidth="97.0" text="NÃO" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            </children>
-        </GridPane>
-        <Label layoutX="458.0" layoutY="4.0" text="Dados Guarnição" />
-        <GridPane layoutX="458.0" layoutY="24.0" prefHeight="63.0" prefWidth="348.0">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="46.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="268.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="111.0" minWidth="10.0" prefWidth="33.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-                <Label text="Servidor" />
-                <TextField fx:id="txtBuscaServidor" disable="true" prefHeight="25.0" prefWidth="261.0" GridPane.columnIndex="1" />
-                <Button fx:id="btBuscaServidor" disable="true" mnemonicParsing="false" onMouseClicked="#clikedBtBuscaServidor" text="+" GridPane.columnIndex="2" />
-                <Label text="Função" GridPane.rowIndex="1" />
-                <ComboBox fx:id="cbFuncao" disable="true" onAction="#clickedCbFuncao" prefHeight="25.0" prefWidth="219.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            </children>
-        </GridPane>
-        <Button fx:id="btAdicionarServidor" disable="true" layoutX="681.0" layoutY="95.0" mnemonicParsing="false" onMouseClicked="#clickedBtAdicionarServidor" text="Adiciona" />
-        <Button fx:id="btRemoveServidor" disable="true" layoutX="747.0" layoutY="95.0" mnemonicParsing="false" onMouseClicked="#clickedBtRemoveServidor" text="Remove" />
-        <TableView fx:id="tableServidorGuarnicao" disable="true" layoutX="458.0" layoutY="128.0" onMouseExited="#clickedExitedTableServidorGuarnicao" prefHeight="165.0" prefWidth="348.0">
-            <columns>
-                <TableColumn fx:id="tbColumnNomeServidor" prefWidth="241.0" text="Nome">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="servidor" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="tbColumnFuncaoServidor" prefWidth="106.0" text="Função">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="funcao" />
-                    </cellValueFactory>
-                </TableColumn>
-            </columns>
-        </TableView>
-        <Button fx:id="btSalvar" disable="true" layoutX="673.0" layoutY="318.0" mnemonicParsing="false" onMouseClicked="#clickedBtSalvar" prefHeight="25.0" prefWidth="64.0" text="Salvar" />
-        <Button fx:id="btCancelar" layoutX="744.0" layoutY="318.0" mnemonicParsing="false" onMouseClicked="#clickedBtVoltar" prefHeight="25.0" prefWidth="64.0" text="Voltar" />
-        <Separator layoutX="432.0" layoutY="3.0" orientation="VERTICAL" prefHeight="306.0" prefWidth="4.0" />
-        <Separator layoutX="14.0" layoutY="22.0" prefHeight="4.0" prefWidth="803.0" />
-        <Separator layoutX="10.0" layoutY="308.0" prefHeight="4.0" prefWidth="792.0" />
-      <TextField fx:id="txtVtrBaixada" disable="true" layoutX="292.0" layoutY="263.0" prefHeight="25.0" prefWidth="114.0" />
-      <Label layoutX="312.0" layoutY="290.0" text="Hora da Baixa" />
-    </children>
-</Pane>
+<TabPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="565.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaAdicionaOperacionalController">
+  <tabs>
+    <Tab fx:id="tabDadosViatura" text="Dados do P.O">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="565.0">
+               <children>
+                  <Button fx:id="btnAvancar" disable="true" layoutX="493.0" layoutY="371.0" mnemonicParsing="false" onMouseClicked="#clickedBtnAvançar" prefHeight="29.0" prefWidth="62.0" text="Avançar" />
+                  <Label layoutX="26.0" layoutY="293.0" text="Hora da Baixa" />
+                  <ComboBox fx:id="cbTipoPO" layoutX="293.0" layoutY="32.0" onAction="#clickedCbTipoPO" prefHeight="25.0" prefWidth="262.0" />
+                  <Label layoutX="295.0" layoutY="15.0" text="Tipo Pat. Operacional">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="15.0" layoutY="15.0" text="Unidade Operacional">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cbTipoUnidadeOperacional" disable="true" layoutX="15.0" layoutY="32.0" onAction="#clickedCbUnidadeOperacional" prefHeight="25.0" prefWidth="262.0" />
+                  <Label layoutX="15.0" layoutY="67.0" text="Prefixo">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtPrefixo" disable="true" layoutX="15.0" layoutY="84.0" prefHeight="25.0" prefWidth="240.0" />
+                  <ToggleButton fx:id="tbBCS" disable="true" layoutX="25.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#clickedTbBCS" prefHeight="25.0" prefWidth="126.0" text="Pertence a BCS" />
+                  <ToggleButton fx:id="tbGPS" disable="true" layoutX="182.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#clickedTbGPS" prefHeight="25.0" prefWidth="97.0" text="Possui GPS" />
+                  <ToggleButton fx:id="tbEstadoGPS" disable="true" layoutX="305.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#clickedTbEstadoGPS" prefHeight="25.0" prefWidth="97.0" text="GPS Ativo" />
+                  <ToggleButton fx:id="tbHT" disable="true" layoutX="183.0" layoutY="258.0" mnemonicParsing="false" onMouseClicked="#clickedTbHT" prefHeight="25.0" prefWidth="97.0" text="Possui HT" />
+                  <ToggleButton fx:id="tbAudio" disable="true" layoutX="305.0" layoutY="258.0" mnemonicParsing="false" onMouseClicked="#clickedTbAudio" prefHeight="25.0" prefWidth="97.0" text="Possui Audio" />
+                  <ToggleButton fx:id="tbCamera" disable="true" layoutX="183.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#clickedTbCamera" prefHeight="25.0" prefWidth="97.0" text="Possui Câmera" />
+                  <ToggleButton fx:id="tbEstadoCam" disable="true" layoutX="305.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#clickedTbEstadoCam" prefHeight="25.0" prefWidth="97.0" text="Câmera Ativa" />
+                  <Separator layoutX="15.0" layoutY="174.0" prefHeight="14.0" prefWidth="541.0" />
+                  <Separator layoutX="15.0" layoutY="349.0" prefHeight="14.0" prefWidth="539.0" />
+                  <Separator layoutX="11.0" layoutY="181.0" orientation="VERTICAL" prefHeight="174.0" prefWidth="11.0" />
+                  <Separator layoutX="551.0" layoutY="181.0" orientation="VERTICAL" prefHeight="174.0" prefWidth="11.0" />
+                  <TextField fx:id="txtTomboHT" disable="true" layoutX="426.0" layoutY="258.0" prefHeight="25.0" prefWidth="116.0" />
+                  <Label layoutX="427.0" layoutY="241.0" text="Tombo HT:" />
+                  <Separator layoutX="153.0" layoutY="181.0" orientation="VERTICAL" prefHeight="174.0" prefWidth="13.0" />
+                  <LocalTimeTextField fx:id="horaBaixaViatura" disable="true" layoutX="25.0" layoutY="310.0" prefHeight="25.0" prefWidth="125.0" />
+                  <ToggleButton fx:id="tbViaturaAtiva" disable="true" layoutX="25.0" layoutY="256.0" mnemonicParsing="false" onMouseClicked="#clickedTbViaturaAtiva" prefHeight="25.0" prefWidth="124.0" text="Ativa" />
+                  <Label layoutX="16.0" layoutY="118.0" text="Hora Inicial Plantão">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <LocalTimeTextField fx:id="horaInicialPlantaoViatura" layoutX="15.0" layoutY="135.0" prefHeight="25.0" prefWidth="72.0" />
+                  <Label layoutX="155.0" layoutY="118.0" text="Hora Final Plantão">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <LocalTimeTextField fx:id="horaFinalPlantaoViatura" layoutX="155.0" layoutY="135.0" prefHeight="25.0" prefWidth="103.0" />
+                  <Label layoutX="298.0" layoutY="118.0" text="Hora Pausa 1">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <LocalTimeTextField fx:id="horaPausa1Viatura" layoutX="297.0" layoutY="135.0" prefHeight="25.0" prefWidth="65.0" />
+                  <Label layoutX="437.0" layoutY="118.0" text="Hora Pausa 2">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <LocalTimeTextField fx:id="horaPausa2Viatura" layoutX="436.0" layoutY="135.0" prefHeight="25.0" prefWidth="84.0" />
+                  <Separator layoutX="15.0" layoutY="238.0" prefHeight="14.0" prefWidth="143.0" />
+               </children>
+            </AnchorPane>
+      </content>
+    </Tab>
+    <Tab fx:id="tabDadosGuarnicao" disable="true" text="Dados da Guarnição">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="416.0" prefWidth="587.0">
+               <children>
+                  <Button fx:id="btnSalvar" disable="true" layoutX="421.0" layoutY="377.0" mnemonicParsing="false" onMouseClicked="#clickedBtnSalvar" prefHeight="25.0" prefWidth="64.0" text="Salvar" />
+                  <Button fx:id="btnCancelar" layoutX="493.0" layoutY="377.0" mnemonicParsing="false" onMouseClicked="#clickedBtnVoltar" prefHeight="25.0" prefWidth="64.0" text="Voltar" />
+                  <Button fx:id="btnAdicionarServidor" disable="true" layoutX="470.0" layoutY="151.0" mnemonicParsing="false" onMouseClicked="#clickedBtnAdicionarServidor" prefHeight="25.0" prefWidth="85.0" text="Adiciona" />
+                  <TableView fx:id="tableServidorGuarnicao" disable="true" layoutX="13.0" layoutY="186.0" prefHeight="182.0" prefWidth="543.0">
+                     <columns>
+                        <TableColumn fx:id="tbColumnNomeServidor" prefWidth="279.0" text="NOME">
+                           <cellValueFactory>
+                              <PropertyValueFactory property="servidor" />
+                           </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="tbColumnFuncaoServidor" prefWidth="139.0" text="FUNÇÃO">
+                           <cellValueFactory>
+                              <PropertyValueFactory property="funcao" />
+                           </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="tbColumnAcaoServidor" prefWidth="124.0" text="AÇÃO">
+                           <cellValueFactory>
+                              <PropertyValueFactory property="funcao" />
+                           </cellValueFactory>
+                        </TableColumn>
+                     </columns>
+                  </TableView>
+                  <Label layoutX="312.0" layoutY="15.0" text="Função">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="cbFuncao" disable="true" layoutX="312.0" layoutY="32.0" onAction="#clickedCbFuncao" prefHeight="25.0" prefWidth="241.0" />
+                  <Label layoutX="15.0" layoutY="15.0" text="Servidor">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtNomeServidor" disable="true" layoutX="15.0" layoutY="32.0" onMouseClicked="#clickedTxtNomeServidor" prefHeight="25.0" prefWidth="272.0" />
+                  <Label layoutX="15.0" layoutY="100.0" text="Hora Inicial Plantão">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <LocalTimeTextField fx:id="horaInicialPlantaoServidor" disable="true" layoutX="15.0" layoutY="117.0" prefHeight="25.0" prefWidth="72.0" />
+                  <Label layoutX="155.0" layoutY="100.0" text="Hora Final Plantão">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <LocalTimeTextField fx:id="horaFinalPlantaoServidor" disable="true" layoutX="154.0" layoutY="117.0" prefHeight="25.0" prefWidth="103.0" />
+                  <Label layoutX="294.0" layoutY="100.0" text="Hora Pausa 1">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <LocalTimeTextField fx:id="horaPausa1Servidor" disable="true" layoutX="294.0" layoutY="117.0" prefHeight="25.0" prefWidth="65.0" />
+                  <Label layoutX="435.0" layoutY="100.0" text="Hora Pausa 2">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <LocalTimeTextField fx:id="horaPausa2Servidor" disable="true" layoutX="435.0" layoutY="117.0" prefHeight="25.0" prefWidth="84.0" />
+                  <CheckBox fx:id="chcMesmoHorario" layoutX="15.0" layoutY="70.0" mnemonicParsing="false" onAction="#clickedChcMesmoHorario" selected="true" text="Utilizar mesmo horário da viatura">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </CheckBox>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>

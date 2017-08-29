@@ -96,9 +96,9 @@
                         <Button fx:id="btnAdicionarServidor" layoutX="300.0" layoutY="250.0" mnemonicParsing="false" onMouseClicked="#clickedBtnAdicionar" prefHeight="25.0" prefWidth="88.0" text="Adicionar" />
                         <TableView fx:id="tableServidorMesa" layoutX="404.0" layoutY="21.0" prefHeight="267.0" prefWidth="453.0">
                            <columns>
-                              <TableColumn fx:id="tbColumnNomeServidor" prefWidth="168.0" text="NOME" />
-                              <TableColumn fx:id="tbColumnFuncaoServidor" minWidth="0.0" prefWidth="186.0" text="FUNÇÃO" />
-                              <TableColumn fx:id="tbColumnAcaoServidor" minWidth="0.0" prefWidth="98.0" text="AÇÃO" />
+                              <TableColumn fx:id="tbColumnNomeServidor" prefWidth="199.0" resizable="false" text="NOME" />
+                              <TableColumn fx:id="tbColumnFuncaoServidor" minWidth="0.0" prefWidth="134.0" resizable="false" text="FUNÇÃO" />
+                              <TableColumn fx:id="tbColumnAcaoServidor" minWidth="0.0" prefWidth="119.0" resizable="false" text="AÇÃO" />
                            </columns>
                         </TableView>
                      </children>
