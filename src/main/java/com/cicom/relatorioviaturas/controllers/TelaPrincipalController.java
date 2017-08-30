@@ -754,7 +754,7 @@ public class TelaPrincipalController implements Initializable {
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Sucesso!");
-                    alert.setHeaderText("Operacional editado com Sucesso");
+                    alert.setHeaderText("Operacional cadastrado com sucesso");
                     alert.showAndWait();
                 } else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);

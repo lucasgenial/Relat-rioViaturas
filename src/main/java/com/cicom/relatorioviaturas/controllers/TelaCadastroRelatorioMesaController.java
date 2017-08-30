@@ -435,7 +435,7 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
         if ((horaPausa2.getLocalTime() != null && horaPausa1.getLocalTime() != null) && horaPausa2.getLocalTime().isBefore(horaPausa1.getLocalTime())) {
             if (dataFinal.getValue().equals(dataInicial.getValue())) {
                 mensagemErroTela = "Data Inválida";
-                mensagemErroCorpo = "Corrija o campo Hora da Pausa2!\nEsta não poderá anterior a Hora da Pausa2!";
+                mensagemErroCorpo = "Corrija o campo Hora da Pausa2!\nEsta não poderá anterior a Hora da Pausaa!";
                 return false;
             }
         }

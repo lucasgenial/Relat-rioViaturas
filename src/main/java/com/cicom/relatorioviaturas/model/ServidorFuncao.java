@@ -85,14 +85,12 @@ public class ServidorFuncao implements Serializable {
     }
     
     @Basic
-    @NotNull
     @Column(name = "HORA_PAUSA_1")
     public LocalTime getHoraPausa1() {
         return this.horaPausa1;
     }
     
     @Basic
-    @NotNull
     @Column(name = "HORA_PAUSA_2")
     public LocalTime getHoraPausa2() {
         return this.horaPausa2;

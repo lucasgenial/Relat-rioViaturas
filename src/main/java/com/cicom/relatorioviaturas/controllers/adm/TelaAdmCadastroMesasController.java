@@ -479,8 +479,9 @@ public class TelaAdmCadastroMesasController implements Initializable {
                     if (mesaVisualizar != null) {
                         txtNome.setText(mesaVisualizar.getNome());
                         cbTipoMesa.setValue(mesaVisualizar.getTipoMesa());
-
-                        tableUnidades.getItems().setAll(mesaVisualizar.getUnidades());
+                        listaDeUnidadeCadastro = mesaVisualizar.getUnidades();
+                                
+                        atualizarTabelaUnidade(listaDeUnidadeCadastro);
 
                         txtNome.setDisable(true);
                         cbUnidade.setDisable(true);
@@ -511,7 +512,7 @@ public class TelaAdmCadastroMesasController implements Initializable {
                         txtNome.setText(mesaEditar.getNome());
                         cbTipoMesa.setValue(mesaEditar.getTipoMesa());
                         listaDeUnidadeCadastro = mesaEditar.getUnidades();
-//                        tableUnidades.getItems().setAll(listaDeUnidadeCadastro);
+                        
                         atualizarTabelaUnidade(listaDeUnidadeCadastro);
 
                         txtNome.setDisable(false);

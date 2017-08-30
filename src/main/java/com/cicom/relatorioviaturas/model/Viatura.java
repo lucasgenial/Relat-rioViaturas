@@ -24,6 +24,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Icaro Bastos
@@ -34,18 +35,23 @@ import javax.persistence.Table;
 public class Viatura implements Serializable {
 
     private IntegerProperty id = new SimpleIntegerProperty();
-    private boolean audio;
-    private boolean bcs;
-    private StringProperty estado = new SimpleStringProperty();
-    private boolean gps;
-    private boolean camera;
-    private StringProperty estadoCam = new SimpleStringProperty();
-    private StringProperty ht = new SimpleStringProperty();
-    private StringProperty prefixo = new SimpleStringProperty();
     private PO tipoPO;
-    private Set<ServidorFuncao> guarnicao = new HashSet<>();
+    private StringProperty prefixo = new SimpleStringProperty();
+    private boolean bcs;
+    private boolean estadoGPS;
+    private boolean gps;
+    private boolean ht;
+    private boolean audio;
+    private StringProperty tomboHT = new SimpleStringProperty();
+    private boolean camera;
+    private boolean estadoCam;
+    private LocalTime horaInicialPlantao;
+    private LocalTime horaFinalPlantao;
+    private LocalTime horaPausa1;
+    private LocalTime horaPausa2;
     private boolean vtrBaixada;
     private LocalTime hrDaBaixa;
+    private Set<ServidorFuncao> guarnicao = new HashSet<>();
 
     /*
     GETTERS
@@ -71,8 +77,8 @@ public class Viatura implements Serializable {
 
     @Basic
     @Column(name = "ESTADO")
-    public String getEstado() {
-        return this.estado.get();
+    public boolean isEstadoGPS() {
+        return this.estadoGPS;
     }
 
     @Basic
@@ -89,20 +95,26 @@ public class Viatura implements Serializable {
 
     @Basic
     @Column(name = "ESTADO_CAM")
-    public String getEstadoCam() {
-        return this.estadoCam.get();
+    public boolean isEstadoCam() {
+        return this.estadoCam;
     }
 
     @Basic
     @Column(name = "HT")
-    public String getHt() {
-        return this.ht.get();
+    public boolean isHt() {
+        return this.ht;
     }
 
     @Basic
     @Column(name = "PREFIXO")
     public String getPrefixo() {
         return this.prefixo.get();
+    }
+
+    @Basic
+    @Column(name = "TOMBO_HT")
+    public String getTomboHT() {
+        return this.tomboHT.get();
     }
 
     @OneToOne(targetEntity = PO.class)
@@ -126,6 +138,32 @@ public class Viatura implements Serializable {
     }
 
     @Basic
+    @NotNull
+    @Column(name = "HR_INICIO_PLANTAO")
+    public LocalTime getHoraInicialPlantao() {
+        return this.horaInicialPlantao;
+    }
+
+    @Basic
+    @NotNull
+    @Column(name = "HR_FIM_PLANTAO")
+    public LocalTime getHoraFinalPlantao() {
+        return this.horaFinalPlantao;
+    }
+
+    @Basic
+    @Column(name = "HR_PAUSA1")
+    public LocalTime getHoraPausa1() {
+        return this.horaPausa1;
+    }
+
+    @Basic
+    @Column(name = "HR_PAUSA2")
+    public LocalTime getHoraPausa2() {
+        return this.horaPausa2;
+    }
+
+    @Basic
     @Column(name = "HR_DA_BAIXA")
     public LocalTime getHrDaBaixa() {
         return this.hrDaBaixa;
@@ -146,8 +184,8 @@ public class Viatura implements Serializable {
         this.bcs = value;
     }
 
-    public void setEstado(String value) {
-        this.estado.set(value);
+    public void setEstadoGPS(boolean value) {
+        this.estadoGPS = value;
     }
 
     public void setGps(boolean value) {
@@ -158,16 +196,20 @@ public class Viatura implements Serializable {
         this.camera = value;
     }
 
-    public void setEstadoCam(String value) {
-        this.estadoCam.set(value);
+    public void setEstadoCam(boolean value) {
+        this.estadoCam = value;
     }
 
-    public void setHt(String value) {
-        this.ht.set(value);
+    public void setHt(boolean value) {
+        this.ht = value;
     }
 
     public void setPrefixo(String value) {
         this.prefixo.set(value);
+    }
+
+    public void setTomboHT(String value) {
+        this.tomboHT.set(value);
     }
 
     public void setTipoPO(PO value) {
@@ -182,6 +224,22 @@ public class Viatura implements Serializable {
         this.vtrBaixada = value;
     }
 
+    public void setHoraInicialPlantao(LocalTime value) {
+        this.horaInicialPlantao = value;
+    }
+
+    public void setHoraFinalPlantao(LocalTime value) {
+        this.horaFinalPlantao = value;
+    }
+
+    public void setHoraPausa1(LocalTime value) {
+        this.horaPausa1 = value;
+    }
+
+    public void setHoraPausa2(LocalTime value) {
+        this.horaPausa2 = value;
+    }
+
     public void setHrDaBaixa(LocalTime value) {
         this.hrDaBaixa = value;
     }
@@ -193,43 +251,44 @@ public class Viatura implements Serializable {
         return this.id;
     }
 
-    public StringProperty estadoProperty() {
-        return this.estado;
-    }
-
-    public StringProperty estadoCamProperty() {
-        return this.estadoCam;
-    }
-
-    public StringProperty htProperty() {
-        return this.ht;
-    }
-
     public StringProperty prefixoProperty() {
         return this.prefixo;
     }
 
+    public StringProperty tomboHTProperty() {
+        return this.tomboHT;
+    }
+
     @Override
     public String toString() {
-        return "Viatura{" + "id=" + id + ", audio=" + audio + ", bcs=" + bcs + ", estado=" + estado + ", gps=" + gps + ", camera=" + camera + ", estadoCam=" + estadoCam + ", ht=" + ht + ", prefixo=" + prefixo + ", tipoPO=" + tipoPO + ", guarnicao=" + guarnicao + ", vtrBaixada=" + vtrBaixada + ", hrDaBaixa=" + hrDaBaixa + '}';
+        return "Viatura{" + "id=" + id + ", tipoPO=" + tipoPO.getNome() + ", prefixo=" + prefixo.getValue() + ", bcs="
+                + bcs + ", estadoGPS=" + estadoGPS + ", gps=" + gps + ", ht=" + ht + ", audio=" + audio + ", tomboHT="
+                + tomboHT.getValue() + ", camera=" + camera + ", estadoCam=" + estadoCam + ", horaInicialPlantao="
+                + horaInicialPlantao + ", horaFinalPlantao=" + horaFinalPlantao + ", horaPausa1=" + horaPausa1 + ", horaPausa2="
+                + horaPausa2 + ", vtrBaixada=" + vtrBaixada + ", hrDaBaixa=" + hrDaBaixa + ", guarnicao=" + guarnicao.size() + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.id);
-        hash = 29 * hash + (this.audio ? 1 : 0);
-        hash = 29 * hash + (this.bcs ? 1 : 0);
-        hash = 29 * hash + Objects.hashCode(this.estado);
-        hash = 29 * hash + (this.gps ? 1 : 0);
-        hash = 29 * hash + (this.camera ? 1 : 0);
-        hash = 29 * hash + Objects.hashCode(this.estadoCam);
-        hash = 29 * hash + Objects.hashCode(this.ht);
-        hash = 29 * hash + Objects.hashCode(this.prefixo);
-        hash = 29 * hash + Objects.hashCode(this.tipoPO);
-        hash = 29 * hash + Objects.hashCode(this.guarnicao);
-        hash = 29 * hash + (this.vtrBaixada ? 1 : 0);
-        hash = 29 * hash + Objects.hashCode(this.hrDaBaixa);
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.id);
+        hash = 17 * hash + Objects.hashCode(this.tipoPO);
+        hash = 17 * hash + Objects.hashCode(this.prefixo);
+        hash = 17 * hash + (this.bcs ? 1 : 0);
+        hash = 17 * hash + (this.estadoGPS ? 1 : 0);
+        hash = 17 * hash + (this.gps ? 1 : 0);
+        hash = 17 * hash + (this.ht ? 1 : 0);
+        hash = 17 * hash + (this.audio ? 1 : 0);
+        hash = 17 * hash + Objects.hashCode(this.tomboHT);
+        hash = 17 * hash + (this.camera ? 1 : 0);
+        hash = 17 * hash + (this.estadoCam ? 1 : 0);
+        hash = 17 * hash + Objects.hashCode(this.horaInicialPlantao);
+        hash = 17 * hash + Objects.hashCode(this.horaFinalPlantao);
+        hash = 17 * hash + Objects.hashCode(this.horaPausa1);
+        hash = 17 * hash + Objects.hashCode(this.horaPausa2);
+        hash = 17 * hash + (this.vtrBaixada ? 1 : 0);
+        hash = 17 * hash + Objects.hashCode(this.hrDaBaixa);
+        hash = 17 * hash + Objects.hashCode(this.guarnicao);
         return hash;
     }
 
@@ -245,16 +304,25 @@ public class Viatura implements Serializable {
             return false;
         }
         final Viatura other = (Viatura) obj;
-        if (this.audio != other.audio) {
+        if (this.bcs != other.bcs) {
             return false;
         }
-        if (this.bcs != other.bcs) {
+        if (this.estadoGPS != other.estadoGPS) {
             return false;
         }
         if (this.gps != other.gps) {
             return false;
         }
+        if (this.ht != other.ht) {
+            return false;
+        }
+        if (this.audio != other.audio) {
+            return false;
+        }
         if (this.camera != other.camera) {
+            return false;
+        }
+        if (this.estadoCam != other.estadoCam) {
             return false;
         }
         if (this.vtrBaixada != other.vtrBaixada) {
@@ -263,27 +331,34 @@ public class Viatura implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.estado, other.estado)) {
-            return false;
-        }
-        if (!Objects.equals(this.estadoCam, other.estadoCam)) {
-            return false;
-        }
-        if (!Objects.equals(this.ht, other.ht)) {
+        if (!Objects.equals(this.tipoPO, other.tipoPO)) {
             return false;
         }
         if (!Objects.equals(this.prefixo, other.prefixo)) {
             return false;
         }
-        if (!Objects.equals(this.tipoPO, other.tipoPO)) {
+        if (!Objects.equals(this.tomboHT, other.tomboHT)) {
             return false;
         }
-        if (!Objects.equals(this.guarnicao, other.guarnicao)) {
+        if (!Objects.equals(this.horaInicialPlantao, other.horaInicialPlantao)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaFinalPlantao, other.horaFinalPlantao)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaPausa1, other.horaPausa1)) {
+            return false;
+        }
+        if (!Objects.equals(this.horaPausa2, other.horaPausa2)) {
             return false;
         }
         if (!Objects.equals(this.hrDaBaixa, other.hrDaBaixa)) {
             return false;
         }
+        if (!Objects.equals(this.guarnicao, other.guarnicao)) {
+            return false;
+        }
         return true;
     }
+
 }

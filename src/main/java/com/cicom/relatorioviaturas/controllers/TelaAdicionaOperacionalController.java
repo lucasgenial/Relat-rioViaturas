@@ -68,9 +68,9 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private TabPane root;
     @FXML
-    private ComboBox<PO> cbTipoPO;
+    private ComboBox<PO> cbTipoPO = new ComboBox<>();
     @FXML
-    private ComboBox<Unidade> cbUnidade;
+    private ComboBox<Unidade> cbUnidade = new ComboBox<>();
     @FXML
     private TextField txtPrefixo;
     @FXML
@@ -78,7 +78,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private ToggleButton tbGPS;
     @FXML
-    private ToggleButton tbEstado;
+    private ToggleButton tbEstadoGPS;
     @FXML
     private ToggleButton tbHT;
     @FXML
@@ -96,7 +96,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private TableColumn<ServidorFuncao, Boolean> tbColumnAcaoServidor;
     @FXML
-    private ComboBox<Funcao> cbFuncao;
+    private ComboBox<Funcao> cbFuncao = new ComboBox<>();
     @FXML
     private TextField txtNomeServidor;
     @FXML
@@ -122,7 +122,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private Button btnSalvar;
     @FXML
-    private Button btnCancelar;
+    private Button btnVoltar;
     @FXML
     private Button btnAdicionarServidor;
 
@@ -135,7 +135,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private LocalTimeTextField horaPausa2Servidor;
     @FXML
-    private CheckBox chcMesmoHorario;
+    private CheckBox chcMesmoHorario = new CheckBox();
 
     private final PoDAO daoPO = new PoDAO();
     private final UnidadeDAO daoUnidade = new UnidadeDAO();
@@ -143,24 +143,23 @@ public class TelaAdicionaOperacionalController implements Initializable {
     private final RelatorioDiarioMesasDAO daoRelatorioMesa = new RelatorioDiarioMesasDAO();
     private final RelatorioDiarioViaturasDAO daoRelatorioViatura = new RelatorioDiarioViaturasDAO();
 
-    private String mensagemErroTela = "";
-    private String mensagemErroCorpo = "";
-
     private Viatura viatura;
     private Servidor servidor = new Servidor();
     private Funcao funcao = new Funcao();
     private ServidorFuncao servidorFuncao = new ServidorFuncao();
     private Set<ServidorFuncao> listaDeServidores = new HashSet<>();
     private List<Funcao> listaFuncao = new ArrayList<>();
+    private List<Unidade> listaUnidade = new ArrayList<>();
     private List<PO> listaPOS = new ArrayList<>();
     private PO tipoPO;
-    private String tituloMensagem;
-    private String corpoMensagem;
+    private String tituloMensagem = "";
+    private String corpoMensagem = "";
     private RelatorioDiarioMesas relatorioDeMesa;
     private RelatorioDiarioViaturas relatorioDeViatura;
     private Stage stage;
     private ViaturaDAO daoViatura = new ViaturaDAO();
     private boolean botaoSalvarClicado = false;
+    private ServidorFuncao servidorEditar;
 
     /**
      * Initializes the controller class.
@@ -189,6 +188,9 @@ public class TelaAdicionaOperacionalController implements Initializable {
                             txtNomeServidor.setDisable(false);
                             cbTipoPO.setDisable(false);
                             tableServidorGuarnicao.setDisable(false);
+                            btnAvancar.setDisable(true);
+                            tbViaturaAtiva.setDisable(true);
+                            horaBaixaViatura.setDisable(true);
                             if (viatura.isVtrBaixada()) {
                                 btnSalvar.setDisable(true);
                             } else {
@@ -262,6 +264,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     private void carregaDadosTablelaServidorGuarnicao(Set<ServidorFuncao> dados) {
 
         if (!dados.isEmpty()) {
+            tableServidorGuarnicao.getItems().clear();
             tableServidorGuarnicao.setDisable(false);
             tbColumnNomeServidor.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ServidorFuncao, String>, ObservableValue<String>>() {
                 @Override
@@ -291,11 +294,14 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
             tableServidorGuarnicao.getItems().addAll(FXCollections.observableSet(dados));
             tableServidorGuarnicao.setDisable(false);
+            btnSalvar.setDisable(false);
         } else {
             tableServidorGuarnicao.getItems().clear();
             btnAdicionarServidor.setText("Adicionar");
 
             limparDadosServidor();
+
+            btnSalvar.setDisable(true);
             tableServidorGuarnicao.setDisable(true);
         }
     }
@@ -323,7 +329,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
         //Retorna ao valor padrão
         tbAudio.setSelected(false);
         tbBCS.setSelected(false);
-        tbEstado.setSelected(false);
+        tbEstadoGPS.setSelected(false);
         tbGPS.setSelected(false);
         tbCamera.setSelected(false);
         tbEstadoCam.setSelected(false);
@@ -342,14 +348,15 @@ public class TelaAdicionaOperacionalController implements Initializable {
             clickedChcMesmoHorario();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(mensagemErroTela);
-            alert.setHeaderText(mensagemErroCorpo);
+            alert.setTitle(tituloMensagem);
+            alert.setHeaderText(corpoMensagem);
             alert.showAndWait();
         }
     }
-    
+
+    @FXML
     private void clickedChcMesmoHorario() {
-        if(chcMesmoHorario.isSelected()){
+        if (chcMesmoHorario.isSelected()) {
             //Pega os memos horários da viatura
             horaInicialPlantaoServidor.setLocalTime(horaInicialPlantaoViatura.getLocalTime());
             horaFinalPlantaoServidor.setLocalTime(horaFinalPlantaoViatura.getLocalTime());
@@ -359,7 +366,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
             horaFinalPlantaoServidor.setDisable(true);
             horaPausa1Servidor.setDisable(true);
             horaPausa2Servidor.setDisable(true);
-        } else{
+        } else {
             //Novos horarios para cada servidor
             horaInicialPlantaoServidor.setLocalTime(horaInicialPlantaoViatura.getLocalTime());
             horaFinalPlantaoServidor.setLocalTime(horaFinalPlantaoViatura.getLocalTime());
@@ -421,6 +428,10 @@ public class TelaAdicionaOperacionalController implements Initializable {
                         break;
                     }
 
+                    if (!verificaHoraViatura()) {
+                        break;
+                    }
+
                     retorno = true;
                 case "BARCO":
                     if (txtPrefixo.getText().isEmpty()) {
@@ -451,6 +462,10 @@ public class TelaAdicionaOperacionalController implements Initializable {
                         break;
                     }
 
+                    if (!verificaHoraViatura()) {
+                        break;
+                    }
+
                     retorno = true;
                 case "A PÉ":
                     if (listaDeServidores.isEmpty()) {
@@ -468,6 +483,34 @@ public class TelaAdicionaOperacionalController implements Initializable {
                     if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
                         tituloMensagem = "Erro Hora Baixa";
                         corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        break;
+                    }
+
+                    if (!verificaHoraViatura()) {
+                        break;
+                    }
+
+                    retorno = true;
+                case "MÓDULO":
+                    if (listaDeServidores.isEmpty()) {
+                        tituloMensagem = "Erro Guarnição";
+                        corpoMensagem = "Para o Tipo P.O. selecionado, \n é necessário cadastrar ao menos 1 servidor!";
+                        break;
+                    }
+
+                    if (tbHT.isSelected() && txtTomboHT.getText() == null) {
+                        tituloMensagem = "Erro Tombo HT";
+                        corpoMensagem = "A opção HT foi selecionada, devendo ser fornecido o tombo do mesmo!";
+                        break;
+                    }
+
+                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                        tituloMensagem = "Erro Hora Baixa";
+                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        break;
+                    }
+
+                    if (!verificaHoraViatura()) {
                         break;
                     }
 
@@ -500,6 +543,9 @@ public class TelaAdicionaOperacionalController implements Initializable {
                         corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
                         break;
                     }
+                    if (!verificaHoraViatura()) {
+                        break;
+                    }
 
                     retorno = true;
             }
@@ -509,6 +555,108 @@ public class TelaAdicionaOperacionalController implements Initializable {
         }
 
         return retorno;
+    }
+
+    private boolean verificaHoraViatura() {
+        if (horaInicialPlantaoViatura.getLocalTime() == null) {
+            //Pop-up informando o cadastro
+            tituloMensagem = "Erro Hora Incial Plantão";
+            corpoMensagem = "É necessário Informar o hora do inicio do plantão deste PO!";
+            return false;
+        }
+
+        if (horaFinalPlantaoViatura.getLocalTime() == null) {
+            //Pop-up informando o cadastro
+            tituloMensagem = "Erro Hora Final Plantão";
+            corpoMensagem = "É necessário Informar o hora do final do plantão deste PO!";
+            return false;
+        }
+
+        if (horaPausa1Viatura.getLocalTime() == null && horaPausa2Viatura.getLocalTime() != null) {
+            //Pop-up informando o cadastro
+            tituloMensagem = "Erro Hora Pausa 2";
+            corpoMensagem = "Não é possivel cadastrar pausa2 antes da hora da pausa1!";
+            return false;
+        }
+
+        //É antes
+        if ((horaFinalPlantaoViatura.getLocalTime() != null && horaInicialPlantaoViatura.getLocalTime() != null)
+                && horaFinalPlantaoViatura.getLocalTime().isBefore(horaInicialPlantaoViatura.getLocalTime())) {
+            if (relatorioDeMesa.getDataFinal().equals(relatorioDeMesa.getDataInicial())) {
+                tituloMensagem = "Data Inválida";
+                corpoMensagem = "Corrija o campo Hora Plantão Inicial!\nEsta não poderá anterior a Hora de saída!";
+                return false;
+            }
+        }
+
+        if ((horaPausa2Viatura.getLocalTime() != null && horaPausa1Viatura.getLocalTime() != null)
+                && horaPausa2Viatura.getLocalTime().isBefore(horaPausa1Viatura.getLocalTime())) {
+            if (relatorioDeMesa.getDataFinal().equals(relatorioDeMesa.getDataInicial())) {
+                tituloMensagem = "Data Inválida";
+                corpoMensagem = "Corrija o campo Hora da Pausa2!\nEsta não poderá ser anterior a Hora da Pausa1!";
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean verificaHoraServidor() {
+        if (horaInicialPlantaoServidor.getLocalTime() == null) {
+            //Pop-up informando o cadastro
+            tituloMensagem = "Erro Hora Incial Plantão";
+            corpoMensagem = "É necessário Informar o hora do inicio do plantão deste Servidor!";
+            return false;
+        }
+
+        if (horaInicialPlantaoServidor.getLocalTime().isBefore(horaInicialPlantaoViatura.getLocalTime())) {
+            //Pop-up informando o cadastro
+            tituloMensagem = "Erro Hora Incial Plantão";
+            corpoMensagem = "A hora do inicio do plantão deste servidor não poderá ser\n"
+                    + "inferior a hora inicial do plantão deste PO!";
+            return false;
+        }
+
+        if (horaFinalPlantaoServidor.getLocalTime() == null) {
+            //Pop-up informando o cadastro
+            tituloMensagem = "Erro Hora Final Plantão";
+            corpoMensagem = "É necessário Informar o hora do final do plantão deste Servidor!";
+            return false;
+        }
+
+        if (horaFinalPlantaoServidor.getLocalTime().isAfter(horaFinalPlantaoViatura.getLocalTime())) {
+            //Pop-up informando o cadastro
+            tituloMensagem = "Erro Hora Final Plantão";
+            corpoMensagem = "A hora do fim do plantão do servidor não poderá ser\n"
+                    + "superior a hora final do plantão deste PO!";
+            return false;
+        }
+
+        if (horaPausa1Servidor.getLocalTime() == null && horaPausa2Servidor.getLocalTime() != null) {
+            //Pop-up informando o cadastro
+            tituloMensagem = "Erro Hora Pausa 2";
+            corpoMensagem = "Não é possivel cadastrar pausa2 antes da hora da pausa1 deste Servidor!";
+            return false;
+        }
+
+        //É antes
+        if ((horaFinalPlantaoServidor.getLocalTime() != null && horaInicialPlantaoServidor.getLocalTime() != null)
+                && horaFinalPlantaoServidor.getLocalTime().isBefore(horaInicialPlantaoServidor.getLocalTime())) {
+            if (relatorioDeMesa.getDataFinal().equals(relatorioDeMesa.getDataInicial())) {
+                tituloMensagem = "Data Inválida";
+                corpoMensagem = "Corrija o campo Hora Plantão Inicial!\nEsta não poderá anterior a Hora de saída deste Servidor!";
+                return false;
+            }
+        }
+
+        if ((horaPausa2Servidor.getLocalTime() != null && horaPausa1Servidor.getLocalTime() != null)
+                && horaPausa2Servidor.getLocalTime().isBefore(horaPausa1Servidor.getLocalTime())) {
+            if (relatorioDeMesa.getDataFinal().equals(relatorioDeMesa.getDataInicial())) {
+                tituloMensagem = "Data Inválida";
+                corpoMensagem = "Corrija o campo Hora da Pausa2!\nEsta não poderá ser anterior a Hora da Pausa1 deste Servidor!";
+                return false;
+            }
+        }
+        return true;
     }
 
     @FXML
@@ -578,70 +726,73 @@ public class TelaAdicionaOperacionalController implements Initializable {
             if (viatura == null) {
                 viatura = new Viatura();
 
-                viatura.setAudio(tbAudio.isSelected());
+                viatura.setTipoPO(tipoPO);
+                viatura.setPrefixo(txtPrefixo.getText());
+
+                //horario
+                viatura.setHoraInicialPlantao(horaInicialPlantaoViatura.getLocalTime());
+                viatura.setHoraFinalPlantao(horaFinalPlantaoViatura.getLocalTime());
+                viatura.setHoraPausa1(horaPausa1Viatura.getLocalTime());
+                viatura.setHoraPausa2(horaPausa2Viatura.getLocalTime());
+
+                //BCS
                 viatura.setBcs(tbBCS.isSelected());
+
+                //GPS
                 viatura.setGps(tbGPS.isSelected());
+                viatura.setEstadoGPS(tbEstadoGPS.isSelected());
+
+                //HT e Audio
+                viatura.setHt(tbHT.isSelected());
+                viatura.setAudio(tbAudio.isSelected());
+                viatura.setTomboHT(txtTomboHT.getText());
+
+                //Camera
                 viatura.setCamera(tbCamera.isSelected());
+                viatura.setEstadoCam(tbEstadoCam.isSelected());
+
+                //Baixa Viatura
                 viatura.setVtrBaixada(tbViaturaAtiva.isSelected());
                 viatura.setHrDaBaixa(horaBaixaViatura.getLocalTime());
 
-                //Verifica estado GPS
-                if (tbEstado.isSelected()) {
-                    viatura.setEstado("ATIVO");
-                } else {
-                    viatura.setEstado("INATIVO");
-                }
-
-                //Verifica estado Camera
-                if (tbEstadoCam.isSelected()) {
-                    viatura.setEstadoCam("ATIVO");
-                } else {
-                    viatura.setEstadoCam("INATIVO");
-                }
-
-                //Verfica estado HT
-                if (tbHT.isSelected()) {
-                    viatura.setHt("POSSUI");
-                } else {
-                    viatura.setHt("NÃO POSSUI");
-                }
-
+                //Guarnicao
                 viatura.setGuarnicao(listaDeServidores);
-                viatura.setPrefixo(txtPrefixo.getText());
-                viatura.setTipoPO(tipoPO);
 
                 relatorioDeViatura.getViaturas().add(viatura);
 
                 root.getScene().getWindow().hide();
             } else {
-                viatura.setAudio(tbAudio.isSelected());
+                viatura.setTipoPO(tipoPO);
+                viatura.setPrefixo(txtPrefixo.getText());
+
+                //horario
+                viatura.setHoraInicialPlantao(horaInicialPlantaoViatura.getLocalTime());
+                viatura.setHoraFinalPlantao(horaFinalPlantaoViatura.getLocalTime());
+                viatura.setHoraPausa1(horaPausa1Viatura.getLocalTime());
+                viatura.setHoraPausa2(horaPausa2Viatura.getLocalTime());
+
+                //BCS
                 viatura.setBcs(tbBCS.isSelected());
+
+                //GPS
                 viatura.setGps(tbGPS.isSelected());
+                viatura.setEstadoGPS(tbEstadoGPS.isSelected());
+
+                //HT e Audio
+                viatura.setHt(tbHT.isSelected());
+                viatura.setAudio(tbAudio.isSelected());
+                viatura.setTomboHT(txtTomboHT.getText());
+
+                //Camera
                 viatura.setCamera(tbCamera.isSelected());
+                viatura.setEstadoCam(tbEstadoCam.isSelected());
+
+                //Baixa Viatura
                 viatura.setVtrBaixada(tbViaturaAtiva.isSelected());
                 viatura.setHrDaBaixa(horaBaixaViatura.getLocalTime());
 
-                //Verifica estado GPS
-                if (tbEstado.isSelected()) {
-                    viatura.setEstado("ATIVO");
-                } else {
-                    viatura.setEstado("INATIVO");
-                }
-
-                //Verfica estado HT
-                if (tbHT.isSelected()) {
-                    viatura.setHt("POSSUI");
-                } else {
-                    viatura.setHt("NÃO POSSUI");
-                }
-                //Limpa os servidores
-                viatura.getGuarnicao().clear();
-
-                //adiciona os servidores novos
+                //Guarnicao
                 viatura.setGuarnicao(listaDeServidores);
-
-                viatura.setPrefixo(txtPrefixo.getText());
-                viatura.setTipoPO(tipoPO);
 
                 root.getScene().getWindow().hide();
             }
@@ -657,7 +808,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
     }
 
     @FXML
-    private void clickedBtVoltar() {
+    private void clickedBtnVoltar() {
         Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
         alertAntesExcluir.setTitle("Atenção!");
         alertAntesExcluir.setHeaderText("Os dados informados serão perdidos, deseja continuar?");
@@ -685,24 +836,79 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
     @FXML
     private void clickedBtnAdicionarServidor(MouseEvent event) {
-        listaDeServidores.add(new ServidorFuncao(servidor, funcao, horaInicialPlantaoServidor.getLocalTime(),
-                horaFinalPlantaoServidor.getLocalTime(), horaPausa1Servidor.getLocalTime(), horaPausa2Servidor.getLocalTime(), true));
+        if (btnAdicionarServidor.getText().equalsIgnoreCase("novo")) {
+            servidorEditar = null;
+            servidor = null;
+            funcao = null;
 
-        //Carrega os dados na tabela Servidores
-        carregaDadosTablelaServidorGuarnicao(listaDeServidores);
+            //Desabilitar e Limpa dados para um novo ServidorFunção
+            cbFuncao.setValue(null);
+            cbFuncao.setDisable(true);
+            txtNomeServidor.clear();
+            txtNomeServidor.setDisable(false);
+            servidor = null;
+            
+            btnAdicionarServidor.setDisable(true);
+            btnAdicionarServidor.setText("Adicionar");
 
-        //Desabilitar e Limpa dados para um novo ServidorFunção
-        cbFuncao.setValue(null);
-        cbFuncao.setDisable(true);
-        txtNomeServidor.clear();
-        servidor = null;
+        } else if (btnAdicionarServidor.getText().equalsIgnoreCase("Salvar")) {
+            if (verificaHoraServidor()) {
+                servidorEditar.setFuncao(funcao);
+                servidorEditar.setHoraInicialPlantao(horaInicialPlantaoServidor.getLocalTime());
+                servidorEditar.setHoraFinalPlantao(horaFinalPlantaoServidor.getLocalTime());
+                servidorEditar.setHoraPausa1(horaPausa1Servidor.getLocalTime());
+                servidorEditar.setHoraPausa2(horaPausa2Servidor.getLocalTime());
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Servidor Adicionado");
-        alert.setHeaderText("Servidor adicionado!");
-        alert.showAndWait();
+                //Carrega os dados na tabela Servidores
+                carregaDadosTablelaServidorGuarnicao(listaDeServidores);
+                servidorEditar = null;
+                servidor = null;
+                funcao = null;
+
+                //Desabilitar e Limpa dados para um novo ServidorFunção
+                cbFuncao.setValue(null);
+                cbFuncao.setDisable(true);
+                txtNomeServidor.clear();
+                servidor = null;
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Servidor Adicionado");
+                alert.setHeaderText("Servidor adicionado!");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(tituloMensagem);
+                alert.setHeaderText(corpoMensagem);
+                alert.showAndWait();
+            }
+
+        } else {
+            if (verificaHoraServidor()) {
+                listaDeServidores.add(new ServidorFuncao(servidor, funcao, horaInicialPlantaoServidor.getLocalTime(),
+                        horaFinalPlantaoServidor.getLocalTime(), horaPausa1Servidor.getLocalTime(), horaPausa2Servidor.getLocalTime(), true));
+
+                //Carrega os dados na tabela Servidores
+                carregaDadosTablelaServidorGuarnicao(listaDeServidores);
+
+                //Desabilitar e Limpa dados para um novo ServidorFunção
+                cbFuncao.setValue(null);
+                cbFuncao.setDisable(true);
+                txtNomeServidor.clear();
+                servidor = null;
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Servidor Adicionado");
+                alert.setHeaderText("Servidor adicionado!");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(tituloMensagem);
+                alert.setHeaderText(corpoMensagem);
+                alert.showAndWait();
+            }
+        }
     }
-    
+
     @FXML
     private void clickedTbGPS() {
         if (tbGPS.isSelected()) {
@@ -711,7 +917,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
             tbGPS.setText("Sem GPS");
         }
     }
-    
+
     @FXML
     private void clickedTbBCS() {
         if (tbBCS.isSelected()) {
@@ -751,10 +957,10 @@ public class TelaAdicionaOperacionalController implements Initializable {
     @FXML
     private void clickedTbHT() {
         if (tbHT.isSelected()) {
-            Alert alertVoltar = new Alert(Alert.AlertType.INFORMATION);
-            alertVoltar.setTitle("Atenção!");
-            alertVoltar.setHeaderText("Informe o tombo do HT");
-            alertVoltar.getButtonTypes().clear();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Atenção!");
+            alert.setHeaderText("Informe o tombo do HT");
+            alert.getButtonTypes().clear();
 
             tbHT.setText("Possui HT");
             txtTomboHT.setDisable(false);
@@ -779,10 +985,10 @@ public class TelaAdicionaOperacionalController implements Initializable {
         if (tbViaturaAtiva.isSelected()) {
 
             if (horaBaixaViatura.getLocalTime() == null) {
-                Alert alertVoltar = new Alert(Alert.AlertType.ERROR);
-                alertVoltar.setTitle("Atenção!");
-                alertVoltar.setHeaderText("Informe o horário da Baixa da Viatura");
-                alertVoltar.getButtonTypes().clear();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Atenção!");
+                alert.setHeaderText("Informe o horário da Baixa da Viatura");
+                alert.getButtonTypes().clear();
 
                 tbViaturaAtiva.setSelected(false);
                 tbViaturaAtiva.setText("Ativa");
@@ -829,6 +1035,23 @@ public class TelaAdicionaOperacionalController implements Initializable {
         if (value != null) {
 
             this.viatura = new Viatura();
+            this.viatura.setId(value.getId());
+
+            this.cbUnidade.setConverter(new StringConverter<Unidade>() {
+                @Override
+                public String toString(Unidade item) {
+                    if (item != null) {
+                        return item.getNome() + " - " + item.getComandoDeArea();
+                    }
+                    return "";
+                }
+
+                @Override
+                public Unidade fromString(String string) {
+                    return daoUnidade.buscaPorNome(string);
+                }
+            });
+            this.cbUnidade.getSelectionModel().select(relatorioDeViatura.getUnidade());
 
             this.cbTipoPO.setConverter(new StringConverter<PO>() {
                 @Override
@@ -845,30 +1068,34 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 }
             });
             this.cbTipoPO.getSelectionModel().select(value.getTipoPO());
-
-            this.viatura.setId(value.getId());
             this.tipoPO = value.getTipoPO();
+
+            //Horário
             this.txtPrefixo.setText(value.getPrefixo());
+            this.horaInicialPlantaoViatura.setLocalTime(value.getHoraInicialPlantao());
+            this.horaFinalPlantaoViatura.setLocalTime(value.getHoraFinalPlantao());
+            this.horaPausa1Viatura.setLocalTime(value.getHoraPausa1());
+            this.horaPausa2Viatura.setLocalTime(value.getHoraPausa2());
+
+            //BCS
             this.tbBCS.setSelected(value.isBcs());
+
+            //GPS
             this.tbGPS.setSelected(value.isGps());
+            this.tbEstadoGPS.setSelected(value.isEstadoGPS());
+
+            //Audio HT
+            this.tbHT.setSelected(value.isHt());
+            this.tbAudio.setSelected(value.isAudio());
+            this.txtTomboHT.setText(value.getTomboHT());
+
+            //CAMERA
             this.tbCamera.setSelected(value.isCamera());
+            this.tbEstadoCam.setSelected(value.isCamera());
+
+            //Viatura Baixada
             this.tbViaturaAtiva.setSelected(value.isVtrBaixada());
             this.horaBaixaViatura.setLocalTime(value.getHrDaBaixa());
-
-            if (value.getHt().equals("POSSUI")) {
-                this.tbHT.setSelected(true);
-
-            } else {
-                this.tbHT.setSelected(false);
-            }
-
-            this.tbAudio.setSelected(value.isAudio());
-
-            if (value.getHt().equals("ATIVO")) {
-                this.tbEstado.setSelected(true);
-            } else {
-                this.tbEstado.setSelected(false);
-            }
 
             verificaTipoPO(value.getTipoPO());
 
@@ -877,7 +1104,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
             carregaDadosTablelaServidorGuarnicao(value.getGuarnicao());
         }
     }
-    
+
     public RelatorioDiarioViaturas getRelatorioDeViatura() {
         return this.relatorioDeViatura;
     }
@@ -887,11 +1114,12 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
         if (value != null) {
             listaPOS.addAll(relatorioDeViatura.getUnidade().getPos());
+            listaUnidade.add(relatorioDeViatura.getUnidade());
             cbUnidade.setConverter(new StringConverter<Unidade>() {
                 @Override
                 public String toString(Unidade item) {
                     if (item != null) {
-                        return item.getNome();
+                        return item.getNome() + " - " + item.getComandoDeArea();
                     }
                     return "";
                 }
@@ -902,7 +1130,8 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 }
 
             });
-            cbUnidade.setValue(value.getUnidade());
+            cbUnidade.getItems().addAll(listaUnidade);
+            cbUnidade.getSelectionModel().select(value.getUnidade());
         }
     }
 
@@ -911,62 +1140,111 @@ public class TelaAdicionaOperacionalController implements Initializable {
             switch (tipoPO.getNome()) {
                 case "VIATURA 2 RODAS":
                     txtPrefixo.setDisable(false);
-                    tbAudio.setDisable(false);
+                    //Habilita as horas
+                    horaInicialPlantaoViatura.setDisable(false);
+                    horaFinalPlantaoViatura.setDisable(false);
+                    horaPausa1Viatura.setDisable(false);
+                    horaPausa2Viatura.setDisable(false);
+
+                    //Habilita os itens do PO
                     tbBCS.setDisable(false);
-                    tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
-                    tbCamera.setDisable(false);
-                    horaBaixaViatura.setDisable(false);
+                    tbEstadoGPS.setDisable(false);
                     tbHT.setDisable(false);
-                    txtNomeServidor.setDisable(false);
+                    tbAudio.setDisable(false);
+                    tbCamera.setDisable(true);
+                    tbEstadoCam.setDisable(true);
                     break;
                 case "BARCO":
                     txtPrefixo.setDisable(false);
-                    tbAudio.setDisable(false);
+                    //Habilita as horas
+                    horaInicialPlantaoViatura.setDisable(false);
+                    horaFinalPlantaoViatura.setDisable(false);
+                    horaPausa1Viatura.setDisable(false);
+                    horaPausa2Viatura.setDisable(false);
+
+                    //Habilita os itens do PO
                     tbBCS.setDisable(false);
-                    tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
-                    tbCamera.setDisable(false);
-                    horaBaixaViatura.setDisable(false);
+                    tbEstadoGPS.setDisable(false);
                     tbHT.setDisable(false);
-                    txtNomeServidor.setDisable(false);
+                    tbAudio.setDisable(false);
+                    tbCamera.setDisable(false);
+                    tbEstadoCam.setDisable(false);
                     break;
                 case "A PÉ":
-                    tbAudio.setDisable(false);
-                    tbBCS.setDisable(true);
-                    tbEstado.setDisable(false);
-                    tbGPS.setDisable(false);
-                    tbCamera.setDisable(false);
-                    horaBaixaViatura.setDisable(false);
+                    txtPrefixo.setDisable(true);
+                    //Habilita as horas
+                    horaInicialPlantaoViatura.setDisable(false);
+                    horaFinalPlantaoViatura.setDisable(false);
+                    horaPausa1Viatura.setDisable(false);
+                    horaPausa2Viatura.setDisable(false);
+
+                    //Habilita os itens do PO
+                    tbBCS.setDisable(false);
+                    tbGPS.setDisable(true);
+                    tbEstadoGPS.setDisable(true);
                     tbHT.setDisable(false);
-                    txtNomeServidor.setDisable(false);
+                    tbAudio.setDisable(false);
+                    tbCamera.setDisable(true);
+                    tbEstadoCam.setDisable(true);
+                    break;
+                case "MÓDULO":
+                    txtPrefixo.setDisable(true);
+                    //Habilita as horas
+                    horaInicialPlantaoViatura.setDisable(false);
+                    horaFinalPlantaoViatura.setDisable(false);
+                    horaPausa1Viatura.setDisable(false);
+                    horaPausa2Viatura.setDisable(false);
+
+                    //Habilita os itens do PO
+                    tbBCS.setDisable(false);
+                    tbGPS.setDisable(true);
+                    tbEstadoGPS.setDisable(true);
+                    tbHT.setDisable(false);
+                    tbAudio.setDisable(false);
+                    tbCamera.setDisable(true);
+                    tbEstadoCam.setDisable(true);
                     break;
                 case "VIATURA 4 RODAS":
                     txtPrefixo.setDisable(false);
-                    tbAudio.setDisable(false);
+                    //Habilita as horas
+                    horaInicialPlantaoViatura.setDisable(false);
+                    horaFinalPlantaoViatura.setDisable(false);
+                    horaPausa1Viatura.setDisable(false);
+                    horaPausa2Viatura.setDisable(false);
+
+                    //Habilita os itens do PO
                     tbBCS.setDisable(false);
-                    tbEstado.setDisable(false);
                     tbGPS.setDisable(false);
-                    tbCamera.setDisable(false);
-                    horaBaixaViatura.setDisable(false);
+                    tbEstadoGPS.setDisable(false);
                     tbHT.setDisable(false);
-                    txtNomeServidor.setDisable(false);
+                    tbAudio.setDisable(false);
+                    tbCamera.setDisable(false);
+                    tbEstadoCam.setDisable(false);
                     break;
                 default:
                     txtPrefixo.setDisable(true);
-                    tbAudio.setDisable(true);
+                    //Habilita as horas
+                    horaInicialPlantaoViatura.setDisable(true);
+                    horaFinalPlantaoViatura.setDisable(true);
+                    horaPausa1Viatura.setDisable(true);
+                    horaPausa2Viatura.setDisable(true);
+
+                    //Habilita os itens do PO
                     tbBCS.setDisable(true);
-                    tbEstado.setDisable(true);
                     tbGPS.setDisable(true);
-                    tbCamera.setDisable(false);
-                    horaBaixaViatura.setDisable(false);
+                    tbEstadoGPS.setDisable(true);
                     tbHT.setDisable(true);
-                    txtNomeServidor.setDisable(true);
+                    tbAudio.setDisable(true);
+                    tbCamera.setDisable(true);
+                    tbEstadoCam.setDisable(true);
+                    txtTomboHT.setDisable(true);
                     break;
             }
 
             //Habilita Botão Salvar
-            btnSalvar.setDisable(false);
+            btnAvancar.setDisable(false);
         }
 
         //Trocar os nomes
@@ -1036,7 +1314,7 @@ public class TelaAdicionaOperacionalController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent t) {
-                    ServidorFuncao servidorEditar = (ServidorFuncao) tblView.getItems().get(getIndex());
+                    servidorEditar = (ServidorFuncao) tblView.getItems().get(getIndex());
 
                     if (servidorEditar != null) {
                         txtNomeServidor.setText(servidorEditar.getServidor().getNome());
@@ -1069,22 +1347,22 @@ public class TelaAdicionaOperacionalController implements Initializable {
                 ServidorFuncao servidorRemover = (ServidorFuncao) tblView.getItems().get(getIndex());
 
                 if (servidorRemover != null) {
-                    Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
-                    alertVoltar.setTitle("Atenção!");
-                    alertVoltar.setHeaderText("Os dados referentes à este Servidor serão perdidos, deseja continuar?");
-                    alertVoltar.getButtonTypes().clear();
-                    alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Atenção!");
+                    alert.setHeaderText("Os dados referentes à este Servidor serão perdidos, deseja continuar?");
+                    alert.getButtonTypes().clear();
+                    alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
 
                     //Deactivate Defaultbehavior for yes-Button:
-                    Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+                    Button yesButton = (Button) alert.getDialogPane().lookupButton(ButtonType.YES);
                     yesButton.setDefaultButton(false);
 
                     //Activate Defaultbehavior for no-Button:
-                    Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+                    Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
                     noButton.setDefaultButton(true);
 
                     //Pega qual opção o usuario pressionou
-                    final Optional<ButtonType> resultado1 = alertVoltar.showAndWait();
+                    final Optional<ButtonType> resultado1 = alert.showAndWait();
 
                     if (resultado1.get() == ButtonType.YES) {
                         listaDeServidores.remove(servidorRemover);
@@ -1125,5 +1403,4 @@ public class TelaAdicionaOperacionalController implements Initializable {
     public void setBotaoSalvarClicado(boolean botaoSalvarClicado) {
         this.botaoSalvarClicado = botaoSalvarClicado;
     }
-
 }
