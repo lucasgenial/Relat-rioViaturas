@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+  <tabs>
+    <Tab text="INSTITUIÇÃO">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Text layoutX="11.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INSTITUIÇÕES CADASTRADAS" />
+                  <Label layoutX="15.0" layoutY="41.0" text="Nome" />
+                  <TextField fx:id="txtNomeBuscaInstituicao" layoutX="12.0" layoutY="62.0" prefHeight="25.0" prefWidth="461.0" promptText="Informe o nome da INSTITUIÇÃO" />
+                  <Button fx:id="btnNovoInstituicao" layoutX="489.0" layoutY="62.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="NOVO" />
+                  <Separator layoutY="35.0" prefHeight="2.0" prefWidth="600.0" />
+                  <Label layoutX="12.0" layoutY="96.0" text="Resultado da Busca" />
+                  <TableView layoutX="15.0" layoutY="113.0" prefHeight="200.0" prefWidth="569.0">
+                    <columns>
+                      <TableColumn prefWidth="47.0" text="ID" />
+                      <TableColumn fx:id="tableListaInstituicao" prefWidth="386.0" text="INSTITUIÇÃO" />
+                        <TableColumn minWidth="0.0" prefWidth="135.0" text="AÇÃO" />
+                    </columns>
+                  </TableView>
+                  <Button fx:id="btnVoltarInstituicao" layoutX="489.0" layoutY="323.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="VOLTAR" />
+               </children></AnchorPane>
+      </content>
+    </Tab>
+  </tabs>
+</TabPane>

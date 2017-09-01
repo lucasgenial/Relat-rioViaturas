@@ -19,12 +19,13 @@ import com.cicom.relatorioviaturas.model.Unidade;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 public class MainApp extends Application {
 
@@ -35,14 +36,17 @@ public class MainApp extends Application {
         setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SplashScreen.fxml"));
 
-        Image iconApp = new Image(getClass().getResourceAsStream("/Imagens/ic_app_sisef.png"));
-        stage.getIcons().add(iconApp);
-
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setResizable(false);
         stage.centerOnScreen();
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                System.exit(0);
+            }
+        });
         stage.show();
     }
 
@@ -159,7 +163,7 @@ public class MainApp extends Application {
         und1.setPos(listaDePOs);
         und2.setPos(listaDePOs);
         und3.setPos(listaDePOs);
-        
+
         UnidadeDAO daoUnidade = new UnidadeDAO();
         daoUnidade.salvar(und1);
         daoUnidade.salvar(und2);

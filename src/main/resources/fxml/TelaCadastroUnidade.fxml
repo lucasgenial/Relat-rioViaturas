@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.collections.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.Pane?>
 
-<Pane fx:id="root" prefHeight="292.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaCadastroUnidadeController">
+<Pane fx:id="root" prefHeight="292.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaCadastroUnidadeController">
     <children>
         <Label layoutX="17.0" layoutY="3.0" text="Selecione a Unidade" />
         <TableView fx:id="tableUnidadesDisponiveis" layoutX="17.0" layoutY="22.0" prefHeight="236.0" prefWidth="517.0">
@@ -20,12 +17,12 @@
                         <PropertyValueFactory property="id" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="colNomeUnidade" prefWidth="343.0" resizable="false" text="Nome Unidade">
+                <TableColumn fx:id="colNomeUnidade" prefWidth="202.0" resizable="false" text="INSTITUIÇÃO">
                     <cellValueFactory>
                         <PropertyValueFactory property="nome" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="colNomeCmdUnidade" prefWidth="137.0" resizable="false" text="Comando de Área">
+                <TableColumn fx:id="colNomeCmdUnidade" prefWidth="278.0" resizable="false" text="NOME DA UNIDADE">
                     <cellValueFactory>
                         <PropertyValueFactory property="comandoDeArea" />
                     </cellValueFactory>

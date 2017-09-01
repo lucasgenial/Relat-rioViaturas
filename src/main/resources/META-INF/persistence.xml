@@ -9,8 +9,8 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sisef_atual"/>
             <property name="javax.persistence.jdbc.user" value="cicom"/>
             <property name="javax.persistence.jdbc.password" value="nac@2016"/>
-            <property name="javax.persistence.validation.group.pre-persist" value="javax.validation.groups.Default"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+            <!--<property name="javax.persistence.validation.group.pre-persist" value="javax.validation.groups.Default"/>-->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
             
             <!--<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>-->

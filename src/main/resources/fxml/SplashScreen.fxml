@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<StackPane fx:id="painelPrincipal" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.SplashScreenController">
+<StackPane fx:id="painelPrincipal" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.SplashScreenController">
    <children>
       <ImageView fitHeight="579.0" fitWidth="768.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -18,10 +17,15 @@
       <Pane prefHeight="200.0" prefWidth="200.0">
          <children>
             <Label layoutX="132.0" layoutY="381.0" prefHeight="83.0" prefWidth="546.0" text="Label" />
-            <Label layoutX="221.0" layoutY="354.0" text="Carregando..." textFill="WHITE">
+            <Label layoutX="236.0" layoutY="375.0" text="Carregando..." textFill="WHITE">
                <font>
                   <Font name="System Italic" size="18.0" />
                </font></Label>
+            <ImageView fitHeight="36.0" fitWidth="163.0" layoutX="256.0" layoutY="404.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Imagens/LoadingBar.gif" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
    </children>
