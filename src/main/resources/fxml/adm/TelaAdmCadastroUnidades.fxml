@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<TabPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="455.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroUnidadesController">
+<TabPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="455.0" minWidth="580.0" prefHeight="455.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.adm.TelaAdmCadastroUnidadesController">
     <tabs>
         <Tab fx:id="tabCadastro" text="Cadastro">
             <content>
@@ -31,23 +31,25 @@
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
                         <TextField fx:id="txtNomeUnidade" layoutX="12.0" layoutY="63.0" prefHeight="25.0" prefWidth="549.0" promptText="Nome" />
-                        <Label layoutX="25.0" layoutY="171.0" prefHeight="17.0" prefWidth="112.0" text="P.O.">
+                  <Label layoutX="14.0" layoutY="98.0" text="Instituição/Unidade">
                      <font>
                         <Font name="System Bold" size="12.0" />
-                     </font></Label>
-                        <ComboBox fx:id="cbTipoPO" layoutX="24.0" layoutY="188.0" prefHeight="25.0" prefWidth="449.0" promptText="Selecione o P.O." />
-                        <Button fx:id="btnCadastrar" layoutX="386.0" layoutY="386.0" mnemonicParsing="false" onMouseClicked="#clickedBtnCadastrarUnidade" text="CADASTRAR" />
-                        <Button fx:id="btnVoltar" layoutX="479.0" layoutY="386.0" mnemonicParsing="false" onMouseClicked="#clickedBtnVoltar" prefHeight="25.0" prefWidth="85.0" text="VOLTAR" />
-                        <Separator layoutX="120.0" layoutY="150.0" prefHeight="14.0" prefWidth="445.0" />
-                        <Separator layoutX="15.0" layoutY="373.0" prefHeight="8.0" prefWidth="550.0" />
-                        <Separator layoutX="8.0" layoutY="156.0" orientation="VERTICAL" prefHeight="220.0" prefWidth="13.0" />
-                        <Separator layoutX="559.0" layoutY="157.0" orientation="VERTICAL" prefHeight="219.0" prefWidth="13.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtNomeInstituicaoUnidade" layoutX="12.0" layoutY="115.0" prefHeight="25.0" prefWidth="549.0" promptText="Nome" />
                         <Label layoutX="22.0" layoutY="149.0" prefHeight="15.0" prefWidth="123.0" text="Controle de P.O.">
                             <font>
                                 <Font name="Roboto" size="12.0" />
                             </font>
                         </Label>
-                        <Button fx:id="btnInserirPO" layoutX="481.0" layoutY="188.0" mnemonicParsing="false" onMouseClicked="#clickedBtnInserirPO" prefHeight="25.0" prefWidth="72.0" text="INSERIR" />
+                        <Separator layoutX="120.0" layoutY="150.0" prefHeight="14.0" prefWidth="445.0" />
+                        <Separator layoutX="8.0" layoutY="156.0" orientation="VERTICAL" prefHeight="220.0" prefWidth="13.0" />
+                        <Label layoutX="25.0" layoutY="171.0" prefHeight="17.0" prefWidth="112.0" text="P.O.">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                        <ComboBox fx:id="cbTipoPO" layoutX="24.0" layoutY="188.0" prefHeight="25.0" prefWidth="449.0" promptText="Selecione o P.O." />
+                        <Button fx:id="btnInserirPO" layoutX="481.0" layoutY="188.0" minHeight="25.0" minWidth="72.0" mnemonicParsing="false" onMouseClicked="#clickedBtnInserirPO" prefHeight="25.0" prefWidth="72.0" text="INSERIR" />
                         <TableView fx:id="tablePO" layoutX="23.0" layoutY="223.0" prefHeight="143.0" prefWidth="532.0">
                             <columns>
                                 <TableColumn fx:id="tbColumnIdPO" prefWidth="42.0" text="ID">
@@ -59,17 +61,15 @@
                                 <TableColumn fx:id="tbColumnAcaoPO" minWidth="0.0" prefWidth="123.0" text="AÇÃO" />
                             </columns>
                         </TableView>
-                  <Label layoutX="14.0" layoutY="98.0" text="Instituição/Unidade">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="txtNomeInstituicaoUnidade" layoutX="12.0" layoutY="115.0" prefHeight="25.0" prefWidth="549.0" promptText="Nome" />
+                        <Separator layoutX="559.0" layoutY="157.0" orientation="VERTICAL" prefHeight="219.0" prefWidth="13.0" />
+                        <Separator layoutX="15.0" layoutY="373.0" prefHeight="8.0" prefWidth="550.0" />
+                        <Button fx:id="btnCadastrar" layoutX="384.0" layoutY="386.0" minHeight="25.0" minWidth="85.0" mnemonicParsing="false" onMouseClicked="#clickedBtnCadastrarUnidade" prefHeight="25.0" prefWidth="85.0" text="CADASTRAR" />
+                        <Button fx:id="btnVoltar" layoutX="479.0" layoutY="386.0" minHeight="25.0" minWidth="85.0" mnemonicParsing="false" onMouseClicked="#clickedBtnVoltar" prefHeight="25.0" prefWidth="85.0" text="VOLTAR" />
                     </children>
                 </AnchorPane>
             </content>
         </Tab>
-        <Tab fx:id="tabListagem" onSelectionChanged="#selectedTabListagem" text="Listagem">
+        <Tab fx:id="tabListagem" text="Listagem">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="405.0" prefWidth="580.0">
                     <children>

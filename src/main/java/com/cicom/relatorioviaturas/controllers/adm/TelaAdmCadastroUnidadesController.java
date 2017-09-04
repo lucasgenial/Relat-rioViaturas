@@ -138,25 +138,44 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
         }
     }
 
+    private void limparDados() {
+        txtNomeBusca.clear();
+        txtNomeInstituicaoUnidade.clear();
+        txtNomeUnidade.clear();
+        listaPOsDaUnidade.clear();
+        listaUnidade.clear();
+        atualizarTabelaPO(listaPOsDaUnidade);
+
+        unidadeEditar = null;
+        txtNomeBusca.setDisable(false);
+        cbTipoBusca.setDisable(false);
+        txtNomeInstituicaoUnidade.setDisable(false);
+        txtNomeUnidade.setDisable(false);
+        cbTipoPO.setDisable(false);
+        btnInserirPO.setDisable(false);
+    }
+
     @FXML
     private void clickedBtnCadastrarUnidade(MouseEvent event) {
         //Se o botão salvar for ativado e o editar for verdadeiro
         //Estamos modificando um Tipo P.O. Já existente
-        if (btnCadastrar.getText().equals("Novo")) {
-            selectedTabListagem();
-        } else if (btnCadastrar.getText().equals("Salvar")) {
+        if (btnCadastrar.getText().equals("NOVO")) {
+            limparDados();
+            btnCadastrar.setText("CADASTRAR");
+        } else if (btnCadastrar.getText().equals("SALVAR")) {
             if (verificaDados()) {
                 //Altera o nome do PO
                 unidadeEditar.setNome(txtNomeUnidade.getText());
                 unidadeEditar.setComandoDeArea(txtNomeInstituicaoUnidade.getText());
                 unidadeEditar.setPos(listaPOsDaUnidade);
-
+                
                 daoUnidade.alterar(unidadeEditar);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso!");
                 alert.setHeaderText("Unidade alterado com sucesso!");
                 alert.showAndWait();
+                limparDados();
                 carregaDados();
 
             } else {
@@ -172,13 +191,15 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
                 novaUnidade.setNome(txtNomeUnidade.getText());
                 novaUnidade.setComandoDeArea(txtNomeInstituicaoUnidade.getText());
                 novaUnidade.setPos(listaPOsDaUnidade);
+                novaUnidade.setAtivo(true);
 
                 daoUnidade.salvar(novaUnidade);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso!");
-                alert.setHeaderText("Unidade alterado com sucesso!");
+                alert.setHeaderText("Unidade cadastrado com sucesso!");
                 alert.showAndWait();
+                limparDados();
                 carregaDados();
 
             } else {
@@ -195,30 +216,37 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
         if (txtNomeUnidade.getText().isEmpty()) {
             tituloMensagem = "Erro Nome Unidade";
             corpoMensagem = "O nome da Unidade é necessário!";
-            txtNomeUnidade.setFocusTraversable(true);
             return false;
         }
 
         if (txtNomeInstituicaoUnidade.getText().isEmpty()) {
             tituloMensagem = "Erro Comando de Area Unidade";
             corpoMensagem = "O Comando de Área é necessário!";
-            txtNomeInstituicaoUnidade.setFocusTraversable(true);
             return false;
         }
 
         if (listaPOsDaUnidade.isEmpty()) {
             tituloMensagem = "Erro Tipo P.O. Unidade";
             corpoMensagem = "A unidade precisará gerenciar algum tipo de P.O.!";
-            cbTipoPO.setFocusTraversable(true);
             return false;
         }
 
-        if (!(txtNomeUnidade.getText().equals(unidadeEditar.getNome())) && (daoUnidade.buscaPorNome(txtNomeUnidade.getText()) != null)) {
-            tituloMensagem = "Erro Salvar Unidade";
-            corpoMensagem = "Esta Unidade já está cadastrada no banco!";
-            return false;
+        if (btnCadastrar.getText().equalsIgnoreCase("SALVAR")) {
+            if (!(txtNomeUnidade.getText().equals(unidadeEditar.getNome())) && (daoUnidade.buscaPorNome(txtNomeUnidade.getText()) != null)) {
+                tituloMensagem = "Erro Salvar Unidade";
+                corpoMensagem = "Esta Unidade já está cadastrada no banco!";
+                return false;
+            }
         }
-
+        
+        if (btnCadastrar.getText().equalsIgnoreCase("CADASTRAR")) {
+            if ((daoUnidade.buscaPorNome(txtNomeUnidade.getText()) != null)) {
+                tituloMensagem = "Erro Salvar Unidade";
+                corpoMensagem = "Esta Unidade já está cadastrada no banco!";
+                return false;
+            }
+        }
+        
         return true;
     }
 
@@ -268,16 +296,6 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
     private void exitCbTipoBusca(MouseEvent event) {
     }
 
-    @FXML
-    private void selectedTabListagem() {
-        txtNomeBusca.clear();
-        txtNomeInstituicaoUnidade.clear();
-        txtNomeUnidade.clear();
-        listaPOsDaUnidade.clear();
-        tablePO.getItems().clear();
-        unidadeEditar = null;
-    }
-
     private void atualizarTabelaPO(Set<PO> dados) {
         tablePO.getItems().clear();
 
@@ -308,8 +326,10 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
         tablePO.getItems().addAll(FXCollections.observableSet(dados));
     }
 
-    private void atualizarTabelaUnidade(List<Unidade> listaUnidade) {
-        ObservableList<Unidade> dadosIniciais = FXCollections.observableList(listaUnidade);
+    private void atualizarTabelaUnidade(List<Unidade> dados) {
+//        tableListaUnidades.getItems().clear();
+        
+        ObservableList<Unidade> dadosIniciais = FXCollections.observableList(dados);
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Unidade> filtroDeDados = new FilteredList<>(dadosIniciais, p -> true);
@@ -434,7 +454,7 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
         @Override
         protected void updateItem(Boolean t, boolean empty) {
             super.updateItem(t, empty);
-            if (!empty) {
+            if (!empty && !btnCadastrar.getText().equalsIgnoreCase("NOVO")) {
                 setGraphic(botaoRemover);
                 setAlignment(Pos.CENTER);
             } else {
@@ -467,19 +487,18 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent t) {
-                    Unidade unidadeVisualizar = (Unidade) tblView.getItems().get(getIndex());
+                    Unidade unidadeVisualizar = tblView.getItems().get(getIndex());
                     if (unidadeVisualizar != null) {
                         txtNomeUnidade.setText(unidadeVisualizar.getNome());
                         txtNomeInstituicaoUnidade.setText(unidadeVisualizar.getComandoDeArea());
-                        listaPOsDaUnidade = unidadeVisualizar.getPos();
+                        listaPOsDaUnidade.addAll(unidadeVisualizar.getPos());
 
                         atualizarTabelaPO(listaPOsDaUnidade);
 
                         txtNomeUnidade.setDisable(true);
                         txtNomeInstituicaoUnidade.setDisable(true);
                         cbTipoPO.setDisable(true);
-                        tablePO.setEditable(false);
-                        btnCadastrar.setText("Novo");
+                        btnCadastrar.setText("NOVO");
 
                         root.getSelectionModel().select(tabCadastro);
                     }
@@ -501,7 +520,7 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
                     if (unidadeEditar != null) {
                         txtNomeUnidade.setText(unidadeEditar.getNome());
                         txtNomeInstituicaoUnidade.setText(unidadeEditar.getComandoDeArea());
-                        listaPOsDaUnidade = unidadeEditar.getPos();
+                        listaPOsDaUnidade.addAll(unidadeEditar.getPos());
 
                         atualizarTabelaPO(listaPOsDaUnidade);
 
@@ -509,7 +528,7 @@ public class TelaAdmCadastroUnidadesController implements Initializable {
                         txtNomeInstituicaoUnidade.setDisable(false);
                         tablePO.setEditable(true);
                         btnCadastrar.setDisable(false);
-                        btnCadastrar.setText("Salvar");
+                        btnCadastrar.setText("SALVAR");
 
                         root.getSelectionModel().select(tabCadastro);
                     }

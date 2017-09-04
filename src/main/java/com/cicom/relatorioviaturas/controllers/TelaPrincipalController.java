@@ -433,9 +433,6 @@ public class TelaPrincipalController implements Initializable {
             limparDados();
 
             listaRelatorioViaturas = relatorioDiarioMesasSelecionado.getRelatorioDiarioViaturas();
-
-            System.out.println("LISTA VIATURA: " + relatorioDiarioMesasSelecionado.getRelatorioDiarioViaturas());
-
             if (listaRelatorioViaturas != null) {
                 carregaDadosTabelaUnidade();
             } else {
@@ -791,7 +788,6 @@ public class TelaPrincipalController implements Initializable {
                 dialogStageAtual.setTitle("Editar Operacional");
                 dialogStageAtual.setResizable(false);
                 dialogStageAtual.setScene(scene);
-                System.out.println("VIATURA ANTES " + viaturaSelecionado);
 
                 //Setando o cliente no Controller.
                 TelaAdicionaOperacionalController controller = loader.getController();

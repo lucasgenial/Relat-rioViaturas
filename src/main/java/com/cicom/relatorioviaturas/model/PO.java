@@ -12,11 +12,15 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -32,6 +36,8 @@ public class PO implements Serializable {
     private IntegerProperty id = new SimpleIntegerProperty();
     private StringProperty nome = new SimpleStringProperty();
     private Set<Unidade> unidades = new HashSet<>();
+    private Caracteristica caracteristica;
+    private Set<Funcionalidade> funcionalidades = new HashSet<>();
     private Boolean ativo;
 
     public PO() {
@@ -44,6 +50,13 @@ public class PO implements Serializable {
     public PO(String nome, Boolean ativo) {
         this.setNome(nome);
         this.setAtivo(ativo);
+    }
+
+    public PO(String nome, Set<Funcionalidade> funcionalidades, Caracteristica caracteristica, Boolean ativo) {
+        this.setNome(nome);
+        this.setAtivo(ativo);
+        this.setCaracteristica(caracteristica);
+        this.setFuncionalidades(funcionalidades);
     }
 
     public PO(String nome, Set<Unidade> unidades) {
@@ -61,7 +74,6 @@ public class PO implements Serializable {
         return this.id.get();
     }
 
-    @Basic
     @NotNull
     @Column(name = "NOME", unique = true)
     public String getNome() {
@@ -71,6 +83,20 @@ public class PO implements Serializable {
     @ManyToMany(mappedBy = "pos", targetEntity = Unidade.class, fetch = FetchType.LAZY)
     public Set<Unidade> getUnidades() {
         return this.unidades;
+    }
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "CARACTERISTICA")
+    public Caracteristica getCaracteristica() {
+        return caracteristica;
+    }
+
+    @Enumerated(EnumType.ORDINAL)
+    @ElementCollection(fetch = FetchType.LAZY, targetClass = Funcionalidade.class)   
+    @Column(name = "FUNCIONALIDADES", length = 30)   
+    @JoinTable(name = "FUNCIONALIDADES_PO")
+    public Set<Funcionalidade> getFuncionalidade() {
+        return funcionalidades;
     }
 
     @Column(name = "ATIVO")
@@ -93,6 +119,14 @@ public class PO implements Serializable {
         this.unidades = value;
     }
 
+    public void setCaracteristica(Caracteristica value) {
+        this.caracteristica = value;
+    }
+
+    public void setFuncionalidades(Set<Funcionalidade> value) {
+        this.funcionalidades = value;
+    }
+
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
@@ -110,16 +144,18 @@ public class PO implements Serializable {
 
     @Override
     public String toString() {
-        return "PO{" + "id=" + id + ", nome=" + nome + ", está em " + unidades.size() + " unidades}";
+        return "PO{" + "id=" + id + ", nome=" + nome + ", unidades=" + unidades + ", caracteristica=" + caracteristica + ", funcionalidades=" + funcionalidades + ", ativo=" + ativo + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.id);
-        hash = 53 * hash + Objects.hashCode(this.nome);
-        hash = 53 * hash + Objects.hashCode(this.unidades);
-        hash = 53 * hash + Objects.hashCode(this.ativo);
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.id);
+        hash = 23 * hash + Objects.hashCode(this.nome);
+        hash = 23 * hash + Objects.hashCode(this.unidades);
+        hash = 23 * hash + Objects.hashCode(this.caracteristica);
+        hash = 23 * hash + Objects.hashCode(this.funcionalidades);
+        hash = 23 * hash + Objects.hashCode(this.ativo);
         return hash;
     }
 
@@ -142,6 +178,12 @@ public class PO implements Serializable {
             return false;
         }
         if (!Objects.equals(this.unidades, other.unidades)) {
+            return false;
+        }
+        if (this.caracteristica != other.caracteristica) {
+            return false;
+        }
+        if (!Objects.equals(this.funcionalidades, other.funcionalidades)) {
             return false;
         }
         if (!Objects.equals(this.ativo, other.ativo)) {

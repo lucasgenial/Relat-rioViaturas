@@ -8,7 +8,9 @@ import com.cicom.relatorioviaturas.DAO.ServidorDAO;
 import com.cicom.relatorioviaturas.DAO.SexoDAO;
 import com.cicom.relatorioviaturas.DAO.TipoMesaDAO;
 import com.cicom.relatorioviaturas.DAO.UnidadeDAO;
+import com.cicom.relatorioviaturas.model.Caracteristica;
 import com.cicom.relatorioviaturas.model.Funcao;
+import com.cicom.relatorioviaturas.model.Funcionalidade;
 import com.cicom.relatorioviaturas.model.Instituicao;
 import com.cicom.relatorioviaturas.model.Mesa;
 import com.cicom.relatorioviaturas.model.PO;
@@ -32,7 +34,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-//        lancarDados();
+        lancarDados();
         setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SplashScreen.fxml"));
 
@@ -58,23 +60,26 @@ public class MainApp extends Application {
     }
 
     private void lancarDados() {
+        
+        Set<Funcionalidade> funcionalidades = new HashSet<>();
+        
+        funcionalidades.add(Funcionalidade.GPS);
+        funcionalidades.add(Funcionalidade.Audio);
+        funcionalidades.add(Funcionalidade.Camera);
+        
         //PO
         PoDAO daoPO = new PoDAO();
         Set<PO> listaDePOs = new HashSet<>();
-        listaDePOs.add(new PO("A PÉ", true));
-        listaDePOs.add(new PO("VIATURA 4 RODAS", true));
-        listaDePOs.add(new PO("VIATURA 2 RODAS", true));
-        listaDePOs.add(new PO("BARCO", true));
-        listaDePOs.add(new PO("MÓDULO", true));
+        listaDePOs.add(new PO("A PÉ", funcionalidades, Caracteristica.Posto, true));
+        listaDePOs.add(new PO("VIATURA 4 RODAS", funcionalidades, Caracteristica.Motorizado,  true));
+        listaDePOs.add(new PO("VIATURA 2 RODAS", funcionalidades, Caracteristica.Motorizado,  true));
+        listaDePOs.add(new PO("BARCO", funcionalidades, Caracteristica.Motorizado,  true));
+        listaDePOs.add(new PO("MÓDULO", null, Caracteristica.Posto, true));
 
-        System.out.println("SALVAR OS POs \n\n");
         for (PO item : listaDePOs) {
             daoPO.salvar(item);
         }
-
-        System.out.println("POS SALVOS \n\n");
-
-        System.out.println("SALVAR FUNCAO \n\n");
+        
         //FUNCAO
         Funcao func1 = new Funcao("Motorista");
         Funcao func2 = new Funcao("Patrulheiro");
@@ -89,9 +94,6 @@ public class MainApp extends Application {
         daoFuncao.salvar(func4);
         daoFuncao.salvar(func5);
 
-        System.out.println("FUNCAO SALVAS \n\n");
-
-        System.out.println("SALVAR SEXO");
         SexoDAO daoSexo = new SexoDAO();
 
         Sexo sex1 = new Sexo("Masculino");
@@ -99,10 +101,7 @@ public class MainApp extends Application {
 
         daoSexo.salvar(sex1);
         daoSexo.salvar(sex2);
-
-        System.out.println("SALVAR SEXO\n\n");
-
-        System.out.println("SALVAR INSTITUCIONAL");
+        
         InstituicaoDAO daoInstituicao = new InstituicaoDAO();
 
         Instituicao inst1 = new Instituicao("PM");
@@ -115,10 +114,7 @@ public class MainApp extends Application {
         daoInstituicao.salvar(inst3);
         daoInstituicao.salvar(inst4);
 
-        System.out.println("SALVAR INSTITUCIONAL\n\n");
-
 //        //CADASTRA COMANDANTE
-//        System.out.println("SALVAR SERVIDOR \n\n");
         ServidorDAO daoServidor = new ServidorDAO();
         daoServidor.getListAtivos();
 
@@ -150,7 +146,6 @@ public class MainApp extends Application {
         daoServidor.salvar(ser12);
 
 //        //Unidade
-//        System.out.println("SALVAR UNIDADE \n\n");
         Unidade und1 = new Unidade("POLICIA MILITAR", "8º BPM", true);
         Unidade und2 = new Unidade("POLICIA MILITAR", "7º CIPM", true);
         Unidade und3 = new Unidade("POLICIA MILITAR", "CIPPA", true);
@@ -174,11 +169,6 @@ public class MainApp extends Application {
         daoUnidade.salvar(und7);
         daoUnidade.salvar(und8);
 
-        System.out.println("UNIDADES SALVAS \n\n");
-
-        //Cadastra MESAS
-        System.out.println("SALVAR MESA \n\n");
-
         Set<Unidade> listaUnid = new HashSet<>();
         listaUnid.add(und1);
         listaUnid.add(und2);
@@ -198,7 +188,5 @@ public class MainApp extends Application {
 
         MesaDAO daoMesa = new MesaDAO();
         daoMesa.salvar(new Mesa("CICOM - COSTA DO DESCOBRIMENTO", listaUnid, tipoMesa, true));
-
-        System.out.println("MESAS SALVAS \n\n");
     }
 }

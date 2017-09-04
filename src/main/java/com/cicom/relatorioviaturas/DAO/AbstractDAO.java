@@ -51,9 +51,6 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
             retorno = administracao.find(classeEntidade, codigoBuscado);
             transacao.commit();
 
-            if (retorno == null) {
-                System.out.println("ESTOU AQUI");
-            }
         } catch (Exception e) {
             if (transacao != null) {
                 transacao.rollback();
@@ -63,7 +60,6 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
             //Fecha a Tranção e a fabrica
             administracao.close();
         }
-        System.out.println("BUSCA POR CODIGO: " + retorno);
         return retorno;
     }
 
@@ -76,7 +72,6 @@ public abstract class AbstractDAO<T> implements FabricaDAO<T> {
         try {
             transacao.begin();
             retorno = administracao.find(classeEntidade, obj);
-//            administracao.detach(retorno);
             transacao.commit();
         } catch (Exception e) {
             if (transacao != null) {
