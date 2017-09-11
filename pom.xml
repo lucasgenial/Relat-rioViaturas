@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.cicom</groupId>
-    <artifactId>RelatorioViaturas</artifactId>
+    <artifactId>RelatorioEfetivos</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>RelatorioViaturas</name>
+    <name>RelatorioEfetivos</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

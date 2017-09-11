@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="501.0" prefWidth="577.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaPrincipalController">
+<VBox prefHeight="501.0" prefWidth="577.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioefetivos.controllers.TelaPrincipalController">
     <children>
         <MenuBar fx:id="barraDeMenu" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="774.0">
             <menus>

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="662.0" prefWidth="1312.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.TelaPrincipalController">
+<VBox prefHeight="662.0" prefWidth="1312.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioefetivos.controllers.TelaPrincipalController">
     <children>
         <MenuBar fx:id="barraDeMenu" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="1317.0">
             <menus>
@@ -138,7 +138,7 @@
                                                 </AnchorPane>
                                             </content>
                                         </Tab>
-                                        <Tab fx:id="tabRelatorioOperacional" closable="false" text="Relatório Operacional">
+                                        <Tab fx:id="tabRelatorioEfetivo" closable="false" text="Relatório Efetivo">
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                     <children>
@@ -181,8 +181,8 @@
                                                                 </TableColumn>
                                                             </columns>
                                                         </TableView>
-                                                        <Button fx:id="btnAdicionaOperacional" disable="true" layoutX="80.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedAdicionarOperacional" text="Adiciona Operacional" />
-                                                        <Button fx:id="btnEditarOperacional" disable="true" layoutX="217.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedEditarOperacional" text="Editar Operacional" />
+                                                        <Button fx:id="btnAdicionaEfetivo" disable="true" layoutX="80.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedAdicionarEfetivo" text="Adiciona Efetivo" />
+                                                        <Button fx:id="btnEditarEfetivo" disable="true" layoutX="217.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedEditarEfetivo" text="Editar Efetivo" />
                                                         <TableView fx:id="tableGuarnicao" disable="true" layoutX="14.0" layoutY="310.0" mouseTransparent="true" prefHeight="199.0" prefWidth="521.0">
                                                             <columns>
                                                                 <TableColumn fx:id="tbColumnIdServidor" prefWidth="31.0" resizable="false" text="ID">
@@ -194,7 +194,7 @@
                                                                 <TableColumn fx:id="tbColumnFuncaoServidor" prefWidth="173.0" resizable="false" text="FUNÇÃO" />
                                                             </columns>
                                                         </TableView>
-                                                        <Button fx:id="btnRemoverOperacional" disable="true" layoutX="339.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedRemoverOperacional" text="Remover Operacional" />
+                                                        <Button fx:id="btnRemoverEfetivo" disable="true" layoutX="339.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#clickedRemoverEfetivo" text="Remover Efetivo" />
                                                     </children>
                                                 </AnchorPane>
                                             </content>

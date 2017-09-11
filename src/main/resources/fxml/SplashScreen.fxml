@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="painelPrincipal" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioviaturas.controllers.SplashScreenController">
+<StackPane fx:id="painelPrincipal" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioefetivos.controllers.SplashScreenController">
    <children>
       <ImageView fitHeight="579.0" fitWidth="768.0" opacity="0.9" pickOnBounds="true" preserveRatio="true">
          <image>
