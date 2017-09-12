@@ -5,7 +5,7 @@ import com.cicom.relatorioefetivos.DAO.PoDAO;
 import com.cicom.relatorioefetivos.DAO.RelatorioDiarioMesasDAO;
 import com.cicom.relatorioefetivos.DAO.RelatorioDiarioViaturasDAO;
 import com.cicom.relatorioefetivos.DAO.UnidadeDAO;
-import com.cicom.relatorioefetivos.DAO.ViaturaDAO;
+import com.cicom.relatorioefetivos.DAO.EfetivoDAO;
 import com.cicom.relatorioefetivos.model.Funcao;
 import com.cicom.relatorioefetivos.model.PO;
 import com.cicom.relatorioefetivos.model.RelatorioDiarioMesas;
@@ -157,7 +157,7 @@ public class TelaAdicionaEfetivoController implements Initializable {
     private RelatorioDiarioMesas relatorioDeMesa;
     private RelatorioDiarioEfetivo relatorioDeViatura;
     private Stage stage;
-    private ViaturaDAO daoViatura = new ViaturaDAO();
+    private EfetivoDAO daoViatura = new EfetivoDAO();
     private boolean botaoSalvarClicado = false;
     private ServidorFuncao servidorEditar;
 

@@ -7,7 +7,7 @@ import com.cicom.relatorioefetivos.model.RelatorioDiarioEfetivo;
 import com.cicom.relatorioefetivos.model.RelatorioDiarioMesas;
 import com.cicom.relatorioefetivos.DAO.RelatorioDiarioMesasDAO;
 import com.cicom.relatorioefetivos.DAO.RelatorioDiarioViaturasDAO;
-import com.cicom.relatorioefetivos.DAO.ViaturaDAO;
+import com.cicom.relatorioefetivos.DAO.EfetivoDAO;
 import com.cicom.relatorioefetivos.controllers.adm.TelaAdmCadastroMesasController;
 import com.cicom.relatorioefetivos.controllers.adm.TelaAdmCadastroServidorController;
 import com.cicom.relatorioefetivos.controllers.adm.TelaAdmCadastroTipoPOController;
@@ -183,7 +183,7 @@ public class TelaPrincipalController implements Initializable {
      */
     private final RelatorioDiarioMesasDAO DataLoader = new RelatorioDiarioMesasDAO();
     private final RelatorioDiarioViaturasDAO daoRelatorioDeViatura = new RelatorioDiarioViaturasDAO();
-    private final ViaturaDAO daoViatura = new ViaturaDAO();
+    private final EfetivoDAO daoViatura = new EfetivoDAO();
 
     private List<RelatorioDiarioMesas> itens = new ArrayList<>();
     private Set<Efetivo> listaDeViaturas = new HashSet<>();

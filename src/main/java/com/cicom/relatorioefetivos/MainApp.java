@@ -1,6 +1,7 @@
 package com.cicom.relatorioefetivos;
 
 import com.cicom.relatorioefetivos.DAO.FuncaoDAO;
+import com.cicom.relatorioefetivos.DAO.FuncionalidadeDAO;
 import com.cicom.relatorioefetivos.DAO.InstituicaoDAO;
 import com.cicom.relatorioefetivos.DAO.MesaDAO;
 import com.cicom.relatorioefetivos.DAO.PoDAO;
@@ -33,7 +34,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-//        lancarDados();
+        lancarDados();
         setUserAgentStylesheet(STYLESHEET_MODENA);
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/SplashScreen.fxml"));
 
@@ -65,6 +66,12 @@ public class MainApp extends Application {
         funcionalidades.add(new Funcionalidade("GPS",true));
         funcionalidades.add(new Funcionalidade("Audio",true));
         funcionalidades.add(new Funcionalidade("Camera",true));
+        
+        FuncionalidadeDAO daoFuncionalidade = new FuncionalidadeDAO();
+        
+        for(Funcionalidade fun:funcionalidades){
+            daoFuncionalidade.salvar(fun);
+        }
         
         //PO
         PoDAO daoPO = new PoDAO();

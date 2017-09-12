@@ -61,7 +61,7 @@ public class PoDAO extends AbstractDAO<PO> {
 
         try {
             transacao.begin();
-            t = administracao.createQuery("SELECT u FROM PO u WHERE u.ativo=1").getResultList();
+            t = administracao.createQuery("SELECT u FROM PO u WHERE u.status=1").getResultList();
             transacao.commit();
         } catch (Exception e) {
             if (transacao != null) {

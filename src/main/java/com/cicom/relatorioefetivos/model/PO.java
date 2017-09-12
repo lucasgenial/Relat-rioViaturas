@@ -91,7 +91,7 @@ public class PO implements Serializable {
         return caracteristica;
     }
 
-    @OneToMany(targetEntity = Funcionalidade.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Funcionalidade.class, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name = "TBL_FUNCIONALIDADE_PO", joinColumns = {
         @JoinColumn(name = "PO_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "FUNCIONALIDADE_ID_FK")})

@@ -6,9 +6,9 @@ import com.cicom.relatorioefetivos.model.Efetivo;
  *
  * @author estatistica
  */
-public class ViaturaDAO extends AbstractDAO<Efetivo> {
+public class EfetivoDAO extends AbstractDAO<Efetivo> {
 
-    public ViaturaDAO() {
+    public EfetivoDAO() {
         super(Efetivo.class);
     }
 }

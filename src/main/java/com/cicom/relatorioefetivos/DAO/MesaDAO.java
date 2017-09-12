@@ -46,7 +46,7 @@ public class MesaDAO extends AbstractDAO<Mesa> {
 
         try {
             transacao.begin();
-            t = administracao.createQuery("SELECT u FROM Mesa u WHERE u.ativo=1").getResultList();
+            t = administracao.createQuery("SELECT u FROM Mesa u WHERE u.status=1").getResultList();
             transacao.commit();
         } catch (Exception e) {
             if (transacao != null) {
