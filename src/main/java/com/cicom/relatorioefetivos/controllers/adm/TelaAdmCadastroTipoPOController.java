@@ -6,6 +6,7 @@ import com.cicom.relatorioefetivos.DAO.PoDAO;
 import com.cicom.relatorioefetivos.model.Caracteristica;
 import com.cicom.relatorioefetivos.model.Funcionalidade;
 import com.cicom.relatorioefetivos.model.PO;
+import com.cicom.relatorioefetivos.model.TipoMesa;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Optional;
@@ -34,8 +35,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 /**
  *
@@ -104,21 +105,20 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
     private TableColumn<PO, Boolean> columnAcaoPO;
 
     @FXML
-    private Button btnCadastrarPo;
-    private Stage dialogStage;
+    private Button btnCadastrar;
 
-    private PoDAO daoPO = new PoDAO();
-    private CaracteristicaDAO daoCaracateristica = new CaracteristicaDAO();
-    private FuncionalidadeDAO daoFuncionalidade = new FuncionalidadeDAO();
+    private final PoDAO daoPO = new PoDAO();
+    private final CaracteristicaDAO daoCaracateristica = new CaracteristicaDAO();
+    private final FuncionalidadeDAO daoFuncionalidade = new FuncionalidadeDAO();
 
     private Set<PO> listaPOS = new HashSet<>();
     private Set<Caracteristica> listaCaracteristica = new HashSet<>();
-    private Set<Funcionalidade> funcionalidadesPO, listaFuncionalidades = new HashSet<>();
+    private Set<Funcionalidade> funcionalidadesPO = new HashSet<>();
+    private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
 
     private PO novoPO, poEditar;
     private String tituloMensagem = "";
     private String corpoMensagem = "";
-    private Caracteristica caracteristica;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -149,6 +149,20 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
         if (!listaCaracteristica.isEmpty()) {
             cbCaracteristica.getItems().clear();
             cbCaracteristica.getItems().addAll(listaCaracteristica);
+            cbCaracteristica.setConverter(new StringConverter<Caracteristica>() {
+                @Override
+                public String toString(Caracteristica item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
+                }
+
+                @Override
+                public Caracteristica fromString(String string) {
+                    return daoCaracateristica.buscaPorNome(string);
+                }
+            });
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro Caracteristica");
@@ -164,7 +178,21 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
         if (!listaFuncionalidades.isEmpty()) {
             cbFuncionalidadesPO.getItems().clear();
             cbFuncionalidadesPO.getItems().addAll(listaFuncionalidades);
-        }else {
+            cbFuncionalidadesPO.setConverter(new StringConverter<Funcionalidade>() {
+                @Override
+                public String toString(Funcionalidade item) {
+                    if (item != null) {
+                        return item.getNome();
+                    }
+                    return "";
+                }
+
+                @Override
+                public Funcionalidade fromString(String string) {
+                    return daoFuncionalidade.buscaPorNome(string);
+                }
+            });
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro Funcionalidade");
             alert.setHeaderText("Ocorreu uma inconsistência no Banco de Dados\n"
@@ -213,17 +241,63 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
         tablePO.getItems().setAll(FXCollections.observableSet(dados));
     }
 
-    private void clickedBtnCadastrarPO(MouseEvent event) {
-        if (btnCadastrarPo.getText().equalsIgnoreCase("NOVO")) {
+    private void atualizarTabelaFuncionalidadesPO(Set<Funcionalidade> dados) {
+
+        columnNomeFuncionalidades.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Funcionalidade, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Funcionalidade, String> data) {
+                return new SimpleStringProperty(data.getValue().getNome().toUpperCase());
+            }
+        });
+
+        columnAcaoFuncionalidade.setSortable(false);
+
+        columnAcaoFuncionalidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Funcionalidade, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Funcionalidade, Boolean> param) {
+                return new SimpleBooleanProperty(param.getValue() != null);
+            }
+        });
+
+        columnAcaoFuncionalidade.setCellFactory(new Callback<TableColumn<Funcionalidade, Boolean>, TableCell<Funcionalidade, Boolean>>() {
+            @Override
+            public TableCell<Funcionalidade, Boolean> call(TableColumn<Funcionalidade, Boolean> data) {
+                return new ButtonCellFuncionalidade(tableFuncionalidadesPO);
+            }
+        });
+
+        tableFuncionalidadesPO.getItems().setAll(FXCollections.observableSet(dados));
+    }
+
+    @FXML
+    private void clickedBtnInserirFuncionalidade(MouseEvent event) {
+        Funcionalidade funcionalidadeSelecionada = cbFuncionalidadesPO.getSelectionModel().getSelectedItem();
+
+        if (funcionalidadeSelecionada != null) {
+            //Carrega o item na lista de POS que comporá a tabela/Unidade
+            funcionalidadesPO.add(funcionalidadeSelecionada);
+
+            //Adiciono o item na Tabela
+            atualizarTabelaFuncionalidadesPO(funcionalidadesPO);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("É necessário selecionar uma Funcionalidade!");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void clickedBtnCadastrar(MouseEvent event) {
+        if (btnCadastrar.getText().equalsIgnoreCase("NOVO")) {
             limparDados();
             carregaDados();
-        } else if (btnCadastrarPo.getText().equalsIgnoreCase("SALVAR")) {
+        } else if (btnCadastrar.getText().equalsIgnoreCase("SALVAR")) {
             if (verificaDados()) {
-
-                poEditar.setStatus(cbSituacaoPO.getValue().equalsIgnoreCase("ATIVADO"));
-                poEditar.setCaracteristica(caracteristica);
-                poEditar.setFuncionalidades(funcionalidadesPO);
                 poEditar.setNome(txtNomePO.getText().toUpperCase());
+                poEditar.setStatus(cbSituacaoPO.getValue().equalsIgnoreCase("ATIVADO"));
+                poEditar.setCaracteristica(cbCaracteristica.getSelectionModel().getSelectedItem());
+                poEditar.setFuncionalidades(funcionalidadesPO);
 
                 daoPO.alterar(poEditar);
 
@@ -243,10 +317,10 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
         } else {
             if (verificaDados()) {
                 PO novoPO = new PO();
-                novoPO.setStatus(cbSituacaoPO.getValue().equalsIgnoreCase("ATIVADO"));
-                novoPO.setCaracteristica(caracteristica);
-                novoPO.setFuncionalidades(funcionalidadesPO);
                 novoPO.setNome(txtNomePO.getText().toUpperCase());
+                novoPO.setStatus(cbSituacaoPO.getValue().equalsIgnoreCase("ATIVADO"));
+                novoPO.setCaracteristica(cbCaracteristica.getSelectionModel().getSelectedItem());
+                novoPO.setFuncionalidades(funcionalidadesPO);
 
                 daoPO.salvar(novoPO);
 
@@ -268,15 +342,21 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
 
     private void limparDados() {
         listaPOS.clear();
+        listaCaracteristica.clear();
+        listaFuncionalidades.clear();
         funcionalidadesPO.clear();
-
+        tableFuncionalidadesPO.getItems().clear();
+        
         poEditar = null;
-        txtNomePO.setDisable(true);
-        cbSituacaoPO.setDisable(true);
+        txtNomePO.setDisable(false);
+        cbSituacaoPO.setDisable(false);
+        cbFuncionalidadesPO.setDisable(false);
+        cbCaracteristica.setDisable(false);
+        btnInserir.setDisable(false);
 
         txtNomePO.clear();
-        cbSituacaoPO.setValue("");
-        btnCadastrarPo.setText("CADASTRAR");
+        cbSituacaoPO.getSelectionModel().select("");
+        btnCadastrar.setText("CADASTRAR");
     }
 
     private boolean verificaDados() {
@@ -292,13 +372,13 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
             return false;
         }
 
-        if (caracteristica == null) {
+        if (cbCaracteristica.getSelectionModel().isEmpty()) {
             tituloMensagem = "Erro Caracteristica P.O.";
             corpoMensagem = "O PO possui uma caracteristica!";
             return false;
         }
 
-        if (btnCadastrarPo.getText().equalsIgnoreCase("SALVAR")) {
+        if (btnCadastrar.getText().equalsIgnoreCase("SALVAR")) {
             if (!(txtNomePO.getText().equals(poEditar.getNome())) && (daoPO.buscaPorNome(txtNomePO.getText()) != null)) {
                 tituloMensagem = "Erro Salvar PO";
                 corpoMensagem = "Este PO já está cadastrada no banco!";
@@ -306,7 +386,7 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
             }
         }
 
-        if (btnCadastrarPo.getText().equalsIgnoreCase("CADASTRAR")) {
+        if (btnCadastrar.getText().equalsIgnoreCase("CADASTRAR")) {
             if ((daoPO.buscaPorNome(txtNomePO.getText()) != null)) {
                 tituloMensagem = "Erro Salvar Unidade";
                 corpoMensagem = "Esta Unidade já está cadastrada no banco!";
@@ -317,120 +397,7 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
         return true;
     }
 
-    private void cadastraFuncionalidades() {
-        if (ccGPS.isSelected()) {
-            funcionalidadesPO.add(Funcionalidade.GPS);
-        }
-
-        if (ccAudio.isSelected()) {
-            funcionalidadesPO.add(Funcionalidade.Audio);
-        }
-
-        if (ccCamera.isSelected()) {
-            funcionalidadesPO.add(Funcionalidade.Camera);
-        }
-    }
-
-    private boolean verificaCaracteristica() {
-        boolean select = false;
-
-        if (ccPostoFixo.isSelected()) {
-            caracteristica = Caracteristica.PostoFixo;
-        } else if (ccAereo.isSelected()) {
-            caracteristica = Caracteristica.Aereo;
-        } else if (ccMotorizado.isSelected()) {
-            caracteristica = Caracteristica.Motorizado;
-        } else if (ccMontado.isSelected()) {
-            caracteristica = Caracteristica.Montado;
-        } else if (ccApe.isSelected()) {
-            caracteristica = Caracteristica.Ape;
-        }
-
-        switch (caracteristica.name()) {
-            case "PostoFixo":
-                ccPostoFixo.setSelected(true);
-                ccAereo.setSelected(false);
-                ccMotorizado.setSelected(false);
-                ccMontado.setSelected(false);
-                ccApe.setSelected(false);
-
-                ccGPS.setDisable(false);
-                ccAudio.setDisable(false);
-                ccCamera.setDisable(false);
-                select = true;
-                break;
-
-            case "Aereo":
-                ccPostoFixo.setSelected(false);
-                ccAereo.setSelected(true);
-                ccMotorizado.setSelected(false);
-                ccMontado.setSelected(false);
-                ccApe.setSelected(false);
-
-                ccGPS.setDisable(false);
-                ccAudio.setDisable(false);
-                ccCamera.setDisable(false);
-                select = true;
-                break;
-
-            case "Motorizado":
-                ccPostoFixo.setSelected(false);
-                ccAereo.setSelected(false);
-                ccMotorizado.setSelected(true);
-                ccMontado.setSelected(false);
-                ccApe.setSelected(false);
-
-                ccGPS.setDisable(false);
-                ccAudio.setDisable(false);
-                ccCamera.setDisable(false);
-                select = true;
-                break;
-
-            case "Montado":
-                ccPostoFixo.setSelected(false);
-                ccAereo.setSelected(false);
-                ccMotorizado.setSelected(false);
-                ccMontado.setSelected(true);
-                ccApe.setSelected(false);
-
-                ccGPS.setDisable(false);
-                ccAudio.setDisable(false);
-                ccCamera.setDisable(false);
-                select = true;
-                break;
-
-            case "Ape":
-                ccPostoFixo.setSelected(false);
-                ccAereo.setSelected(false);
-                ccMotorizado.setSelected(false);
-                ccMontado.setSelected(false);
-                ccApe.setSelected(true);
-
-                if (btnCadastrarPo.getText().equalsIgnoreCase("NOVO")) {
-                    ccGPS.setDisable(true);
-                    ccAudio.setDisable(true);
-                    ccCamera.setDisable(true);
-                }
-                select = true;
-                break;
-
-            default:
-                ccPostoFixo.setSelected(false);
-                ccAereo.setSelected(false);
-                ccMotorizado.setSelected(false);
-                ccMontado.setSelected(false);
-                ccApe.setSelected(false);
-
-                ccGPS.setDisable(false);
-                ccAudio.setDisable(false);
-                ccCamera.setDisable(false);
-                select = false;
-                break;
-        }
-
-        return select;
-    }
-
+    @FXML
     private void clickedBtnVoltar(MouseEvent event) {
         Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
         alertVoltar.setTitle("Atenção!");
@@ -458,8 +425,61 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
     private void clickedCbSituacaoBuscaPO(ActionEvent event) {
     }
 
-    @FXML
-    private void clickedBtnCadastrarPo(MouseEvent event) {
+    private class ButtonCellFuncionalidade extends TableCell<Funcionalidade, Boolean> {
+
+        //BOTAO REMOVER
+        private Button botaoRemover = new Button();
+        private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
+
+        private ButtonCellFuncionalidade(TableView<Funcionalidade> tblView) {
+
+            //BOTAO REMOVER
+            imagemRemover.fitHeightProperty().set(16);
+            imagemRemover.fitWidthProperty().set(16);
+
+            botaoRemover.setGraphic(imagemRemover);
+            botaoRemover.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent t) {
+                    Funcionalidade funcionalidadeRemover = (Funcionalidade) tblView.getItems().get(getIndex());
+
+                    if (funcionalidadeRemover != null) {
+                        Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
+                        alertVoltar.setTitle("Atenção!");
+                        alertVoltar.setHeaderText("Os dados referentes à este serão perdidos, deseja continuar?");
+                        alertVoltar.getButtonTypes().clear();
+                        alertVoltar.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+
+                        //Deactivate Defaultbehavior for yes-Button:
+                        Button yesButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.YES);
+                        yesButton.setDefaultButton(false);
+
+                        //Activate Defaultbehavior for no-Button:
+                        Button noButton = (Button) alertVoltar.getDialogPane().lookupButton(ButtonType.NO);
+                        noButton.setDefaultButton(true);
+
+                        //Pega qual opção o usuario pressionou
+                        final Optional<ButtonType> resultado = alertVoltar.showAndWait();
+
+                        if (resultado.get() == ButtonType.YES) {
+                            funcionalidadesPO.remove(funcionalidadeRemover);
+                            atualizarTabelaFuncionalidadesPO(funcionalidadesPO);
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        protected void updateItem(Boolean t, boolean empty) {
+            super.updateItem(t, empty);
+            if (!empty && !btnCadastrar.getText().equalsIgnoreCase("NOVO")) {
+                setGraphic(botaoRemover);
+                setAlignment(Pos.CENTER);
+            } else {
+                setGraphic(null);
+            }
+        }
     }
 
     private class ButtonCellPO extends TableCell<PO, Boolean> {
@@ -492,45 +512,22 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
                             cbSituacaoPO.getSelectionModel().select(1);
                         }
 
+                        cbCaracteristica.getSelectionModel().select(poVisualizar.getCaracteristica());
+
+                        if (!funcionalidadesPO.isEmpty()) {
+                            funcionalidadesPO.clear();
+                        }
+                        funcionalidadesPO.addAll(poVisualizar.getFuncionalidades());
+
+                        atualizarTabelaFuncionalidadesPO(funcionalidadesPO);
+
                         txtNomePO.setDisable(true);
                         cbSituacaoPO.setDisable(true);
-                        ccPostoFixo.setDisable(true);
-                        ccAereo.setDisable(true);
-                        ccMotorizado.setDisable(true);
-                        ccMontado.setDisable(true);
-                        ccApe.setDisable(true);
+                        cbCaracteristica.setDisable(true);
+                        cbFuncionalidadesPO.setDisable(true);
+                        btnInserir.setDisable(true);
 
-                        ccGPS.setDisable(true);
-                        ccAudio.setDisable(true);
-                        ccCamera.setDisable(true);
-
-                        //Define a caracteristica
-                        caracteristica = poVisualizar.getCaracteristica();
-                        System.out.println("CARACTERISTICA : " + caracteristica.name());
-                        verificaCaracteristica();
-
-                        //define as funcionalidades
-                        ccGPS.setSelected(false);
-                        ccAudio.setSelected(false);
-                        ccCamera.setSelected(false);
-
-                        for (Funcionalidade funcionalidade : poVisualizar.getFuncionalidades()) {
-
-                            System.out.println("FUNCIONALIDADE : " + funcionalidade.name());
-                            if (funcionalidade.name().equalsIgnoreCase(Funcionalidade.GPS.name())) {
-                                ccGPS.setSelected(true);
-                            }
-
-                            if (funcionalidade.name().equalsIgnoreCase(Funcionalidade.Audio.name())) {
-                                ccAudio.setSelected(true);
-                            }
-
-                            if (funcionalidade.name().equalsIgnoreCase(Funcionalidade.Camera.name())) {
-                                ccCamera.setSelected(true);
-                            }
-                        }
-
-                        btnCadastrarPo.setText("NOVO");
+                        btnCadastrar.setText("NOVO");
 
                         root.getSelectionModel().select(tabCadastro);
                     }
@@ -560,40 +557,22 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
 
                         txtNomePO.setDisable(false);
                         cbSituacaoPO.setDisable(false);
-                        ccPostoFixo.setDisable(false);
-                        ccAereo.setDisable(false);
-                        ccMotorizado.setDisable(false);
-                        ccMontado.setDisable(false);
-                        ccApe.setDisable(false);
 
-                        ccGPS.setDisable(false);
-                        ccAudio.setDisable(false);
-                        ccCamera.setDisable(false);
-
-                        //Define a Caracteristica
-                        caracteristica = poEditar.getCaracteristica();
-                        verificaCaracteristica();
-
-                        //Define as funcionalidades
-                        ccGPS.setSelected(false);
-                        ccAudio.setSelected(false);
-                        ccCamera.setSelected(false);
-
-                        for (Funcionalidade funcionalidade : poEditar.getFuncionalidades()) {
-                            if (funcionalidade.name().equalsIgnoreCase(Funcionalidade.GPS.name())) {
-                                ccGPS.setSelected(true);
-                            }
-
-                            if (funcionalidade.name().equalsIgnoreCase(Funcionalidade.Audio.name())) {
-                                ccAudio.setSelected(true);
-                            }
-
-                            if (funcionalidade.name().equalsIgnoreCase(Funcionalidade.Camera.name())) {
-                                ccCamera.setSelected(true);
-                            }
+                        cbCaracteristica.getSelectionModel().select(poEditar.getCaracteristica());
+                        if (!funcionalidadesPO.isEmpty()) {
+                            funcionalidadesPO.clear();
                         }
+                        funcionalidadesPO.addAll(poEditar.getFuncionalidades());
 
-                        btnCadastrarPo.setText("SALVAR");
+                        atualizarTabelaFuncionalidadesPO(funcionalidadesPO);
+
+                        txtNomePO.setDisable(false);
+                        cbSituacaoPO.setDisable(false);
+                        cbCaracteristica.setDisable(false);
+                        cbFuncionalidadesPO.setDisable(false);
+                        btnInserir.setDisable(false);
+
+                        btnCadastrar.setText("SALVAR");
 
                         root.getSelectionModel().select(tabCadastro);
                     }

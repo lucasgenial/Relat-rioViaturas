@@ -10,12 +10,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +20,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -86,16 +85,16 @@ public class PO implements Serializable {
         return this.unidades;
     }
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "CARACTERISTICA")
+    @OneToOne(targetEntity = Caracteristica.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "CARACTERISTICA")
     public Caracteristica getCaracteristica() {
         return caracteristica;
     }
 
-    @ElementCollection(targetClass = Funcionalidade.class)
-    @CollectionTable(name = "TBL_FUNCIONALIDADES", joinColumns = @JoinColumn(name = "PO"))
-    @Column(name = "FUNCIONALIDADES")
-    @Enumerated(EnumType.STRING)
+    @OneToMany(targetEntity = Funcionalidade.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinTable(name = "TBL_FUNCIONALIDADE_PO", joinColumns = {
+        @JoinColumn(name = "PO_ID_FK")}, inverseJoinColumns = {
+        @JoinColumn(name = "FUNCIONALIDADE_ID_FK")})
     public Set<Funcionalidade> getFuncionalidades() {
         return funcionalidades;
     }

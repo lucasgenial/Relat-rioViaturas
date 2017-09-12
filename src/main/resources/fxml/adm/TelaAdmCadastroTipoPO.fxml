@@ -9,90 +9,103 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <TabPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioefetivos.controllers.adm.TelaAdmCadastroTipoPOController">
-  <tabs>
-    <Tab fx:id="tabCadastro" text="Cadastro">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <Text layoutX="12.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTROS DE P.O." />
-                  <Separator layoutY="35.0" prefHeight="2.0" prefWidth="600.0" />
-                  <Label layoutX="12.0" layoutY="46.0" text="Nome">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font></Label>
-                  <TextField fx:id="txtNomePO" layoutX="11.0" layoutY="63.0" prefHeight="25.0" prefWidth="578.0" promptText="Informe o Tipo de P.O" />
-                  <Button fx:id="btnCadastrarPo" layoutX="395.0" layoutY="335.0" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" onMouseClicked="#clickedBtnCadastrarPo" prefHeight="25.0" prefWidth="90.0" text="NOVO" />
-                  <Button fx:id="btnVoltar" layoutX="499.0" layoutY="335.0" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="VOLTAR" />
-                  <ComboBox fx:id="cbSituacaoPO" layoutX="11.0" layoutY="115.0" prefHeight="25.0" prefWidth="154.0" />
-                  <Label layoutX="12.0" layoutY="98.0" text="Situação">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="176.0" layoutY="98.0" text="Caracateristica">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="26.0" layoutY="147.0" text="Funcionalidades">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="cbCaracteristica" layoutX="175.0" layoutY="115.0" prefHeight="25.0" prefWidth="230.0" />
-                  <Separator layoutX="128.0" layoutY="150.0" prefHeight="13.0" prefWidth="461.0" />
-                  <Separator layoutX="11.0" layoutY="155.0" orientation="VERTICAL" prefHeight="169.0" prefWidth="11.0" />
-                  <Separator layoutX="16.0" layoutY="318.0" prefHeight="13.0" prefWidth="572.0" />
-                  <ComboBox fx:id="cbFuncionalidadesPO" layoutX="21.0" layoutY="167.0" prefHeight="25.0" prefWidth="256.0" />
-                  <Button fx:id="btnInserir" layoutX="285.0" layoutY="167.0" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="INSERIR" />
-                  <Separator layoutX="585.0" layoutY="154.0" orientation="VERTICAL" prefHeight="170.0" prefWidth="14.0" />
-                  <TableView fx:id="tableFuncionalidadesPO" layoutX="22.0" layoutY="202.0" prefHeight="115.0" prefWidth="561.0">
-                    <columns>
-                      <TableColumn fx:id="columnIDFuncionalidades" prefWidth="34.33333206176758" text="ID" />
-                      <TableColumn fx:id="columnNomeFuncionalidades" prefWidth="407.0" text="FUNCIONALIDADE" />
-                        <TableColumn fx:id="columnAcaoFuncionalidade" prefWidth="118.0" text="AÇÃO" />
-                    </columns>
-                  </TableView>
-               </children></AnchorPane>
-      </content>
-    </Tab>
-      <Tab fx:id="tabListagem" text="Listagem">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <Text layoutX="12.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LISTAGEM DOS P.O CADASTRADOS" />
-                  <Separator layoutY="35.0" prefHeight="2.0" prefWidth="600.0" />
-                  <Label layoutX="12.0" layoutY="46.0" text="Nome">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font></Label>
-                  <TextField fx:id="txtNomeBuscaPo" layoutX="11.0" layoutY="63.0" prefHeight="25.0" prefWidth="400.0" promptText="Informe o Tipo de P.O" />
-                  <Label layoutX="12.0" layoutY="97.0" text="Resultado da Busca">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font></Label>
-                  <TableView fx:id="tablePO" layoutX="11.0" layoutY="114.0" prefHeight="246.0" prefWidth="579.0">
-                     <columns>
-                        <TableColumn fx:id="columnIdPO" prefWidth="51.0" text="ID" />
-                        <TableColumn fx:id="columnNomePO" prefWidth="268.0" text="TIPO DE P.O" />
-                        <TableColumn fx:id="columnSituacaoPO" prefWidth="141.0" text="SITUAÇÃO" />
-                        <TableColumn fx:id="columnAcaoPO" prefWidth="118.0" text="AÇÃO" />
-                     </columns>
-                  </TableView>
-                  <ComboBox fx:id="cbSituacaoBuscaPO" layoutX="421.0" layoutY="63.0" onAction="#clickedCbSituacaoBuscaPO" prefHeight="25.0" prefWidth="169.0" />
-                  <Label layoutX="422.0" layoutY="47.0" text="Situação">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-         </content>
-      </Tab>
-  </tabs>
+    <tabs>
+        <Tab fx:id="tabCadastro" text="Cadastro">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Text layoutX="12.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTROS DE P.O." />
+                        <Separator layoutY="35.0" prefHeight="2.0" prefWidth="600.0" />
+                        <Label layoutX="12.0" layoutY="46.0" text="Nome">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtNomePO" layoutX="11.0" layoutY="63.0" prefHeight="25.0" prefWidth="578.0" promptText="Informe o Tipo de P.O" />
+                        <Button fx:id="btnCadastrar" layoutX="395.0" layoutY="335.0" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" onMouseClicked="#clickedBtnCadastrar" prefHeight="25.0" prefWidth="90.0" text="NOVO" />
+                        <Button fx:id="btnVoltar" layoutX="499.0" layoutY="335.0" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" onMouseClicked="#clickedBtnVoltar" prefHeight="25.0" prefWidth="90.0" text="VOLTAR" />
+                        <ComboBox fx:id="cbSituacaoPO" layoutX="11.0" layoutY="115.0" prefHeight="25.0" prefWidth="154.0" />
+                        <Label layoutX="12.0" layoutY="98.0" text="Situação">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="176.0" layoutY="98.0" text="Caracateristica">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="26.0" layoutY="147.0" text="Funcionalidades">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="cbCaracteristica" layoutX="175.0" layoutY="115.0" prefHeight="25.0" prefWidth="230.0" />
+                        <Separator layoutX="128.0" layoutY="150.0" prefHeight="13.0" prefWidth="461.0" />
+                        <Separator layoutX="11.0" layoutY="155.0" orientation="VERTICAL" prefHeight="169.0" prefWidth="11.0" />
+                        <Separator layoutX="16.0" layoutY="318.0" prefHeight="13.0" prefWidth="572.0" />
+                        <ComboBox fx:id="cbFuncionalidadesPO" layoutX="21.0" layoutY="167.0" prefHeight="25.0" prefWidth="256.0" />
+                        <Button fx:id="btnInserir" layoutX="285.0" layoutY="167.0" minHeight="25.0" minWidth="90.0" mnemonicParsing="false" onMouseClicked="#clickedBtnInserirFuncionalidade" prefHeight="25.0" prefWidth="90.0" text="INSERIR" />
+                        <Separator layoutX="585.0" layoutY="154.0" orientation="VERTICAL" prefHeight="170.0" prefWidth="14.0" />
+                        <TableView fx:id="tableFuncionalidadesPO" layoutX="22.0" layoutY="202.0" prefHeight="115.0" prefWidth="561.0">
+                            <columns>
+                                <TableColumn fx:id="columnIDFuncionalidades" prefWidth="45.0" resizable="false" text="ID">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="id" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="columnNomeFuncionalidades" prefWidth="382.0" resizable="false" text="FUNCIONALIDADE" />
+                                <TableColumn fx:id="columnAcaoFuncionalidade" prefWidth="133.0" resizable="false" text="AÇÃO" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="tabListagem" text="Listagem">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Text layoutX="12.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LISTAGEM DOS P.O CADASTRADOS" />
+                        <Separator layoutY="35.0" prefHeight="2.0" prefWidth="600.0" />
+                        <Label layoutX="12.0" layoutY="46.0" text="Nome">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="txtNomeBuscaPo" layoutX="11.0" layoutY="63.0" prefHeight="25.0" prefWidth="400.0" promptText="Informe o Tipo de P.O" />
+                        <Label layoutX="12.0" layoutY="97.0" text="Resultado da Busca">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <TableView fx:id="tablePO" layoutX="11.0" layoutY="114.0" prefHeight="246.0" prefWidth="579.0">
+                            <columns>
+                                <TableColumn fx:id="columnIdPO" prefWidth="51.0" text="ID">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="id" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn fx:id="columnNomePO" prefWidth="268.0" text="TIPO DE P.O" />
+                                <TableColumn fx:id="columnSituacaoPO" prefWidth="141.0" text="SITUAÇÃO" />
+                                <TableColumn fx:id="columnAcaoPO" prefWidth="118.0" text="AÇÃO" />
+                            </columns>
+                        </TableView>
+                        <ComboBox fx:id="cbSituacaoBuscaPO" layoutX="421.0" layoutY="63.0" onAction="#clickedCbSituacaoBuscaPO" prefHeight="25.0" prefWidth="169.0" />
+                        <Label layoutX="422.0" layoutY="47.0" text="Situação">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
 </TabPane>

@@ -62,29 +62,30 @@ public class MainApp extends Application {
         
         Set<Funcionalidade> funcionalidades = new HashSet<>();
         
-        funcionalidades.add(Funcionalidade.GPS);
-        funcionalidades.add(Funcionalidade.Audio);
-        funcionalidades.add(Funcionalidade.Camera);
+        funcionalidades.add(new Funcionalidade("GPS",true));
+        funcionalidades.add(new Funcionalidade("Audio",true));
+        funcionalidades.add(new Funcionalidade("Camera",true));
         
         //PO
         PoDAO daoPO = new PoDAO();
         Set<PO> listaDePOs = new HashSet<>();
-        listaDePOs.add(new PO("A PÉ", funcionalidades, Caracteristica.Ape, true));
-        listaDePOs.add(new PO("VIATURA 4 RODAS", funcionalidades, Caracteristica.Motorizado,  true));
-        listaDePOs.add(new PO("VIATURA 2 RODAS", funcionalidades, Caracteristica.Motorizado,  true));
-        listaDePOs.add(new PO("BARCO", funcionalidades, Caracteristica.Motorizado,  true));
-        listaDePOs.add(new PO("MÓDULO", null, Caracteristica.PostoFixo, true));
+        listaDePOs.add(new PO("A PÉ", funcionalidades, new Caracteristica("A pé", true), true));
+        listaDePOs.add(new PO("VIATURA 4 RODAS", funcionalidades, new Caracteristica("Motorizado", true),  true));
+        listaDePOs.add(new PO("VIATURA 2 RODAS", funcionalidades, new Caracteristica("Montado", true),  true));
+        listaDePOs.add(new PO("BARCO", funcionalidades, new Caracteristica("Marinho", true),  true));
+        listaDePOs.add(new PO("DRONE", null, new Caracteristica("Aéreo", true), true));
+        listaDePOs.add(new PO("MÓDULO", null, new Caracteristica("Posto Fixo", true), true));
 
         for (PO item : listaDePOs) {
             daoPO.salvar(item);
         }
         
         //FUNCAO
-        Funcao func1 = new Funcao("Motorista");
-        Funcao func2 = new Funcao("Patrulheiro");
-        Funcao func3 = new Funcao("Supervisor");
-        Funcao func4 = new Funcao("Operador");
-        Funcao func5 = new Funcao("Comandante");
+        Funcao func1 = new Funcao("Motorista", true);
+        Funcao func2 = new Funcao("Patrulheiro", true);
+        Funcao func3 = new Funcao("Supervisor", true);
+        Funcao func4 = new Funcao("Operador", true);
+        Funcao func5 = new Funcao("Comandante", true);
 
         FuncaoDAO daoFuncao = new FuncaoDAO();
         daoFuncao.salvar(func1);
@@ -95,10 +96,10 @@ public class MainApp extends Application {
         
         InstituicaoDAO daoInstituicao = new InstituicaoDAO();
 
-        Instituicao inst1 = new Instituicao("PM");
-        Instituicao inst2 = new Instituicao("BPM");
-        Instituicao inst3 = new Instituicao("PC");
-        Instituicao inst4 = new Instituicao("DPT");
+        Instituicao inst1 = new Instituicao("PM", true);
+        Instituicao inst2 = new Instituicao("BPM", true);
+        Instituicao inst3 = new Instituicao("PC", true);
+        Instituicao inst4 = new Instituicao("DPT", true);
 
         daoInstituicao.salvar(inst1);
         daoInstituicao.salvar(inst2);
@@ -173,8 +174,8 @@ public class MainApp extends Application {
         listaUnid.add(und7);
         listaUnid.add(und8);
 
-        TipoMesa tipoMesa = new TipoMesa("Fixa");
-        TipoMesa tipoMesa2 = new TipoMesa("Evento");
+        TipoMesa tipoMesa = new TipoMesa("Fixa", true);
+        TipoMesa tipoMesa2 = new TipoMesa("Evento", true);
         TipoMesaDAO daoTipoMesa = new TipoMesaDAO();
 
         daoTipoMesa.salvar(tipoMesa);
