@@ -18,7 +18,7 @@
 
 <TabPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="565.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cicom.relatorioefetivos.controllers.TelaAdicionaEfetivoController">
     <tabs>
-        <Tab fx:id="tabDadosViatura" text="Dados do P.O">
+        <Tab fx:id="tabDadosEfetivo" text="Dados do P.O">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="396.0" prefWidth="565.0">
                     <children>
@@ -42,47 +42,47 @@
                             </font>
                         </Label>
                         <TextField fx:id="txtPrefixo" disable="true" layoutX="15.0" layoutY="84.0" prefHeight="25.0" prefWidth="240.0" />
-                        <ToggleButton fx:id="tbBCS" disable="true" layoutX="25.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#clickedTbBCS" prefHeight="25.0" prefWidth="126.0" text="Pertence a BCS" />
-                        <ToggleButton fx:id="tbGPS" disable="true" layoutX="182.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#clickedTbGPS" prefHeight="25.0" prefWidth="97.0" text="Possui GPS" />
-                        <ToggleButton fx:id="tbEstadoGPS" disable="true" layoutX="305.0" layoutY="207.0" mnemonicParsing="false" onMouseClicked="#clickedTbEstadoGPS" prefHeight="25.0" prefWidth="97.0" text="GPS Ativo" />
-                        <ToggleButton fx:id="tbHT" disable="true" layoutX="183.0" layoutY="258.0" mnemonicParsing="false" onMouseClicked="#clickedTbHT" prefHeight="25.0" prefWidth="97.0" text="Possui HT" />
-                        <ToggleButton fx:id="tbAudio" disable="true" layoutX="305.0" layoutY="258.0" mnemonicParsing="false" onMouseClicked="#clickedTbAudio" prefHeight="25.0" prefWidth="97.0" text="Possui Audio" />
-                        <ToggleButton fx:id="tbCamera" disable="true" layoutX="183.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#clickedTbCamera" prefHeight="25.0" prefWidth="97.0" text="Possui Câmera" />
-                        <ToggleButton fx:id="tbEstadoCam" disable="true" layoutX="305.0" layoutY="310.0" mnemonicParsing="false" onMouseClicked="#clickedTbEstadoCam" prefHeight="25.0" prefWidth="97.0" text="Câmera Ativa" />
+                        <ToggleButton fx:id="tbBCS" disable="true" layoutX="24.0" layoutY="195.0" mnemonicParsing="false" onMouseClicked="#clickedTbBCS" prefHeight="25.0" prefWidth="126.0" text="Pertence a BCS" />
                         <Separator layoutX="15.0" layoutY="174.0" prefHeight="14.0" prefWidth="541.0" />
                         <Separator layoutX="15.0" layoutY="349.0" prefHeight="14.0" prefWidth="539.0" />
                         <Separator layoutX="11.0" layoutY="181.0" orientation="VERTICAL" prefHeight="174.0" prefWidth="11.0" />
                         <Separator layoutX="551.0" layoutY="181.0" orientation="VERTICAL" prefHeight="174.0" prefWidth="11.0" />
-                        <TextField fx:id="txtTomboHT" disable="true" layoutX="426.0" layoutY="258.0" prefHeight="25.0" prefWidth="116.0" />
-                        <Label layoutX="427.0" layoutY="241.0" text="Tombo HT:" />
                         <Separator layoutX="153.0" layoutY="181.0" orientation="VERTICAL" prefHeight="174.0" prefWidth="13.0" />
-                        <LocalTimeTextField fx:id="horaBaixaViatura" disable="true" layoutX="25.0" layoutY="310.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ToggleButton fx:id="tbViaturaAtiva" disable="true" layoutX="25.0" layoutY="256.0" mnemonicParsing="false" onMouseClicked="#clickedTbViaturaAtiva" prefHeight="25.0" prefWidth="124.0" text="Ativa" />
+                        <LocalTimeTextField fx:id="horaBaixaEfetivo" disable="true" layoutX="25.0" layoutY="310.0" prefHeight="25.0" prefWidth="125.0" />
+                        <ToggleButton fx:id="tbEfetivoAtiva" disable="true" layoutX="25.0" layoutY="253.0" mnemonicParsing="false" onMouseClicked="#clickedTbEfetivoAtiva" prefHeight="25.0" prefWidth="124.0" text="Ativa" />
                         <Label layoutX="16.0" layoutY="118.0" text="Hora Inicial Plantão">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-                        <LocalTimeTextField fx:id="horaInicialPlantaoViatura" disable="true" layoutX="15.0" layoutY="135.0" prefHeight="25.0" prefWidth="72.0" />
+                        <LocalTimeTextField fx:id="horaInicialPlantaoEfetivo" disable="true" layoutX="15.0" layoutY="135.0" prefHeight="25.0" prefWidth="72.0" />
                         <Label layoutX="155.0" layoutY="118.0" text="Hora Final Plantão">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-                        <LocalTimeTextField fx:id="horaFinalPlantaoViatura" disable="true" layoutX="155.0" layoutY="135.0" prefHeight="25.0" prefWidth="103.0" />
+                        <LocalTimeTextField fx:id="horaFinalPlantaoEfetivo" disable="true" layoutX="155.0" layoutY="135.0" prefHeight="25.0" prefWidth="103.0" />
                         <Label layoutX="298.0" layoutY="118.0" text="Hora Pausa 1">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-                        <LocalTimeTextField fx:id="horaPausa1Viatura" disable="true" layoutX="297.0" layoutY="135.0" prefHeight="25.0" prefWidth="65.0" />
+                        <LocalTimeTextField fx:id="horaPausa1Efetivo" disable="true" layoutX="297.0" layoutY="135.0" prefHeight="25.0" prefWidth="65.0" />
                         <Label layoutX="437.0" layoutY="118.0" text="Hora Pausa 2">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>
                         </Label>
-                        <LocalTimeTextField fx:id="horaPausa2Viatura" disable="true" layoutX="436.0" layoutY="135.0" prefHeight="25.0" prefWidth="84.0" />
-                        <Separator layoutX="15.0" layoutY="238.0" prefHeight="14.0" prefWidth="143.0" />
+                        <LocalTimeTextField fx:id="horaPausa2Efetivo" disable="true" layoutX="436.0" layoutY="135.0" prefHeight="25.0" prefWidth="84.0" />
+                        <Separator layoutX="16.0" layoutY="225.0" prefHeight="14.0" prefWidth="143.0" />
+                  <TableView fx:id="tableFuncionalidade" layoutX="165.0" layoutY="193.0" prefHeight="157.0" prefWidth="384.0">
+                    <columns>
+                      <TableColumn fx:id="columnFuncionalidade" prefWidth="130.0" resizable="false" sortable="false" text="FUNCIONALIDADE" />
+                      <TableColumn fx:id="columnSituacaoFuncionalidade" minWidth="0.0" prefWidth="76.0" resizable="false" sortable="false" text="SITUAÇÃO" />
+                        <TableColumn fx:id="columnStatusFuncionalidade" prefWidth="59.0" resizable="false" sortable="false" text="STATUS" />
+                        <TableColumn fx:id="columnTomboFuncionalidade" prefWidth="118.0" resizable="false" sortable="false" text="TOMBO" />
+                    </columns>
+                  </TableView>
                     </children>
                 </AnchorPane>
             </content>
@@ -149,7 +149,7 @@
                             </font>
                         </Label>
                         <LocalTimeTextField fx:id="horaPausa2Servidor" disable="true" layoutX="435.0" layoutY="117.0" prefHeight="25.0" prefWidth="84.0" />
-                        <CheckBox fx:id="chcMesmoHorario" layoutX="15.0" layoutY="70.0" mnemonicParsing="false" onAction="#clickedChcMesmoHorario" selected="true" text="Utilizar mesmo horário da viatura">
+                        <CheckBox fx:id="chcMesmoHorario" layoutX="15.0" layoutY="70.0" mnemonicParsing="false" onAction="#clickedChcMesmoHorario" selected="true" text="Utilizar mesmo horário da Efetivo">
                             <font>
                                 <Font name="System Bold" size="12.0" />
                             </font>

@@ -1,5 +1,6 @@
 package com.cicom.relatorioefetivos.model;
 
+import com.sun.istack.internal.Nullable;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -20,7 +21,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -37,7 +37,7 @@ public class PO implements Serializable {
     private StringProperty nome = new SimpleStringProperty();
     private Set<Unidade> unidades = new HashSet<>();
     private Caracteristica caracteristica;
-    private Set<Funcionalidade> funcionalidades = new HashSet<>();
+    private Set<FuncionalidadePO> funcionalidades = new HashSet<>();
     private Boolean status;
 
     public PO() {
@@ -47,12 +47,12 @@ public class PO implements Serializable {
         this.setNome(nome);
     }
 
-    public PO(String nome, Boolean ativo) {
+    public PO(String nome, boolean ativo) {
         this.setNome(nome);
         this.setStatus(ativo);
     }
 
-    public PO(String nome, Set<Funcionalidade> funcionalidades, Caracteristica caracteristica, Boolean ativo) {
+    public PO(String nome, Set<FuncionalidadePO> funcionalidades, Caracteristica caracteristica, boolean ativo) {
         this.setNome(nome);
         this.setStatus(ativo);
         this.setCaracteristica(caracteristica);
@@ -88,20 +88,21 @@ public class PO implements Serializable {
     @OneToOne(targetEntity = Caracteristica.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "CARACTERISTICA")
     public Caracteristica getCaracteristica() {
-        return caracteristica;
+        return this.caracteristica;
     }
 
-    @OneToMany(targetEntity = Funcionalidade.class, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE})
+    @Nullable
+    @ManyToMany(targetEntity = Funcionalidade.class, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinTable(name = "TBL_FUNCIONALIDADE_PO", joinColumns = {
         @JoinColumn(name = "PO_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "FUNCIONALIDADE_ID_FK")})
-    public Set<Funcionalidade> getFuncionalidades() {
-        return funcionalidades;
+    public Set<FuncionalidadePO> getFuncionalidades() {
+        return this.funcionalidades;
     }
 
     @Column(name = "STATUS")
     public Boolean getStatus() {
-        return status;
+        return this.status;
     }
 
     /*
@@ -123,11 +124,11 @@ public class PO implements Serializable {
         this.caracteristica = value;
     }
 
-    public void setFuncionalidades(Set<Funcionalidade> value) {
+    public void setFuncionalidades(Set<FuncionalidadePO> value) {
         this.funcionalidades = value;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -144,7 +145,7 @@ public class PO implements Serializable {
 
     @Override
     public String toString() {
-        return "PO{" + "id=" + id + ", nome=" + nome + ", unidades=" + unidades + ", caracteristica=" + caracteristica + ", funcionalidades=" + funcionalidades + ", ativo=" + status + '}';
+        return "PO{" + "id=" + id + ", nome=" + nome + ", unidades=" + unidades.size() + ", caracteristica=" + caracteristica.getNome() + ", funcionalidades=" + funcionalidades.size() + ", ativo=" + status + '}';
     }
 
     @Override

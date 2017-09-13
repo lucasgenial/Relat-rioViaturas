@@ -3,7 +3,7 @@ package com.cicom.relatorioefetivos.controllers;
 import com.cicom.relatorioefetivos.DAO.FuncaoDAO;
 import com.cicom.relatorioefetivos.DAO.PoDAO;
 import com.cicom.relatorioefetivos.DAO.RelatorioDiarioMesasDAO;
-import com.cicom.relatorioefetivos.DAO.RelatorioDiarioViaturasDAO;
+import com.cicom.relatorioefetivos.DAO.RelatorioDiarioEfetivoDAO;
 import com.cicom.relatorioefetivos.DAO.UnidadeDAO;
 import com.cicom.relatorioefetivos.DAO.EfetivoDAO;
 import com.cicom.relatorioefetivos.model.Funcao;
@@ -100,23 +100,23 @@ public class TelaAdicionaEfetivoController implements Initializable {
     @FXML
     private TextField txtNomeServidor;
     @FXML
-    private Tab tabDadosViatura;
+    private Tab tabDadosEfetivo;
     @FXML
     private Button btnAvancar;
     @FXML
     private TextField txtTomboHT;
     @FXML
-    private LocalTimeTextField horaBaixaViatura;
+    private LocalTimeTextField horaBaixaEfetivo;
     @FXML
-    private ToggleButton tbViaturaAtiva;
+    private ToggleButton tbEfetivoAtiva;
     @FXML
-    private LocalTimeTextField horaInicialPlantaoViatura;
+    private LocalTimeTextField horaInicialPlantaoEfetivo;
     @FXML
-    private LocalTimeTextField horaFinalPlantaoViatura;
+    private LocalTimeTextField horaFinalPlantaoEfetivo;
     @FXML
-    private LocalTimeTextField horaPausa1Viatura;
+    private LocalTimeTextField horaPausa1Efetivo;
     @FXML
-    private LocalTimeTextField horaPausa2Viatura;
+    private LocalTimeTextField horaPausa2Efetivo;
     @FXML
     private Tab tabDadosGuarnicao;
     @FXML
@@ -141,9 +141,9 @@ public class TelaAdicionaEfetivoController implements Initializable {
     private final UnidadeDAO daoUnidade = new UnidadeDAO();
     private final FuncaoDAO daoFuncao = new FuncaoDAO();
     private final RelatorioDiarioMesasDAO daoRelatorioMesa = new RelatorioDiarioMesasDAO();
-    private final RelatorioDiarioViaturasDAO daoRelatorioViatura = new RelatorioDiarioViaturasDAO();
+    private final RelatorioDiarioEfetivoDAO daoRelatorioEfetivo = new RelatorioDiarioEfetivoDAO();
 
-    private Efetivo viatura;
+    private Efetivo efetivo;
     private Servidor servidor = new Servidor();
     private Funcao funcao = new Funcao();
     private ServidorFuncao servidorFuncao = new ServidorFuncao();
@@ -155,9 +155,9 @@ public class TelaAdicionaEfetivoController implements Initializable {
     private String tituloMensagem = "";
     private String corpoMensagem = "";
     private RelatorioDiarioMesas relatorioDeMesa;
-    private RelatorioDiarioEfetivo relatorioDeViatura;
+    private RelatorioDiarioEfetivo relatorioDeEfetivo;
     private Stage stage;
-    private EfetivoDAO daoViatura = new EfetivoDAO();
+    private EfetivoDAO daoEfetivo = new EfetivoDAO();
     private boolean botaoSalvarClicado = false;
     private ServidorFuncao servidorEditar;
 
@@ -183,15 +183,15 @@ public class TelaAdicionaEfetivoController implements Initializable {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (viatura != null) {
+                        if (efetivo != null) {
                             tabDadosGuarnicao.setDisable(false);
                             txtNomeServidor.setDisable(false);
                             cbTipoPO.setDisable(false);
                             tableServidorGuarnicao.setDisable(false);
                             btnAvancar.setDisable(true);
-                            tbViaturaAtiva.setDisable(true);
-                            horaBaixaViatura.setDisable(true);
-                            if (viatura.isVtrBaixada()) {
+                            tbEfetivoAtiva.setDisable(true);
+                            horaBaixaEfetivo.setDisable(true);
+                            if (efetivo.isVtrBaixada()) {
                                 btnSalvar.setDisable(true);
                             } else {
                                 btnSalvar.setDisable(false);
@@ -334,7 +334,7 @@ public class TelaAdicionaEfetivoController implements Initializable {
         tbCamera.setSelected(false);
         tbEstadoCam.setSelected(false);
         tbHT.setSelected(false);
-        tbViaturaAtiva.setSelected(false);
+        tbEfetivoAtiva.setSelected(false);
 
         verificaTipoPO(tipoPO);
     }
@@ -357,21 +357,21 @@ public class TelaAdicionaEfetivoController implements Initializable {
     @FXML
     private void clickedChcMesmoHorario() {
         if (chcMesmoHorario.isSelected()) {
-            //Pega os memos horários da viatura
-            horaInicialPlantaoServidor.setLocalTime(horaInicialPlantaoViatura.getLocalTime());
-            horaFinalPlantaoServidor.setLocalTime(horaFinalPlantaoViatura.getLocalTime());
-            horaPausa1Servidor.setLocalTime(horaPausa1Viatura.getLocalTime());
-            horaPausa2Servidor.setLocalTime(horaPausa2Viatura.getLocalTime());
+            //Pega os memos horários da efetivo
+            horaInicialPlantaoServidor.setLocalTime(horaInicialPlantaoEfetivo.getLocalTime());
+            horaFinalPlantaoServidor.setLocalTime(horaFinalPlantaoEfetivo.getLocalTime());
+            horaPausa1Servidor.setLocalTime(horaPausa1Efetivo.getLocalTime());
+            horaPausa2Servidor.setLocalTime(horaPausa2Efetivo.getLocalTime());
             horaInicialPlantaoServidor.setDisable(true);
             horaFinalPlantaoServidor.setDisable(true);
             horaPausa1Servidor.setDisable(true);
             horaPausa2Servidor.setDisable(true);
         } else {
             //Novos horarios para cada servidor
-            horaInicialPlantaoServidor.setLocalTime(horaInicialPlantaoViatura.getLocalTime());
-            horaFinalPlantaoServidor.setLocalTime(horaFinalPlantaoViatura.getLocalTime());
-            horaPausa1Servidor.setLocalTime(horaPausa1Viatura.getLocalTime());
-            horaPausa2Servidor.setLocalTime(horaPausa2Viatura.getLocalTime());
+            horaInicialPlantaoServidor.setLocalTime(horaInicialPlantaoEfetivo.getLocalTime());
+            horaFinalPlantaoServidor.setLocalTime(horaFinalPlantaoEfetivo.getLocalTime());
+            horaPausa1Servidor.setLocalTime(horaPausa1Efetivo.getLocalTime());
+            horaPausa2Servidor.setLocalTime(horaPausa2Efetivo.getLocalTime());
             horaInicialPlantaoServidor.setDisable(false);
             horaFinalPlantaoServidor.setDisable(false);
             horaPausa1Servidor.setDisable(false);
@@ -380,14 +380,14 @@ public class TelaAdicionaEfetivoController implements Initializable {
     }
 
     private boolean verificaDadosPaneDadosPO() {
-        if (horaInicialPlantaoViatura.getLocalTime() == null) {
-            tituloMensagem = "Erro Horário Viatura";
+        if (horaInicialPlantaoEfetivo.getLocalTime() == null) {
+            tituloMensagem = "Erro Horário Efetivo";
             corpoMensagem = "É necessário informar o horário de inicio plantão para o PO!";
             return false;
         }
 
-        if (horaFinalPlantaoViatura.getLocalTime() == null) {
-            tituloMensagem = "Erro Horário Viatura";
+        if (horaFinalPlantaoEfetivo.getLocalTime() == null) {
+            tituloMensagem = "Erro Horário Efetivo";
             corpoMensagem = "É necessário informar o horário de fim do plantão para o PO!";
             return false;
         }
@@ -422,13 +422,13 @@ public class TelaAdicionaEfetivoController implements Initializable {
                         break;
                     }
 
-                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                    if (tbEfetivoAtiva.isSelected() && horaBaixaEfetivo.getLocalTime() == null) {
                         tituloMensagem = "Erro Hora Baixa";
-                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        corpoMensagem = "A opção de Baixa de Efetivo foi selecionada\n, devendo ser fornecido a hora da baixa!";
                         break;
                     }
 
-                    if (!verificaHoraViatura()) {
+                    if (!verificaHoraEfetivo()) {
                         break;
                     }
 
@@ -456,13 +456,13 @@ public class TelaAdicionaEfetivoController implements Initializable {
                         break;
                     }
 
-                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                    if (tbEfetivoAtiva.isSelected() && horaBaixaEfetivo.getLocalTime() == null) {
                         tituloMensagem = "Erro Hora Baixa";
-                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        corpoMensagem = "A opção de Baixa de Efetivo foi selecionada\n, devendo ser fornecido a hora da baixa!";
                         break;
                     }
 
-                    if (!verificaHoraViatura()) {
+                    if (!verificaHoraEfetivo()) {
                         break;
                     }
 
@@ -480,13 +480,13 @@ public class TelaAdicionaEfetivoController implements Initializable {
                         break;
                     }
 
-                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                    if (tbEfetivoAtiva.isSelected() && horaBaixaEfetivo.getLocalTime() == null) {
                         tituloMensagem = "Erro Hora Baixa";
-                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        corpoMensagem = "A opção de Baixa de Efetivo foi selecionada\n, devendo ser fornecido a hora da baixa!";
                         break;
                     }
 
-                    if (!verificaHoraViatura()) {
+                    if (!verificaHoraEfetivo()) {
                         break;
                     }
 
@@ -504,13 +504,13 @@ public class TelaAdicionaEfetivoController implements Initializable {
                         break;
                     }
 
-                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                    if (tbEfetivoAtiva.isSelected() && horaBaixaEfetivo.getLocalTime() == null) {
                         tituloMensagem = "Erro Hora Baixa";
-                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        corpoMensagem = "A opção de Baixa de Efetivo foi selecionada\n, devendo ser fornecido a hora da baixa!";
                         break;
                     }
 
-                    if (!verificaHoraViatura()) {
+                    if (!verificaHoraEfetivo()) {
                         break;
                     }
 
@@ -538,12 +538,12 @@ public class TelaAdicionaEfetivoController implements Initializable {
                         break;
                     }
 
-                    if (tbViaturaAtiva.isSelected() && horaBaixaViatura.getLocalTime() == null) {
+                    if (tbEfetivoAtiva.isSelected() && horaBaixaEfetivo.getLocalTime() == null) {
                         tituloMensagem = "Erro Hora Baixa";
-                        corpoMensagem = "A opção de Baixa de viatura foi selecionada\n, devendo ser fornecido a hora da baixa!";
+                        corpoMensagem = "A opção de Baixa de Efetivo foi selecionada\n, devendo ser fornecido a hora da baixa!";
                         break;
                     }
-                    if (!verificaHoraViatura()) {
+                    if (!verificaHoraEfetivo()) {
                         break;
                     }
 
@@ -557,22 +557,22 @@ public class TelaAdicionaEfetivoController implements Initializable {
         return retorno;
     }
 
-    private boolean verificaHoraViatura() {
-        if (horaInicialPlantaoViatura.getLocalTime() == null) {
+    private boolean verificaHoraEfetivo() {
+        if (horaInicialPlantaoEfetivo.getLocalTime() == null) {
             //Pop-up informando o cadastro
             tituloMensagem = "Erro Hora Incial Plantão";
             corpoMensagem = "É necessário Informar o hora do inicio do plantão deste PO!";
             return false;
         }
 
-        if (horaFinalPlantaoViatura.getLocalTime() == null) {
+        if (horaFinalPlantaoEfetivo.getLocalTime() == null) {
             //Pop-up informando o cadastro
             tituloMensagem = "Erro Hora Final Plantão";
             corpoMensagem = "É necessário Informar o hora do final do plantão deste PO!";
             return false;
         }
 
-        if (horaPausa1Viatura.getLocalTime() == null && horaPausa2Viatura.getLocalTime() != null) {
+        if (horaPausa1Efetivo.getLocalTime() == null && horaPausa2Efetivo.getLocalTime() != null) {
             //Pop-up informando o cadastro
             tituloMensagem = "Erro Hora Pausa 2";
             corpoMensagem = "Não é possivel cadastrar pausa2 antes da hora da pausa1!";
@@ -580,8 +580,8 @@ public class TelaAdicionaEfetivoController implements Initializable {
         }
 
         //É antes
-        if ((horaFinalPlantaoViatura.getLocalTime() != null && horaInicialPlantaoViatura.getLocalTime() != null)
-                && horaFinalPlantaoViatura.getLocalTime().isBefore(horaInicialPlantaoViatura.getLocalTime())) {
+        if ((horaFinalPlantaoEfetivo.getLocalTime() != null && horaInicialPlantaoEfetivo.getLocalTime() != null)
+                && horaFinalPlantaoEfetivo.getLocalTime().isBefore(horaInicialPlantaoEfetivo.getLocalTime())) {
             if (relatorioDeMesa.getDataFinal().equals(relatorioDeMesa.getDataInicial())) {
                 tituloMensagem = "Data Inválida";
                 corpoMensagem = "Corrija o campo Hora Plantão Inicial!\nEsta não poderá anterior a Hora de saída!";
@@ -589,8 +589,8 @@ public class TelaAdicionaEfetivoController implements Initializable {
             }
         }
 
-        if ((horaPausa2Viatura.getLocalTime() != null && horaPausa1Viatura.getLocalTime() != null)
-                && horaPausa2Viatura.getLocalTime().isBefore(horaPausa1Viatura.getLocalTime())) {
+        if ((horaPausa2Efetivo.getLocalTime() != null && horaPausa1Efetivo.getLocalTime() != null)
+                && horaPausa2Efetivo.getLocalTime().isBefore(horaPausa1Efetivo.getLocalTime())) {
             if (relatorioDeMesa.getDataFinal().equals(relatorioDeMesa.getDataInicial())) {
                 tituloMensagem = "Data Inválida";
                 corpoMensagem = "Corrija o campo Hora da Pausa2!\nEsta não poderá ser anterior a Hora da Pausa1!";
@@ -608,7 +608,7 @@ public class TelaAdicionaEfetivoController implements Initializable {
             return false;
         }
 
-        if (horaInicialPlantaoServidor.getLocalTime().isBefore(horaInicialPlantaoViatura.getLocalTime())) {
+        if (horaInicialPlantaoServidor.getLocalTime().isBefore(horaInicialPlantaoEfetivo.getLocalTime())) {
             //Pop-up informando o cadastro
             tituloMensagem = "Erro Hora Incial Plantão";
             corpoMensagem = "A hora do inicio do plantão deste servidor não poderá ser\n"
@@ -623,7 +623,7 @@ public class TelaAdicionaEfetivoController implements Initializable {
             return false;
         }
 
-        if (horaFinalPlantaoServidor.getLocalTime().isAfter(horaFinalPlantaoViatura.getLocalTime())) {
+        if (horaFinalPlantaoServidor.getLocalTime().isAfter(horaFinalPlantaoEfetivo.getLocalTime())) {
             //Pop-up informando o cadastro
             tituloMensagem = "Erro Hora Final Plantão";
             corpoMensagem = "A hora do fim do plantão do servidor não poderá ser\n"
@@ -719,80 +719,80 @@ public class TelaAdicionaEfetivoController implements Initializable {
     private void clickedBtnSalvar(MouseEvent event) {
         if (verificaDados()) {
             /*
-                Verifica se está editando ou salvando nova viatura
-                se viatura == null ---> Salvando nova
+                Verifica se está editando ou salvando nova efetivo
+                se efetivo == null ---> Salvando nova
                 se Efetivo != null ---> Editando
              */
-            if (viatura == null) {
-                viatura = new Efetivo();
+            if (efetivo == null) {
+                efetivo = new Efetivo();
 
-                viatura.setTipoPO(tipoPO);
-                viatura.setPrefixo(txtPrefixo.getText());
+                efetivo.setTipoPO(tipoPO);
+                efetivo.setPrefixo(txtPrefixo.getText());
 
                 //horario
-                viatura.setHoraInicialPlantao(horaInicialPlantaoViatura.getLocalTime());
-                viatura.setHoraFinalPlantao(horaFinalPlantaoViatura.getLocalTime());
-                viatura.setHoraPausa1(horaPausa1Viatura.getLocalTime());
-                viatura.setHoraPausa2(horaPausa2Viatura.getLocalTime());
+                efetivo.setHoraInicialPlantao(horaInicialPlantaoEfetivo.getLocalTime());
+                efetivo.setHoraFinalPlantao(horaFinalPlantaoEfetivo.getLocalTime());
+                efetivo.setHoraPausa1(horaPausa1Efetivo.getLocalTime());
+                efetivo.setHoraPausa2(horaPausa2Efetivo.getLocalTime());
 
                 //BCS
-                viatura.setBcs(tbBCS.isSelected());
+                efetivo.setBcs(tbBCS.isSelected());
 
                 //GPS
-                viatura.setGps(tbGPS.isSelected());
-                viatura.setEstadoGPS(tbEstadoGPS.isSelected());
+                efetivo.setGps(tbGPS.isSelected());
+                efetivo.setEstadoGPS(tbEstadoGPS.isSelected());
 
                 //HT e Audio
-                viatura.setHt(tbHT.isSelected());
-                viatura.setAudio(tbAudio.isSelected());
-                viatura.setTomboHT(txtTomboHT.getText());
+                efetivo.setHt(tbHT.isSelected());
+                efetivo.setAudio(tbAudio.isSelected());
+                efetivo.setTomboHT(txtTomboHT.getText());
 
                 //Camera
-                viatura.setCamera(tbCamera.isSelected());
-                viatura.setEstadoCam(tbEstadoCam.isSelected());
+                efetivo.setCamera(tbCamera.isSelected());
+                efetivo.setEstadoCam(tbEstadoCam.isSelected());
 
                 //Baixa Efetivo
-                viatura.setVtrBaixada(tbViaturaAtiva.isSelected());
-                viatura.setHrDaBaixa(horaBaixaViatura.getLocalTime());
+                efetivo.setVtrBaixada(tbEfetivoAtiva.isSelected());
+                efetivo.setHrDaBaixa(horaBaixaEfetivo.getLocalTime());
 
                 //Guarnicao
-                viatura.setGuarnicao(listaDeServidores);
+                efetivo.setGuarnicao(listaDeServidores);
 
-                relatorioDeViatura.getEfetivos().add(viatura);
+                relatorioDeEfetivo.getEfetivos().add(efetivo);
 
                 root.getScene().getWindow().hide();
             } else {
-                viatura.setTipoPO(tipoPO);
-                viatura.setPrefixo(txtPrefixo.getText());
+                efetivo.setTipoPO(tipoPO);
+                efetivo.setPrefixo(txtPrefixo.getText());
 
                 //horario
-                viatura.setHoraInicialPlantao(horaInicialPlantaoViatura.getLocalTime());
-                viatura.setHoraFinalPlantao(horaFinalPlantaoViatura.getLocalTime());
-                viatura.setHoraPausa1(horaPausa1Viatura.getLocalTime());
-                viatura.setHoraPausa2(horaPausa2Viatura.getLocalTime());
+                efetivo.setHoraInicialPlantao(horaInicialPlantaoEfetivo.getLocalTime());
+                efetivo.setHoraFinalPlantao(horaFinalPlantaoEfetivo.getLocalTime());
+                efetivo.setHoraPausa1(horaPausa1Efetivo.getLocalTime());
+                efetivo.setHoraPausa2(horaPausa2Efetivo.getLocalTime());
 
                 //BCS
-                viatura.setBcs(tbBCS.isSelected());
+                efetivo.setBcs(tbBCS.isSelected());
 
                 //GPS
-                viatura.setGps(tbGPS.isSelected());
-                viatura.setEstadoGPS(tbEstadoGPS.isSelected());
+                efetivo.setGps(tbGPS.isSelected());
+                efetivo.setEstadoGPS(tbEstadoGPS.isSelected());
 
                 //HT e Audio
-                viatura.setHt(tbHT.isSelected());
-                viatura.setAudio(tbAudio.isSelected());
-                viatura.setTomboHT(txtTomboHT.getText());
+                efetivo.setHt(tbHT.isSelected());
+                efetivo.setAudio(tbAudio.isSelected());
+                efetivo.setTomboHT(txtTomboHT.getText());
 
                 //Camera
-                viatura.setCamera(tbCamera.isSelected());
-                viatura.setEstadoCam(tbEstadoCam.isSelected());
+                efetivo.setCamera(tbCamera.isSelected());
+                efetivo.setEstadoCam(tbEstadoCam.isSelected());
 
                 //Baixa Efetivo
-                viatura.setVtrBaixada(tbViaturaAtiva.isSelected());
-                viatura.setHrDaBaixa(horaBaixaViatura.getLocalTime());
+                efetivo.setVtrBaixada(tbEfetivoAtiva.isSelected());
+                efetivo.setHrDaBaixa(horaBaixaEfetivo.getLocalTime());
 
                 //Guarnicao
-                viatura.setGuarnicao(listaDeServidores);
+                efetivo.setGuarnicao(listaDeServidores);
 
                 root.getScene().getWindow().hide();
             }
@@ -827,9 +827,9 @@ public class TelaAdicionaEfetivoController implements Initializable {
         final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
 
         if (resultado.get() == ButtonType.YES) {
-            //Para as duas situações é necessário que a viatura assuma o valor nulo para
+            //Para as duas situações é necessário que a efetivo assuma o valor nulo para
             //Cancelar alterações e/ou salvamento
-            viatura = null;
+            efetivo = null;
             root.getScene().getWindow().hide();
         }
     }
@@ -981,22 +981,22 @@ public class TelaAdicionaEfetivoController implements Initializable {
     }
 
     @FXML
-    private void clickedTbViaturaAtiva() {
-        if (tbViaturaAtiva.isSelected()) {
+    private void clickedTbEfetivoAtiva() {
+        if (tbEfetivoAtiva.isSelected()) {
 
-            if (horaBaixaViatura.getLocalTime() == null) {
+            if (horaBaixaEfetivo.getLocalTime() == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Atenção!");
-                alert.setHeaderText("Informe o horário da Baixa da Viatura");
+                alert.setHeaderText("Informe o horário da Baixa do Efetivo");
                 alert.getButtonTypes().clear();
 
-                tbViaturaAtiva.setSelected(false);
-                tbViaturaAtiva.setText("Ativa");
+                tbEfetivoAtiva.setSelected(false);
+                tbEfetivoAtiva.setText("Ativa");
             } else {
                 Alert alertAntesExcluir = new Alert(Alert.AlertType.CONFIRMATION);
                 alertAntesExcluir.setTitle("Atenção!");
-                alertAntesExcluir.setHeaderText("A viatura selecionada será BAIXADA!. Será necessário"
-                        + "\ncriar uma nova viatura com a mesma guarnição?");
+                alertAntesExcluir.setHeaderText("O Efetivo selecionado será BAIXADO!. Será necessário"
+                        + "\ncriar um novo Efetivo com a mesma guarnição?");
                 alertAntesExcluir.getButtonTypes().clear();
                 alertAntesExcluir.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
 
@@ -1012,14 +1012,14 @@ public class TelaAdicionaEfetivoController implements Initializable {
                 final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
 
                 if (resultado.get() == ButtonType.YES) {
-                    tbViaturaAtiva.setText("Inativa");
+                    tbEfetivoAtiva.setText("Inativa");
 
                 } else {
-                    tbViaturaAtiva.setSelected(false);
+                    tbEfetivoAtiva.setSelected(false);
                 }
             }
         } else {
-            tbViaturaAtiva.setText("Ativa");
+            tbEfetivoAtiva.setText("Ativa");
         }
     }
 
@@ -1027,15 +1027,15 @@ public class TelaAdicionaEfetivoController implements Initializable {
         this.relatorioDeMesa = value;
     }
 
-    public Efetivo getViatura() {
-        return this.viatura;
+    public Efetivo getEfetivo() {
+        return this.efetivo;
     }
 
-    public void setViatura(Efetivo value) {
+    public void setEfetivo(Efetivo value) {
         if (value != null) {
 
-            this.viatura = new Efetivo();
-            this.viatura.setId(value.getId());
+            this.efetivo = new Efetivo();
+            this.efetivo.setId(value.getId());
 
             this.cbTipoUnidadeOperacional.setConverter(new StringConverter<Unidade>() {
                 @Override
@@ -1051,7 +1051,7 @@ public class TelaAdicionaEfetivoController implements Initializable {
                     return daoUnidade.buscaPorNome(string);
                 }
             });
-            this.cbTipoUnidadeOperacional.getSelectionModel().select(relatorioDeViatura.getUnidade());
+            this.cbTipoUnidadeOperacional.getSelectionModel().select(relatorioDeEfetivo.getUnidade());
 
             this.cbTipoPO.setConverter(new StringConverter<PO>() {
                 @Override
@@ -1072,10 +1072,10 @@ public class TelaAdicionaEfetivoController implements Initializable {
 
             //Horário
             this.txtPrefixo.setText(value.getPrefixo());
-            this.horaInicialPlantaoViatura.setLocalTime(value.getHoraInicialPlantao());
-            this.horaFinalPlantaoViatura.setLocalTime(value.getHoraFinalPlantao());
-            this.horaPausa1Viatura.setLocalTime(value.getHoraPausa1());
-            this.horaPausa2Viatura.setLocalTime(value.getHoraPausa2());
+            this.horaInicialPlantaoEfetivo.setLocalTime(value.getHoraInicialPlantao());
+            this.horaFinalPlantaoEfetivo.setLocalTime(value.getHoraFinalPlantao());
+            this.horaPausa1Efetivo.setLocalTime(value.getHoraPausa1());
+            this.horaPausa2Efetivo.setLocalTime(value.getHoraPausa2());
 
             //BCS
             this.tbBCS.setSelected(value.isBcs());
@@ -1093,9 +1093,9 @@ public class TelaAdicionaEfetivoController implements Initializable {
             this.tbCamera.setSelected(value.isCamera());
             this.tbEstadoCam.setSelected(value.isCamera());
 
-            //Viatura Baixada
-            this.tbViaturaAtiva.setSelected(value.isVtrBaixada());
-            this.horaBaixaViatura.setLocalTime(value.getHrDaBaixa());
+            //Efetivo Baixada
+            this.tbEfetivoAtiva.setSelected(value.isVtrBaixada());
+            this.horaBaixaEfetivo.setLocalTime(value.getHrDaBaixa());
 
             verificaTipoPO(value.getTipoPO());
 
@@ -1105,16 +1105,16 @@ public class TelaAdicionaEfetivoController implements Initializable {
         }
     }
 
-    public RelatorioDiarioEfetivo getRelatorioDeViatura() {
-        return this.relatorioDeViatura;
+    public RelatorioDiarioEfetivo getRelatorioDeEfetivo() {
+        return this.relatorioDeEfetivo;
     }
 
-    void setRelatorioDeViatura(RelatorioDiarioEfetivo value) {
-        this.relatorioDeViatura = value;
+    void setRelatorioDeEfetivo(RelatorioDiarioEfetivo value) {
+        this.relatorioDeEfetivo = value;
 
         if (value != null) {
-            listaPOS.addAll(relatorioDeViatura.getUnidade().getPos());
-            listaUnidade.add(relatorioDeViatura.getUnidade());
+            listaPOS.addAll(relatorioDeEfetivo.getUnidade().getPos());
+            listaUnidade.add(relatorioDeEfetivo.getUnidade());
             cbTipoUnidadeOperacional.setConverter(new StringConverter<Unidade>() {
                 @Override
                 public String toString(Unidade item) {
@@ -1141,10 +1141,10 @@ public class TelaAdicionaEfetivoController implements Initializable {
                 case "VIATURA 2 RODAS":
                     txtPrefixo.setDisable(false);
                     //Habilita as horas
-                    horaInicialPlantaoViatura.setDisable(false);
-                    horaFinalPlantaoViatura.setDisable(false);
-                    horaPausa1Viatura.setDisable(false);
-                    horaPausa2Viatura.setDisable(false);
+                    horaInicialPlantaoEfetivo.setDisable(false);
+                    horaFinalPlantaoEfetivo.setDisable(false);
+                    horaPausa1Efetivo.setDisable(false);
+                    horaPausa2Efetivo.setDisable(false);
 
                     //Habilita os itens do PO
                     tbBCS.setDisable(false);
@@ -1158,10 +1158,10 @@ public class TelaAdicionaEfetivoController implements Initializable {
                 case "BARCO":
                     txtPrefixo.setDisable(false);
                     //Habilita as horas
-                    horaInicialPlantaoViatura.setDisable(false);
-                    horaFinalPlantaoViatura.setDisable(false);
-                    horaPausa1Viatura.setDisable(false);
-                    horaPausa2Viatura.setDisable(false);
+                    horaInicialPlantaoEfetivo.setDisable(false);
+                    horaFinalPlantaoEfetivo.setDisable(false);
+                    horaPausa1Efetivo.setDisable(false);
+                    horaPausa2Efetivo.setDisable(false);
 
                     //Habilita os itens do PO
                     tbBCS.setDisable(false);
@@ -1175,10 +1175,10 @@ public class TelaAdicionaEfetivoController implements Initializable {
                 case "A PÉ":
                     txtPrefixo.setDisable(true);
                     //Habilita as horas
-                    horaInicialPlantaoViatura.setDisable(false);
-                    horaFinalPlantaoViatura.setDisable(false);
-                    horaPausa1Viatura.setDisable(false);
-                    horaPausa2Viatura.setDisable(false);
+                    horaInicialPlantaoEfetivo.setDisable(false);
+                    horaFinalPlantaoEfetivo.setDisable(false);
+                    horaPausa1Efetivo.setDisable(false);
+                    horaPausa2Efetivo.setDisable(false);
 
                     //Habilita os itens do PO
                     tbBCS.setDisable(false);
@@ -1192,10 +1192,10 @@ public class TelaAdicionaEfetivoController implements Initializable {
                 case "MÓDULO":
                     txtPrefixo.setDisable(true);
                     //Habilita as horas
-                    horaInicialPlantaoViatura.setDisable(false);
-                    horaFinalPlantaoViatura.setDisable(false);
-                    horaPausa1Viatura.setDisable(false);
-                    horaPausa2Viatura.setDisable(false);
+                    horaInicialPlantaoEfetivo.setDisable(false);
+                    horaFinalPlantaoEfetivo.setDisable(false);
+                    horaPausa1Efetivo.setDisable(false);
+                    horaPausa2Efetivo.setDisable(false);
 
                     //Habilita os itens do PO
                     tbBCS.setDisable(false);
@@ -1209,10 +1209,10 @@ public class TelaAdicionaEfetivoController implements Initializable {
                 case "VIATURA 4 RODAS":
                     txtPrefixo.setDisable(false);
                     //Habilita as horas
-                    horaInicialPlantaoViatura.setDisable(false);
-                    horaFinalPlantaoViatura.setDisable(false);
-                    horaPausa1Viatura.setDisable(false);
-                    horaPausa2Viatura.setDisable(false);
+                    horaInicialPlantaoEfetivo.setDisable(false);
+                    horaFinalPlantaoEfetivo.setDisable(false);
+                    horaPausa1Efetivo.setDisable(false);
+                    horaPausa2Efetivo.setDisable(false);
 
                     //Habilita os itens do PO
                     tbBCS.setDisable(false);
@@ -1226,10 +1226,10 @@ public class TelaAdicionaEfetivoController implements Initializable {
                 default:
                     txtPrefixo.setDisable(true);
                     //Habilita as horas
-                    horaInicialPlantaoViatura.setDisable(true);
-                    horaFinalPlantaoViatura.setDisable(true);
-                    horaPausa1Viatura.setDisable(true);
-                    horaPausa2Viatura.setDisable(true);
+                    horaInicialPlantaoEfetivo.setDisable(true);
+                    horaFinalPlantaoEfetivo.setDisable(true);
+                    horaPausa1Efetivo.setDisable(true);
+                    horaPausa2Efetivo.setDisable(true);
 
                     //Habilita os itens do PO
                     tbBCS.setDisable(true);
@@ -1254,7 +1254,7 @@ public class TelaAdicionaEfetivoController implements Initializable {
         clickedTbEstadoGPS();
         clickedTbCamera();
         clickedTbHT();
-        clickedTbViaturaAtiva();
+        clickedTbEfetivoAtiva();
     }
 
     //    Define os botões de ação do Servidor na Guarnicao

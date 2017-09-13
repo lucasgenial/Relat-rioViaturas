@@ -142,39 +142,39 @@
                                             <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                     <children>
-                                                        <TableView fx:id="tableViatura" disable="true" layoutX="14.0" layoutY="14.0" onMouseClicked="#clikedRowTabelaViatura" prefHeight="271.0" prefWidth="521.0">
+                                                        <TableView fx:id="tableEfetivo" disable="true" layoutX="14.0" layoutY="14.0" onMouseClicked="#clikedRowTabelaEfetivo" prefHeight="271.0" prefWidth="521.0">
                                                             <columns>
-                                                                <TableColumn fx:id="tbColumnIdViatura" prefWidth="31.0" resizable="false" text="ID">
+                                                                <TableColumn fx:id="tbColumnIdEfetivo" prefWidth="31.0" resizable="false" text="ID">
                                                                     <cellValueFactory>
                                                                         <PropertyValueFactory property="id" />
                                                                     </cellValueFactory>
                                                                 </TableColumn>
-                                                                <TableColumn fx:id="tbColumnPrefixoViatura" prefWidth="68.0" resizable="false" text="PREFIXO">
+                                                                <TableColumn fx:id="tbColumnPrefixoEfetivo" prefWidth="68.0" resizable="false" text="PREFIXO">
                                                                     <cellValueFactory>
                                                                         <PropertyValueFactory property="prefixo" />
                                                                     </cellValueFactory>
                                                                 </TableColumn>
-                                                                <TableColumn fx:id="tbColumnBcsViatura" minWidth="0.0" prefWidth="95.0" resizable="false" text="BCS">
+                                                                <TableColumn fx:id="tbColumnBcsEfetivo" minWidth="0.0" prefWidth="95.0" resizable="false" text="BCS">
                                                                     <cellValueFactory>
                                                                         <PropertyValueFactory property="bcs" />
                                                                     </cellValueFactory>
                                                                 </TableColumn>
-                                                                <TableColumn fx:id="tbColumnGpsViatura" prefWidth="88.0" resizable="false" text="GPS">
+                                                                <TableColumn fx:id="tbColumnGpsEfetivo" prefWidth="88.0" resizable="false" text="GPS">
                                                                     <cellValueFactory>
                                                                         <PropertyValueFactory property="gps" />
                                                                     </cellValueFactory>
                                                                 </TableColumn>
-                                                                <TableColumn fx:id="tbColumnHTViatura" prefWidth="88.0" resizable="false" text="HT">
+                                                                <TableColumn fx:id="tbColumnHTEfetivo" prefWidth="88.0" resizable="false" text="HT">
                                                                     <cellValueFactory>
                                                                         <PropertyValueFactory property="ht" />
                                                                     </cellValueFactory>
                                                                 </TableColumn>
-                                                                <TableColumn fx:id="tbColumnAudioViatura" prefWidth="81.0" resizable="false" text="Audio">
+                                                                <TableColumn fx:id="tbColumnAudioEfetivo" prefWidth="81.0" resizable="false" text="Audio">
                                                                     <cellValueFactory>
                                                                         <PropertyValueFactory property="audio" />
                                                                     </cellValueFactory>
                                                                 </TableColumn>
-                                                                <TableColumn fx:id="tbColumnEstadoViatura" prefWidth="69.0" resizable="false" text="Estado">
+                                                                <TableColumn fx:id="tbColumnEstadoEfetivo" prefWidth="69.0" resizable="false" text="Estado">
                                                                     <cellValueFactory>
                                                                         <PropertyValueFactory property="estado" />
                                                                     </cellValueFactory>

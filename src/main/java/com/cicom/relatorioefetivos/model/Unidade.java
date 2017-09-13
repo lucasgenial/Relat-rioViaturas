@@ -68,16 +68,14 @@ public class Unidade implements Serializable {
         return this.id.get();
     }
 
-    @Basic
     @NotNull
     @Column(name = "NOME")
     public String getNome() {
         return this.nome.get();
     }
 
-    @Basic
     @NotNull
-    @JoinColumn(name = "COMANDO_AREA")
+    @Column(name = "COMANDO_AREA")
     public String getComandoDeArea() {
         return this.comandoDeArea.get();
     }

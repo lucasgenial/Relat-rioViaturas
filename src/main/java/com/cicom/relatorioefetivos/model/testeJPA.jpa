@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" pkg="com.cicom.relatorioviaturas.model" v="4.2.4" rws="_149858886889649" cws="_149858886889649" sm="false" xs="false" id="_14985888666331" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" pkg="com.cicom.relatorioefetivos.model" v="4.2.4" rws="_149858886889649" cws="_149858886889649" sm="false" xs="false" id="_14985888666331" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
     <jpa:entity compositePrimaryKeyClass="ServidorFuncaoPK" access="PROPERTY" abs="false" class="ServidorFuncao" v="true" xre="false" m="false" rootElement="_14985888666331" id="_14985888666722">
         <jpa:inf e="true" n="java.io.Serializable"/>
         <jpa:attributes>
@@ -67,10 +67,10 @@
                 </jpa:bv>
                 <jpa:column name="TURNO" unique="false" nullable="true" insertable="true" updatable="true"/>
             </jpa:basic>
-            <jpa:one-to-many own="true" collection-type="java.util.Set" connected-entity-id="_149858886695133" v="true" name="relatorioDiarioViaturas" ft="false" id="_149858886679017">
-                <jpa:join-table name="TBL_RELATORIO_MESAS_VIATURAS">
+            <jpa:one-to-many own="true" collection-type="java.util.Set" connected-entity-id="_149858886695133" v="true" name="relatorioDiarioEfetivos" ft="false" id="_149858886679017">
+                <jpa:join-table name="TBL_RELATORIO_MESAS_EFETIVOS">
                     <jpa:join-column name="RELATORIO_MESAS_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
-                    <jpa:inverse-join-column name="RELATORIO_VIATURAS_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="RELATORIO_EFETIVO_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
                 </jpa:join-table>
                 <jpa:cascade>
                     <jpa:cascade-all/>
@@ -124,7 +124,7 @@
         </jpa:attributes>
         <jpa:table name="TBL_MESA"/>
     </jpa:entity>
-    <jpa:entity compositePrimaryKeyClass="ViaturaPK" access="PROPERTY" abs="false" class="Viatura" v="true" xre="false" m="false" rootElement="_14985888666331" id="_149858886689523">
+    <jpa:entity compositePrimaryKeyClass="EfetivoPK" access="PROPERTY" abs="false" class="Efetivo" v="true" xre="false" m="false" rootElement="_14985888666331" id="_149858886689523">
         <jpa:inf e="true" n="java.io.Serializable"/>
         <jpa:attributes>
             <jpa:basic attribute-type="boolean" v="true" name="audio" ft="false" id="_149858886689625">
@@ -146,8 +146,8 @@
                 <jpa:column name="PREFIXO" unique="false" nullable="true" insertable="true" updatable="true"/>
             </jpa:basic>
             <jpa:one-to-many orp="false" own="true" collection-type="java.util.Set" connected-entity-id="_14985888666722" v="true" name="guarnicao" ft="false" id="_149858886689632">
-                <jpa:join-table name="TBL_SERVIDORES_VIATURAS">
-                    <jpa:join-column name="VIATURA_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                <jpa:join-table name="TBL_SERVIDORES_EFETIVOS">
+                    <jpa:join-column name="EFETIVO_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
                     <jpa:inverse-join-column name="SERVIDOR_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
                 </jpa:join-table>
                 <jpa:cascade>
@@ -171,16 +171,16 @@
                 <jpa:generated-value strategy="IDENTITY"/>
             </jpa:id>
         </jpa:attributes>
-        <jpa:table name="TBL_VIATURA"/>
+        <jpa:table name="TBL_EFETIVO"/>
     </jpa:entity>
-    <jpa:entity compositePrimaryKeyClass="RelatorioDiarioViaturasPK" access="PROPERTY" abs="false" class="RelatorioDiarioViaturas" v="true" xre="false" m="false" rootElement="_14985888666331" id="_149858886695133">
+    <jpa:entity compositePrimaryKeyClass="RelatorioDiarioEfetivosPK" access="PROPERTY" abs="false" class="RelatorioDiarioEfetivos" v="true" xre="false" m="false" rootElement="_14985888666331" id="_149858886695133">
         <jpa:inf e="true" n="java.io.Serializable"/>
         <jpa:attributes>
             <jpa:many-to-one primaryKey="false" connected-entity-id="_149858886709444" v="true" name="unidade" ft="false" id="_149858886695135"/>
-            <jpa:one-to-many orp="false" own="true" collection-type="java.util.List" connected-entity-id="_149858886689523" v="true" name="viaturas" ft="false" id="_149858886695136">
-                <jpa:join-table name="TBL_VIATURAS_POR_RELATORIO">
-                    <jpa:join-column name="RELATORIO_VIATURAS_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
-                    <jpa:inverse-join-column name="VIATURA_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            <jpa:one-to-many orp="false" own="true" collection-type="java.util.List" connected-entity-id="_149858886689523" v="true" name="efetivos" ft="false" id="_149858886695136">
+                <jpa:join-table name="TBL_EFETIVOS_POR_RELATORIO">
+                    <jpa:join-column name="RELATORIO_EFETIVOS_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="EFETIVO_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
                 </jpa:join-table>
                 <jpa:cascade>
                     <jpa:cascade-persist/>
@@ -194,7 +194,7 @@
                 <jpa:generated-value strategy="IDENTITY"/>
             </jpa:id>
         </jpa:attributes>
-        <jpa:table name="TBL_RELATORIO_VIATURAS"/>
+        <jpa:table name="TBL_RELATORIO_EFETIVOS"/>
     </jpa:entity>
     <jpa:entity compositePrimaryKeyClass="ServidorPK" access="PROPERTY" abs="false" class="Servidor" v="true" xre="false" m="false" rootElement="_14985888666331" id="_149858886701737">
         <jpa:inf e="true" n="java.io.Serializable"/>

@@ -91,10 +91,10 @@ public class TelaCadastroUnidadeController implements Initializable {
         Unidade unidadeSelecionada = tableUnidadesDisponiveis.getSelectionModel().getSelectedItem();
 
         if (unidadeSelecionada != null) {
-            RelatorioDiarioEfetivo relatorioViaturas = new RelatorioDiarioEfetivo();
-            relatorioViaturas.setUnidade(unidadeSelecionada);
+            RelatorioDiarioEfetivo relatorioEfetivo = new RelatorioDiarioEfetivo();
+            relatorioEfetivo.setUnidade(unidadeSelecionada);
 
-            relatorioMesasSelecionado.getRelatorioDiarioViaturas().add(relatorioViaturas);
+            relatorioMesasSelecionado.getListaRelatorioDiarioEfetivo().add(relatorioEfetivo);
 
             daoRelatorioDiarioMesas.alterar(relatorioMesasSelecionado);
 

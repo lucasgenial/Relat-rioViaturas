@@ -41,7 +41,7 @@ public class RelatorioDiarioMesas implements Serializable {
     private LocalTime horaInicial;
     private LocalTime horaFinal;
     private Mesa mesa;
-    private Set<RelatorioDiarioEfetivo> relatorioDiarioViaturas = new HashSet<>();
+    private Set<RelatorioDiarioEfetivo> listaRelatorioDiarioEfetivo = new HashSet<>();
     private Set<ServidorFuncao> servidores = new HashSet<>();
 
     public RelatorioDiarioMesas() {
@@ -112,8 +112,8 @@ public class RelatorioDiarioMesas implements Serializable {
     @JoinTable(name = "TBL_RELATORIO_MESAS_EFETIVO", joinColumns = {
         @JoinColumn(name = "RELATORIO_MESAS_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "RELATORIO_EFETIVO_ID_FK")})
-    public Set<RelatorioDiarioEfetivo> getRelatorioDiarioViaturas() {
-        return this.relatorioDiarioViaturas;
+    public Set<RelatorioDiarioEfetivo> getListaRelatorioDiarioEfetivo() {
+        return this.listaRelatorioDiarioEfetivo;
     }
 
     @OneToMany(targetEntity = ServidorFuncao.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -171,8 +171,8 @@ public class RelatorioDiarioMesas implements Serializable {
         this.mesa = mesa;
     }
 
-    public void setRelatorioDiarioViaturas(Set<RelatorioDiarioEfetivo> value) {
-        this.relatorioDiarioViaturas = value;
+    public void setListaRelatorioDiarioEfetivo(Set<RelatorioDiarioEfetivo> value) {
+        this.listaRelatorioDiarioEfetivo = value;
     }
 
     public void setServidores(Set<ServidorFuncao> value) {
@@ -200,7 +200,7 @@ public class RelatorioDiarioMesas implements Serializable {
 
     @Override
     public String toString() {
-        return "RelatorioDiarioMesas{" + "id=" + id + ", dataInicial=" + dataInicial + ", dataFinal=" + dataFinal + ", horaInicial=" + horaInicial + ", horaFinal=" + horaFinal + ", mesa=" + mesa + ", QTD_relatorioDiarioEFETIVO=" + relatorioDiarioViaturas.size() + ", QTD_servidores=" + servidores.size() + '}';
+        return "RelatorioDiarioMesas{" + "id=" + id + ", dataInicial=" + dataInicial + ", dataFinal=" + dataFinal + ", horaInicial=" + horaInicial + ", horaFinal=" + horaFinal + ", mesa=" + mesa + ", QTD_relatorioDiarioEFETIVO=" + listaRelatorioDiarioEfetivo.size() + ", QTD_servidores=" + servidores.size() + '}';
     }
 
     @Override
@@ -212,7 +212,7 @@ public class RelatorioDiarioMesas implements Serializable {
         hash = 59 * hash + Objects.hashCode(this.horaInicial);
         hash = 59 * hash + Objects.hashCode(this.horaFinal);
         hash = 59 * hash + Objects.hashCode(this.mesa);
-        hash = 59 * hash + Objects.hashCode(this.relatorioDiarioViaturas);
+        hash = 59 * hash + Objects.hashCode(this.listaRelatorioDiarioEfetivo);
         hash = 59 * hash + Objects.hashCode(this.servidores);
         return hash;
     }
@@ -247,7 +247,7 @@ public class RelatorioDiarioMesas implements Serializable {
         if (!Objects.equals(this.mesa, other.mesa)) {
             return false;
         }
-        if (!Objects.equals(this.relatorioDiarioViaturas, other.relatorioDiarioViaturas)) {
+        if (!Objects.equals(this.listaRelatorioDiarioEfetivo, other.listaRelatorioDiarioEfetivo)) {
             return false;
         }
         if (!Objects.equals(this.servidores, other.servidores)) {

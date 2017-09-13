@@ -2,6 +2,7 @@ package com.cicom.relatorioefetivos;
 
 import com.cicom.relatorioefetivos.DAO.FuncaoDAO;
 import com.cicom.relatorioefetivos.DAO.FuncionalidadeDAO;
+import com.cicom.relatorioefetivos.DAO.FuncionalidadePODAO;
 import com.cicom.relatorioefetivos.DAO.InstituicaoDAO;
 import com.cicom.relatorioefetivos.DAO.MesaDAO;
 import com.cicom.relatorioefetivos.DAO.PoDAO;
@@ -11,6 +12,7 @@ import com.cicom.relatorioefetivos.DAO.UnidadeDAO;
 import com.cicom.relatorioefetivos.model.Caracteristica;
 import com.cicom.relatorioefetivos.model.Funcao;
 import com.cicom.relatorioefetivos.model.Funcionalidade;
+import com.cicom.relatorioefetivos.model.FuncionalidadePO;
 import com.cicom.relatorioefetivos.model.Instituicao;
 import com.cicom.relatorioefetivos.model.Mesa;
 import com.cicom.relatorioefetivos.model.PO;
@@ -60,33 +62,33 @@ public class MainApp extends Application {
     }
 
     private void lancarDados() {
-        
-        Set<Funcionalidade> funcionalidades = new HashSet<>();
-        
-        funcionalidades.add(new Funcionalidade("GPS",true));
-        funcionalidades.add(new Funcionalidade("Audio",true));
-        funcionalidades.add(new Funcionalidade("Camera",true));
-        
-        FuncionalidadeDAO daoFuncionalidade = new FuncionalidadeDAO();
-        
-        for(Funcionalidade fun:funcionalidades){
+
+        Set<FuncionalidadePO> funcionalidades = new HashSet<>();
+
+        funcionalidades.add(new FuncionalidadePO(new Funcionalidade("GPS", true)));
+        funcionalidades.add(new FuncionalidadePO(new Funcionalidade("Audio", true)));
+        funcionalidades.add(new FuncionalidadePO(new Funcionalidade("Camera", true)));
+
+        FuncionalidadePODAO daoFuncionalidade = new FuncionalidadePODAO();
+
+        for (FuncionalidadePO fun : funcionalidades) {
             daoFuncionalidade.salvar(fun);
         }
-        
+
         //PO
         PoDAO daoPO = new PoDAO();
         Set<PO> listaDePOs = new HashSet<>();
         listaDePOs.add(new PO("A PÉ", funcionalidades, new Caracteristica("A pé", true), true));
-        listaDePOs.add(new PO("VIATURA 4 RODAS", funcionalidades, new Caracteristica("Motorizado", true),  true));
-        listaDePOs.add(new PO("VIATURA 2 RODAS", funcionalidades, new Caracteristica("Montado", true),  true));
-        listaDePOs.add(new PO("BARCO", funcionalidades, new Caracteristica("Marinho", true),  true));
+        listaDePOs.add(new PO("VIATURA 4 RODAS", funcionalidades, new Caracteristica("Motorizado", true), true));
+        listaDePOs.add(new PO("VIATURA 2 RODAS", funcionalidades, new Caracteristica("Montado", true), true));
+        listaDePOs.add(new PO("BARCO", funcionalidades, new Caracteristica("Marinho", true), true));
         listaDePOs.add(new PO("DRONE", null, new Caracteristica("Aéreo", true), true));
         listaDePOs.add(new PO("MÓDULO", null, new Caracteristica("Posto Fixo", true), true));
 
         for (PO item : listaDePOs) {
             daoPO.salvar(item);
         }
-        
+
         //FUNCAO
         Funcao func1 = new Funcao("Motorista", true);
         Funcao func2 = new Funcao("Patrulheiro", true);
@@ -100,7 +102,7 @@ public class MainApp extends Application {
         daoFuncao.salvar(func3);
         daoFuncao.salvar(func4);
         daoFuncao.salvar(func5);
-        
+
         InstituicaoDAO daoInstituicao = new InstituicaoDAO();
 
         Instituicao inst1 = new Instituicao("PM", true);
@@ -116,10 +118,10 @@ public class MainApp extends Application {
 //       CADASTRA COMANDANTE
         ServidorDAO daoServidor = new ServidorDAO();
         daoServidor.getListAtivos();
-        
+
         Sexo sex1 = Sexo.Masculino;
         Sexo sex2 = Sexo.Feminino;
-        
+
 //        public Servidor(String nome, String matricula, Instituicao instituicao, String grauHierarquico, Sexo sexo, String observacao, Boolean ativo);
         Servidor ser1 = new Servidor("SERGIO ANTONIO", "15975", inst1, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
         Servidor ser2 = new Servidor("PEDRO ORLANDO SARDA FILHO", "342432", inst1, "SOLDADO", sex1, "INSERIDO NO MAIN", true);
@@ -147,7 +149,7 @@ public class MainApp extends Application {
         daoServidor.salvar(ser11);
         daoServidor.salvar(ser12);
 
-//        //Unidade
+        //Unidade
         Unidade und1 = new Unidade("POLICIA MILITAR", "8º BPM", true);
         Unidade und2 = new Unidade("POLICIA MILITAR", "7º CIPM", true);
         Unidade und3 = new Unidade("POLICIA MILITAR", "CIPPA", true);

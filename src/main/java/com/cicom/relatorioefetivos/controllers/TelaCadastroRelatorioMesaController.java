@@ -572,7 +572,7 @@ public class TelaCadastroRelatorioMesaController implements Initializable {
         final Optional<ButtonType> resultado = alertAntesExcluir.showAndWait();
 
         if (resultado.get() == ButtonType.YES) {
-            //Para as duas situações é necessário que a viatura assuma o valor nulo para
+            //Para as duas situações é necessário que a Efetivo assuma o valor nulo para
             //Cancelar alterações e/ou salvamento
             servidor = null;
             root.getScene().getWindow().hide();

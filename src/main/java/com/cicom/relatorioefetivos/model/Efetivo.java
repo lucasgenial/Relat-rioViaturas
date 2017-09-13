@@ -124,8 +124,8 @@ public class Efetivo implements Serializable {
     }
 
     @OneToMany(targetEntity = ServidorFuncao.class, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinTable(name = "TBL_SERVIDORES_VIATURAS", joinColumns = {
-        @JoinColumn(name = "VIATURA_ID_FK")}, inverseJoinColumns = {
+    @JoinTable(name = "TBL_SERVIDORES_EFETIVO", joinColumns = {
+        @JoinColumn(name = "EFETIVO_ID_FK")}, inverseJoinColumns = {
         @JoinColumn(name = "SERVIDOR_ID_FK")})
     public Set<ServidorFuncao> getGuarnicao() {
         return this.guarnicao;

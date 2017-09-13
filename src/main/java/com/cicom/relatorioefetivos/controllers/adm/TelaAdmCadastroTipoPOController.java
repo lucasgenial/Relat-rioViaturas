@@ -5,8 +5,8 @@ import com.cicom.relatorioefetivos.DAO.FuncionalidadeDAO;
 import com.cicom.relatorioefetivos.DAO.PoDAO;
 import com.cicom.relatorioefetivos.model.Caracteristica;
 import com.cicom.relatorioefetivos.model.Funcionalidade;
+import com.cicom.relatorioefetivos.model.FuncionalidadePO;
 import com.cicom.relatorioefetivos.model.PO;
-import com.cicom.relatorioefetivos.model.TipoMesa;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Optional;
@@ -113,8 +113,8 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
 
     private Set<PO> listaPOS = new HashSet<>();
     private Set<Caracteristica> listaCaracteristica = new HashSet<>();
-    private Set<Funcionalidade> funcionalidadesPO = new HashSet<>();
-    private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
+    private Set<FuncionalidadePO> funcionalidadesPO = new HashSet<>();
+private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
 
     private PO novoPO, poEditar;
     private String tituloMensagem = "";
@@ -275,6 +275,8 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
 
         if (funcionalidadeSelecionada != null) {
             //Carrega o item na lista de POS que comporá a tabela/Unidade
+            FuncionalidadePO func = new FuncionalidadePO();
+            func.setPo(novoPO);
             funcionalidadesPO.add(funcionalidadeSelecionada);
 
             //Adiciono o item na Tabela
