@@ -66,22 +66,22 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
     private ComboBox<Caracteristica> cbCaracteristica;
 
     @FXML
-    private ComboBox<Funcionalidade> cbFuncionalidadesPO;
+    private ComboBox<Funcionalidade> cbFuncionalidades;
 
     @FXML
     private Button btnInserir;
 
     @FXML
-    private TableView<Funcionalidade> tableFuncionalidadesPO;
+    private TableView<FuncionalidadePO> tableFuncionalidadesPO;
 
     @FXML
-    private TableColumn<Funcionalidade, Integer> columnIDFuncionalidades;
+    private TableColumn<FuncionalidadePO, Integer> columnIDFuncionalidades;
 
     @FXML
-    private TableColumn<Funcionalidade, String> columnNomeFuncionalidades;
+    private TableColumn<FuncionalidadePO, String> columnNomeFuncionalidades;
 
     @FXML
-    private TableColumn<Funcionalidade, Boolean> columnAcaoFuncionalidade;
+    private TableColumn<FuncionalidadePO, Boolean> columnAcaoFuncionalidade;
 
     @FXML
     private ComboBox<String> cbSituacaoBuscaPO;
@@ -114,7 +114,7 @@ public class TelaAdmCadastroTipoPOController implements Initializable {
     private Set<PO> listaPOS = new HashSet<>();
     private Set<Caracteristica> listaCaracteristica = new HashSet<>();
     private Set<FuncionalidadePO> funcionalidadesPO = new HashSet<>();
-private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
+    private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
 
     private PO novoPO, poEditar;
     private String tituloMensagem = "";
@@ -176,9 +176,9 @@ private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
         listaFuncionalidades.addAll(daoFuncionalidade.getList("From Funcionalidade"));
 
         if (!listaFuncionalidades.isEmpty()) {
-            cbFuncionalidadesPO.getItems().clear();
-            cbFuncionalidadesPO.getItems().addAll(listaFuncionalidades);
-            cbFuncionalidadesPO.setConverter(new StringConverter<Funcionalidade>() {
+            cbFuncionalidades.getItems().clear();
+            cbFuncionalidades.getItems().addAll(listaFuncionalidades);
+            cbFuncionalidades.setConverter(new StringConverter<Funcionalidade>() {
                 @Override
                 public String toString(Funcionalidade item) {
                     if (item != null) {
@@ -241,27 +241,27 @@ private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
         tablePO.getItems().setAll(FXCollections.observableSet(dados));
     }
 
-    private void atualizarTabelaFuncionalidadesPO(Set<Funcionalidade> dados) {
+    private void atualizarTabelaFuncionalidadesPO(Set<FuncionalidadePO> dados) {
 
-        columnNomeFuncionalidades.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Funcionalidade, String>, ObservableValue<String>>() {
+        columnNomeFuncionalidades.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<FuncionalidadePO, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Funcionalidade, String> data) {
-                return new SimpleStringProperty(data.getValue().getNome().toUpperCase());
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<FuncionalidadePO, String> data) {
+                return new SimpleStringProperty(data.getValue().getFuncionalidade().getNome().toUpperCase());
             }
         });
 
         columnAcaoFuncionalidade.setSortable(false);
 
-        columnAcaoFuncionalidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Funcionalidade, Boolean>, ObservableValue<Boolean>>() {
+        columnAcaoFuncionalidade.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<FuncionalidadePO, Boolean>, ObservableValue<Boolean>>() {
             @Override
-            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Funcionalidade, Boolean> param) {
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<FuncionalidadePO, Boolean> param) {
                 return new SimpleBooleanProperty(param.getValue() != null);
             }
         });
 
-        columnAcaoFuncionalidade.setCellFactory(new Callback<TableColumn<Funcionalidade, Boolean>, TableCell<Funcionalidade, Boolean>>() {
+        columnAcaoFuncionalidade.setCellFactory(new Callback<TableColumn<FuncionalidadePO, Boolean>, TableCell<FuncionalidadePO, Boolean>>() {
             @Override
-            public TableCell<Funcionalidade, Boolean> call(TableColumn<Funcionalidade, Boolean> data) {
+            public TableCell<FuncionalidadePO, Boolean> call(TableColumn<FuncionalidadePO, Boolean> data) {
                 return new ButtonCellFuncionalidade(tableFuncionalidadesPO);
             }
         });
@@ -271,13 +271,11 @@ private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
 
     @FXML
     private void clickedBtnInserirFuncionalidade(MouseEvent event) {
-        Funcionalidade funcionalidadeSelecionada = cbFuncionalidadesPO.getSelectionModel().getSelectedItem();
+        Funcionalidade funcionalidadeSelecionada = cbFuncionalidades.getSelectionModel().getSelectedItem();
 
         if (funcionalidadeSelecionada != null) {
             //Carrega o item na lista de POS que comporá a tabela/Unidade
-            FuncionalidadePO func = new FuncionalidadePO();
-            func.setPo(novoPO);
-            funcionalidadesPO.add(funcionalidadeSelecionada);
+            funcionalidadesPO.add(new FuncionalidadePO(funcionalidadeSelecionada));
 
             //Adiciono o item na Tabela
             atualizarTabelaFuncionalidadesPO(funcionalidadesPO);
@@ -352,7 +350,7 @@ private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
         poEditar = null;
         txtNomePO.setDisable(false);
         cbSituacaoPO.setDisable(false);
-        cbFuncionalidadesPO.setDisable(false);
+        cbFuncionalidades.setDisable(false);
         cbCaracteristica.setDisable(false);
         btnInserir.setDisable(false);
 
@@ -427,13 +425,13 @@ private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
     private void clickedCbSituacaoBuscaPO(ActionEvent event) {
     }
 
-    private class ButtonCellFuncionalidade extends TableCell<Funcionalidade, Boolean> {
+    private class ButtonCellFuncionalidade extends TableCell<FuncionalidadePO, Boolean> {
 
         //BOTAO REMOVER
         private Button botaoRemover = new Button();
         private final ImageView imagemRemover = new ImageView(new Image(getClass().getResourceAsStream("/icons/remover.png")));
 
-        private ButtonCellFuncionalidade(TableView<Funcionalidade> tblView) {
+        private ButtonCellFuncionalidade(TableView<FuncionalidadePO> tblView) {
 
             //BOTAO REMOVER
             imagemRemover.fitHeightProperty().set(16);
@@ -443,7 +441,7 @@ private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
             botaoRemover.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent t) {
-                    Funcionalidade funcionalidadeRemover = (Funcionalidade) tblView.getItems().get(getIndex());
+                    FuncionalidadePO funcionalidadeRemover = (FuncionalidadePO) tblView.getItems().get(getIndex());
 
                     if (funcionalidadeRemover != null) {
                         Alert alertVoltar = new Alert(Alert.AlertType.CONFIRMATION);
@@ -526,7 +524,7 @@ private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
                         txtNomePO.setDisable(true);
                         cbSituacaoPO.setDisable(true);
                         cbCaracteristica.setDisable(true);
-                        cbFuncionalidadesPO.setDisable(true);
+                        cbFuncionalidades.setDisable(true);
                         btnInserir.setDisable(true);
 
                         btnCadastrar.setText("NOVO");
@@ -571,7 +569,7 @@ private Set<Funcionalidade> listaFuncionalidades = new HashSet<>();
                         txtNomePO.setDisable(false);
                         cbSituacaoPO.setDisable(false);
                         cbCaracteristica.setDisable(false);
-                        cbFuncionalidadesPO.setDisable(false);
+                        cbFuncionalidades.setDisable(false);
                         btnInserir.setDisable(false);
 
                         btnCadastrar.setText("SALVAR");

@@ -13,7 +13,6 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,6 +36,9 @@ public class FuncionalidadePO implements Serializable {
     private StringProperty tombo = new SimpleStringProperty();
 
     public FuncionalidadePO() {
+        this.setSituacao(true);
+        this.setStatus(true);
+        this.setTombo("");
     }
 
     public FuncionalidadePO(Funcionalidade funcionalidade) {
@@ -60,8 +62,8 @@ public class FuncionalidadePO implements Serializable {
         return this.id.get();
     }
 
-    @OneToOne(targetEntity = Funcionalidade.class, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "FUNCIONALIDADE_ID", nullable = false)
+    @OneToOne(targetEntity = Funcionalidade.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "FUNCIONALIDADE_ID_FK")
     public Funcionalidade getFuncionalidade() {
         return this.funcionalidade;
     }
@@ -101,29 +103,32 @@ public class FuncionalidadePO implements Serializable {
         this.tombo.set(value);
     }
 
+    public IntegerProperty idProperty() {
+        return this.id;
+    }
+
     public BooleanProperty situacaoProperty() {
-        return situacao;
+        return this.situacao;
     }
 
     public BooleanProperty statusProperty() {
-        return status;
+        return this.status;
     }
 
     @Override
     public String toString() {
-        return "FuncionalidadePO{" + "id=" + id + ", funcionalidade="
-                + funcionalidade.getNome() + ", situacao=" + situacao.get() + ", status="
-                + status.get() + ", tombo=" + tombo.get() + '}';
+        return "FuncionalidadePO{" + "id=" + id + ", funcionalidade=" + funcionalidade.getNome() + ", situacao="
+                + situacao.get() + ", status=" + status.get() + ", tombo=" + tombo.get() + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        hash = 97 * hash + Objects.hashCode(this.funcionalidade);
-        hash = 97 * hash + Objects.hashCode(this.situacao);
-        hash = 97 * hash + Objects.hashCode(this.status);
-        hash = 97 * hash + Objects.hashCode(this.tombo);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.funcionalidade);
+        hash = 29 * hash + Objects.hashCode(this.situacao);
+        hash = 29 * hash + Objects.hashCode(this.status);
+        hash = 29 * hash + Objects.hashCode(this.tombo);
         return hash;
     }
 

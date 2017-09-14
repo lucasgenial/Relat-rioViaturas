@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -76,11 +75,11 @@ public class Funcionalidade implements Serializable {
     PROPERTY
      */
     public IntegerProperty idProperty() {
-        return id;
+        return this.id;
     }
 
     public StringProperty nomeProperty() {
-        return nome;
+        return this.nome;
     }
 
     @Override

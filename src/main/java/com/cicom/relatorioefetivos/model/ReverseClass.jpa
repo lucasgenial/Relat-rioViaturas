@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" pkg="com.cicom.relatorioviaturas.filtro" v="4.4" rws="_1505362454474257" cws="_1505362454474257" sm="false" xs="false" id="_1505362453628160" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity compositePrimaryKeyClass="EfetivoPK" access="PROPERTY" abs="false" class="Efetivo" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362453704161">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="boolean" v="true" name="audio" ft="false" id="_1505362453704163">
+                <jpa:column name="AUDIO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="bcs" ft="false" id="_1505362453704164">
+                <jpa:column name="BCS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="estadoGPS" ft="false" id="_1505362453704165">
+                <jpa:column name="ESTADO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="gps" ft="false" id="_1505362453704166">
+                <jpa:column name="GPS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="camera" ft="false" id="_1505362453704167">
+                <jpa:column name="CAMERA" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="estadoCam" ft="false" id="_1505362453704168">
+                <jpa:column name="ESTADO_CAM" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="ht" ft="false" id="_1505362453704169">
+                <jpa:column name="HT" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="prefixo" ft="false" id="_1505362453704170">
+                <jpa:column name="PREFIXO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="tomboHT" ft="false" id="_1505362453704171">
+                <jpa:column name="TOMBO_HT" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="boolean" v="true" name="vtrBaixada" ft="false" id="_1505362453726174">
+                <jpa:column name="BAIXADO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaInicialPlantao" ft="false" id="_1505362453726175">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="HR_INICIO_PLANTAO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaFinalPlantao" ft="false" id="_1505362453726176">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="HR_FIM_PLANTAO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaPausa1" ft="false" id="_1505362453726177">
+                <jpa:column name="HR_PAUSA1" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaPausa2" ft="false" id="_1505362453726178">
+                <jpa:column name="HR_PAUSA2" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="hrDaBaixa" ft="false" id="_1505362453726179">
+                <jpa:column name="HR_DA_BAIXA" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:one-to-many orp="true" own="true" collection-type="java.util.Set" connected-entity-id="_1505362453990203" v="true" name="guarnicao" ft="false" id="_1505362453704173">
+                <jpa:join-table name="TBL_SERVIDORES_EFETIVO">
+                    <jpa:join-column name="EFETIVO_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="SERVIDOR_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+                <jpa:cascade>
+                    <jpa:cascade-merge/>
+                    <jpa:cascade-remove/>
+                    <jpa:cascade-detach/>
+                </jpa:cascade>
+            </jpa:one-to-many>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1505362453883192" v="true" name="tipoPO" ft="false" id="_1505362453704172">
+                <jpa:join-column name="TIPO_PO_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:one-to-one>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362453704162">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_EFETIVO"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="MesaPK" access="PROPERTY" abs="false" class="Mesa" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362453773180">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362453773182">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="true" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362453789185">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1505362454224235" v="true" name="tipoMesa" ft="false" id="_1505362453789184">
+                <jpa:join-column name="TIPO_MESA" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:one-to-one>
+            <jpa:many-to-many own="true" collection-type="java.util.Set" connected-entity-id="_1505362453836186" fetch="EAGER" v="true" name="unidades" ft="false" id="_1505362453773183">
+                <jpa:join-table name="TBL_MESA_UNIDADE">
+                    <jpa:join-column name="MESA_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="UNIDADE_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+            </jpa:many-to-many>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362453773181">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_MESA"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="UnidadePK" access="PROPERTY" abs="false" class="Unidade" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362453836186">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362453836188">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="comandoDeArea" ft="false" id="_1505362453836189">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="COMANDO_AREA" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362453836191">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:many-to-many own="true" collection-type="java.util.Set" connected-entity-id="_1505362453883192" connected-attribute-id="_1505362453883195" fetch="LAZY" v="true" name="pos" ft="false" id="_1505362453836190">
+                <jpa:join-table name="TBL_POS_UNIDADE">
+                    <jpa:join-column name="UNIDADE_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="PO_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+            </jpa:many-to-many>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362453836187">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_UNIDADE"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="POPK" access="PROPERTY" abs="false" class="PO" v="true" xre="false" m="false" rootElement="_1505362453628160" id="_1505362453883192">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362453883194">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="true" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362453898198">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:one-to-many orp="false" own="true" collection-type="java.util.List" connected-entity-id="_1505362454130220" v="true" xvt="" name="funcionalidadePoes" id="_1505362535458288">
+                <jpa:xwm nil="false" req="false"/>
+                <jpa:xm nil="false" req="false"/>
+            </jpa:one-to-many>
+            <jpa:one-to-one own="true" orp="true" primaryKey="false" connected-entity-id="_1505362453945199" v="true" name="caracteristica" ft="false" id="_1505362453898196">
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+                <jpa:join-column name="CARACTERISTICA" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:one-to-one>
+            <jpa:many-to-many own="false" collection-type="java.util.Set" connected-entity-id="_1505362453836186" connected-attribute-id="_1505362453836190" fetch="LAZY" v="true" name="unidades" ft="false" id="_1505362453883195"/>
+            <jpa:many-to-many own="true" collection-type="java.util.Set" connected-entity-id="_1505362454130220" v="true" xvt="" name="funcionalidades" ft="false" id="_1505362453898197">
+                <jpa:an e="true" n="@com.sun.istack.internal.Nullable"/>
+                <jpa:xwm nil="false" req="false"/>
+                <jpa:xm nil="false" req="false"/>
+                <jpa:join-table name="TBL_FUNCIONALIDADE_PO">
+                    <jpa:join-column name="PO_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="FUNCIONALIDADE_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+                <jpa:cascade>
+                    <jpa:cascade-merge/>
+                    <jpa:cascade-remove/>
+                    <jpa:cascade-detach/>
+                </jpa:cascade>
+            </jpa:many-to-many>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362453883193">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_PO"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="CaracteristicaPK" access="PROPERTY" abs="false" class="Caracteristica" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362453945199">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362453945201">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="true" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362453945202">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362453945200">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_CARACTERISTICA"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="ServidorFuncaoPK" access="PROPERTY" abs="false" class="ServidorFuncao" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362453990203">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaInicialPlantao" ft="false" id="_1505362453990205">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="HORA_INICIO_PLANTAO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaFinalPlantao" ft="false" id="_1505362453990206">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="HORA_FINAL_PLANTAO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaPausa1" ft="false" id="_1505362453990207">
+                <jpa:column name="HORA_PAUSA_1" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaPausa2" ft="false" id="_1505362453990208">
+                <jpa:column name="HORA_PAUSA_2" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362453990211">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1505362454271239" fetch="EAGER" v="true" name="servidor" ft="false" id="_1505362453990209">
+                <jpa:join-column name="SERVIDOR_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:one-to-one>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1505362454318249" fetch="EAGER" v="true" name="funcao" ft="false" id="_1505362453990210">
+                <jpa:join-column name="FUNCAO_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:one-to-one>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362453990204">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_SERVIDOR_FUNCAO"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="InstituicaoPK" access="PROPERTY" abs="false" class="Instituicao" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362454037212">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362454037214">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="true" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362454037215">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362454037213">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_INSTITUICAO"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="FuncionalidadePK" access="PROPERTY" abs="false" class="Funcionalidade" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362454083216">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362454083218">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="true" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362454083219">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362454083217">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_FUNCIONALIDADE"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="FuncionalidadePOPK" access="PROPERTY" abs="false" class="FuncionalidadePO" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362454130220">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.BooleanProperty" v="true" name="situacao" ft="false" id="_1505362454130223">
+                <jpa:column name="SITUACAO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="javafx.beans.property.BooleanProperty" v="true" name="status" ft="false" id="_1505362454130224">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="tombo" ft="false" id="_1505362454130225">
+                <jpa:column name="TOMBO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1505362454083216" v="true" name="funcionalidade" ft="false" id="_1505362454130222">
+                <jpa:join-column name="FUNCIONALIDADE_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:one-to-one>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362454130221">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_FUNCIONALIDADE_PO"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="RelatorioDiarioMesasPK" access="PROPERTY" abs="false" class="RelatorioDiarioMesas" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362454177226">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="java.time.LocalDate" v="true" name="dataInicial" ft="false" id="_1505362454177228">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="DATA_INICIAL" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaInicial" ft="false" id="_1505362454177229">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="HORA_INICIAL" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalDate" v="true" name="dataFinal" ft="false" id="_1505362454177230">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="DATA_FINAL" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="java.time.LocalTime" v="true" name="horaFinal" ft="false" id="_1505362454177231">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="HORA_FINAL" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:one-to-many orp="true" own="true" collection-type="java.util.Set" connected-entity-id="_1505362454365253" fetch="LAZY" v="true" name="listaRelatorioDiarioEfetivo" ft="false" id="_1505362454177233">
+                <jpa:join-table name="TBL_RELATORIO_MESAS_EFETIVO">
+                    <jpa:join-column name="RELATORIO_MESAS_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="RELATORIO_EFETIVO_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+            </jpa:one-to-many>
+            <jpa:one-to-many orp="true" own="true" collection-type="java.util.Set" connected-entity-id="_1505362453990203" fetch="LAZY" v="true" name="servidores" ft="false" id="_1505362454193234">
+                <jpa:join-table name="TBL_SERVIDORES_RELATORIO_MESAS">
+                    <jpa:join-column name="RELATORIO_MESAS_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="SERVIDOR_ID" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+            </jpa:one-to-many>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1505362453773180" v="true" name="mesa" ft="false" id="_1505362454177232">
+                <jpa:join-column name="MESA" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:one-to-one>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362454177227">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_RELATORIO_MESAS"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="TipoMesaPK" access="PROPERTY" abs="false" class="TipoMesa" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362454224235">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362454224237">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="true" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362454224238">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362454224236">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_TIPO_MESA"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="ServidorPK" access="PROPERTY" abs="false" class="Servidor" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362454271239">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362454271241">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="grauHierarquico" ft="false" id="_1505362454271242">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="GRAU_HIERARQUICO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="matricula" ft="false" id="_1505362454271243">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="MATRICULA" unique="true" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="com.cicom.relatorioefetivos.model.Sexo" v="true" name="sexo" ft="false" id="_1505362454271245">
+                <jpa:column name="SEXO" unique="false" nullable="true" insertable="true" updatable="true"/>
+                <jpa:enumerated>STRING</jpa:enumerated>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362454271246">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="byte[]" v="true" name="foto" ft="false" id="_1505362454271247">
+                <jpa:column name="FOTO" unique="false" nullable="true" insertable="true" updatable="true"/>
+                <jpa:lob/>
+            </jpa:basic>
+            <jpa:basic optional="true" attribute-type="javafx.beans.property.StringProperty" v="true" name="observacao" ft="false" id="_1505362454271248">
+                <jpa:column name="OBSERVACAO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:one-to-one own="true" primaryKey="false" connected-entity-id="_1505362454037212" v="true" name="instituicao" ft="false" id="_1505362454271244">
+                <jpa:join-column name="INSTITUICAO" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:one-to-one>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362454271240">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_SERVIDOR"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="FuncaoPK" access="PROPERTY" abs="false" class="Funcao" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362454318249">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:basic attribute-type="javafx.beans.property.StringProperty" v="true" name="nome" ft="false" id="_1505362454318251">
+                <jpa:bv>
+                    <jpa:nn/>
+                </jpa:bv>
+                <jpa:column name="NOME" unique="true" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic attribute-type="Boolean" v="true" name="status" ft="false" id="_1505362454318252">
+                <jpa:column name="STATUS" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362454318250">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_FUNCAO"/>
+    </jpa:entity>
+    <jpa:entity compositePrimaryKeyClass="RelatorioDiarioEfetivoPK" access="PROPERTY" abs="false" class="RelatorioDiarioEfetivo" v="true" gen="false" xre="false" m="false" rootElement="_1505362453628160" id="_1505362454365253">
+        <jpa:inf e="true" n="java.io.Serializable"/>
+        <jpa:attributes>
+            <jpa:many-to-one primaryKey="false" connected-entity-id="_1505362453836186" v="true" name="unidade" ft="false" id="_1505362454365255">
+                <jpa:join-column name="UNIDADE" unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:many-to-one>
+            <jpa:one-to-many orp="true" own="true" collection-type="java.util.Set" connected-entity-id="_1505362453704161" fetch="LAZY" v="true" name="efetivos" ft="false" id="_1505362454365256">
+                <jpa:join-table name="TBL_EFETIVO_POR_RELATORIO">
+                    <jpa:join-column name="RELATORIO_EFETIVO_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                    <jpa:inverse-join-column name="EFETIVO_ID_FK" unique="false" nullable="true" insertable="true" updatable="true"/>
+                </jpa:join-table>
+                <jpa:cascade>
+                    <jpa:cascade-all/>
+                </jpa:cascade>
+            </jpa:one-to-many>
+            <jpa:id attribute-type="javafx.beans.property.IntegerProperty" v="true" name="id" ft="false" id="_1505362454365254">
+                <jpa:column name="ID" unique="true" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="IDENTITY"/>
+            </jpa:id>
+        </jpa:attributes>
+        <jpa:table name="TBL_RELATORIO_EFETIVO"/>
+    </jpa:entity>
+    <jpa:snp loc="BEFORE_PACKAGE" e="true">/**
+ * This file was generated by the Jeddict
+ */</jpa:snp>
+    <jpa:c>
+        <ct>java.util.List</ct>
+        <ct>java.util.Set</ct>
+        <ct>java.util.Map</ct>
+        <ct>java.util.Collection</ct>
+        <cit>java.util.ArrayList</cit>
+        <cit>java.util.LinkedList</cit>
+        <cit>java.util.HashSet</cit>
+        <cit>java.util.TreeSet</cit>
+        <cit>java.util.HashMap</cit>
+    </jpa:c>
+    <jpa:wsl>
+        <jpa:ws n="Main" id="_1505362454474257">
+            <i ref="_1505362453990203" x="775" y="714"/>
+            <i ref="_1505362454318249" x="1012" y="1009"/>
+            <i ref="_1505362454037212" x="775" y="1325"/>
+            <i ref="_1505362453773180" x="235" y="714"/>
+            <i ref="_1505362453836186" x="32" y="209"/>
+            <i ref="_1505362454224235" x="32" y="1009"/>
+            <i ref="_1505362453945199" x="1581" y="468"/>
+            <i ref="_1505362454083216" x="1315" y="1065"/>
+            <i ref="_1505362454130220" x="1560" y="855"/>
+            <i ref="_1505362454177226" x="505" y="209"/>
+            <i ref="_1505362454271239" x="505" y="1009"/>
+            <i ref="_1505362453704161" x="1012" y="209"/>
+            <i ref="_1505362453883192" x="1418" y="581"/>
+            <i ref="_1505362454365253" x="299" y="14"/>
+        </jpa:ws>
+    </jpa:wsl>
+</jpa:entity-mappings>

@@ -64,10 +64,15 @@ public class MainApp extends Application {
     private void lancarDados() {
 
         Set<FuncionalidadePO> funcionalidades = new HashSet<>();
+        
+        Funcionalidade f1 = new Funcionalidade("GPS", true);
+        Funcionalidade f2 = new Funcionalidade("Audio", true);
+        Funcionalidade f3 = new Funcionalidade("Camera", true);
+        
 
-        funcionalidades.add(new FuncionalidadePO(new Funcionalidade("GPS", true)));
-        funcionalidades.add(new FuncionalidadePO(new Funcionalidade("Audio", true)));
-        funcionalidades.add(new FuncionalidadePO(new Funcionalidade("Camera", true)));
+        funcionalidades.add(new FuncionalidadePO(f1));
+        funcionalidades.add(new FuncionalidadePO(f2));
+        funcionalidades.add(new FuncionalidadePO(f3));
 
         FuncionalidadePODAO daoFuncionalidade = new FuncionalidadePODAO();
 
